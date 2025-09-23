@@ -1,0 +1,197 @@
+import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
+import { BaseQueryFn, FetchArgs, FetchBaseQueryError, FetchBaseQueryMeta } from '@reduxjs/toolkit/query';
+import { API_BASE_URL, globalHeaders } from '@/utils/apiFetch';
+import { ApiResponse } from '@/types';
+
+const baseQuery: BaseQueryFn<string | FetchArgs, unknown, FetchBaseQueryError, object, FetchBaseQueryMeta> = async (
+	args,
+	api,
+	extraOptions
+) => {
+	return fetchBaseQuery({
+		baseUrl: API_BASE_URL,
+		prepareHeaders: (headers) => {
+			Object.entries(globalHeaders).forEach(([key, value]) => {
+				headers.set(key, value);
+			});
+			return headers;
+		}
+	})(args, api, extraOptions);
+};
+
+const transformResponse = (response: ApiResponse) => {
+	if (response?.status === 'success') {
+		return response.data;
+	}
+
+	return [];
+};
+
+export const apiService = createApi({
+	baseQuery,
+	endpoints: (build) => ({
+		getAgents: build.query({
+			query: (args) => {
+				const { side, accessToken } = args;
+				return {
+					url: `/${side}/agents`,
+					headers: {
+						Authorization: `Bearer ${accessToken}`
+					}
+				};
+			},
+			transformResponse
+		}),
+		getClients: build.query({
+			query: (args) => {
+				const { side, accessToken } = args;
+				return {
+					url: `/${side}/clients`,
+					headers: {
+						Authorization: `Bearer ${accessToken}`
+					}
+				};
+			},
+			transformResponse
+		}),
+		getDeals: build.query({
+			query: (args) => {
+				const { side, accessToken, filter } = args;
+				return {
+					url: `/${side}/deals`,
+					params: filter,
+					headers: {
+						Authorization: `Bearer ${accessToken}`
+					}
+				};
+			},
+			transformResponse
+		}),
+		getDealById: build.query({
+			query: (args) => {
+				const { side, accessToken, id } = args;
+				return {
+					url: `/${side}/deals/${id}`,
+					headers: {
+						Authorization: `Bearer ${accessToken}`
+					}
+				};
+			},
+			transformResponse
+		}),
+		getDealMessagesByDealId: build.query({
+			query: (args) => {
+				const { side, accessToken, id } = args;
+				return {
+					url: `/${side}/deals/${id}/messages`,
+					headers: {
+						Authorization: `Bearer ${accessToken}`
+					}
+				};
+			},
+			transformResponse
+		}),
+		getUsers: build.query({
+			query: (args) => {
+				const { side, accessToken } = args;
+				return {
+					url: `/${side}/users`,
+					headers: {
+						Authorization: `Bearer ${accessToken}`
+					}
+				};
+			},
+			transformResponse
+		}),
+		getUserById: build.query({
+			query: (args) => {
+				const { side, accessToken, id } = args;
+				return {
+					url: `/${side}/users/${id}`,
+					headers: {
+						Authorization: `Bearer ${accessToken}`
+					}
+				};
+			},
+			transformResponse
+		}),
+		createUser: build.mutation({
+			query: (args) => {
+				const { side, accessToken, data } = args;
+				return {
+					url: `/${side}/users`,
+					method: 'POST',
+					body: data,
+					headers: {
+						Authorization: `Bearer ${accessToken}`
+					}
+				};
+			}
+		}),
+		updateUser: build.mutation({
+			query: (args) => {
+				const { side, accessToken, id, data } = args;
+				return {
+					url: `/${side}/users/${id}/update`,
+					method: 'POST',
+					body: data,
+					headers: {
+						Authorization: `Bearer ${accessToken}`
+					}
+				};
+			}
+		}),
+		deleteUserById: build.mutation({
+			query: (args) => {
+				const { side, accessToken, id } = args;
+				return {
+					url: `/${side}/users/${id}/delete`,
+					method: 'POST',
+					headers: {
+						Authorization: `Bearer ${accessToken}`
+					}
+				};
+			}
+		}),
+		getCurrencies: build.query({
+			query: () => '/currencies',
+			transformResponse
+		}),
+		syncRates: build.mutation({
+			query: () => {
+				return {
+					url: `/rates/sync`,
+					method: 'POST'
+				};
+			}
+		}),
+		getRates: build.query({
+			query: (args) => {
+				const { accessToken } = args;
+				return {
+					url: `/admin/rates`,
+					headers: {
+						Authorization: `Bearer ${accessToken}`
+					}
+				};
+			},
+			transformResponse
+		}),
+		updateRates: build.mutation({
+			query: (args) => {
+				const { accessToken, data } = args;
+				return {
+					url: `/admin/rates/update`,
+					method: 'POST',
+					body: data,
+					headers: {
+						Authorization: `Bearer ${accessToken}`
+					}
+				};
+			}
+		})
+	}),
+	reducerPath: 'apiService'
+});
+
+export default apiService;
