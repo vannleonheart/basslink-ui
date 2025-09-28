@@ -29,7 +29,7 @@ function Logo() {
 					alt="logo"
 				/>
 				<div className="logo-text flex flex-col flex-auto gap-2">
-					<Typography className="text-2xl tracking-light font-semibold leading-none">BRICS</Typography>
+					<Typography className="text-2xl tracking-light font-semibold leading-none">Bass</Typography>
 					<Typography
 						className="text-[13.6px] tracking-light font-semibold leading-none"
 						color="primary"

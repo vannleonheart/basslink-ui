@@ -11,12 +11,12 @@ import React from 'react';
 
 // eslint-disable-next-line react-refresh/only-export-components
 export const metadata = await generateMetadata({
-	title: 'BRICSLink',
-	description: 'BRICSLink - Connecting businesses beyond borders',
+	title: 'BassLink',
+	description: 'BassLink - Connecting businesses beyond borders',
 	cardImage: '/card.png',
 	robots: 'follow, index',
 	favicon: '/favicon.ico',
-	url: 'https://bricslink.io'
+	url: 'https://basslink.id'
 });
 
 export default async function RootLayout({

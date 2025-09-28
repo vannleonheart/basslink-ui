@@ -4,27 +4,34 @@ import i18n from '@i18n/i18n';
 
 const settingsConfig: FuseSettingsConfigType = {
 	layout: {
-		style: 'layout1', // layout1 layout2 layout3
+		style: 'layout1',
 		config: {
-			mode: '',
+			mode: 'fullwidth',
+			containerWidth: 1120,
 			toolbar: {
-				display: false
+				display: false,
+				style: 'fixed'
 			},
 			navbar: {
-				style: 'style-2'
+				display: true,
+				style: 'style-2',
+				folded: false,
+				position: 'left',
+				open: true
 			},
 			footer: {
-				display: false
+				display: false,
+				style: 'static'
 			}
-		} // checkout default layout configs at src/components/theme-layouts for example  src/components/theme-layouts/layout1/Layout1Config.js
+		}
 	},
 	customScrollbars: true,
-	direction: i18n.dir(i18n.options.lng) || 'ltr', // rtl, ltr
+	direction: i18n.dir(i18n.options.lng) || 'ltr',
 	theme: {
-		main: themesConfig.default,
-		navbar: themesConfig.defaultDark,
-		toolbar: themesConfig.default,
-		footer: themesConfig.defaultDark
+		main: themesConfig.darkBlueSilver,
+		navbar: themesConfig.dark3,
+		toolbar: themesConfig.darkBlueSilver,
+		footer: themesConfig.light
 	},
 	defaultAuth: [],
 	loginRedirectUrl: '/'

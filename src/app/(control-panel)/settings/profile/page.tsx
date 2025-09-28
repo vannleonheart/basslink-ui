@@ -78,7 +78,7 @@ export default function ProfileSettingsPage() {
 
 			const message = getErrorMessage(error?.data?.message ?? error.message ?? 'Failed to update profile');
 
-			if (message === 'ERR_VALIDATION') {
+			if (message === 'ERROR_VALIDATION') {
 				const errorData = error.data.data as ValidationError[];
 
 				if (errorData && errorData.length) {

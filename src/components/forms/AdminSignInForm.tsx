@@ -17,7 +17,7 @@ import PasswordField from '@/components/forms/fields/PasswordField';
 import getErrorMessage from '@/data/errors';
 
 const schema = z.object({
-	email: z.string().email('You must enter a valid email').min(1, 'You must enter an email'),
+	username: z.string().min(1, 'You must enter a username'),
 	password: z.string().min(1, 'Please enter your password.'),
 	remember: z.boolean().optional().default(false)
 });
@@ -26,7 +26,7 @@ function AdminSignInForm() {
 	const { control, formState, handleSubmit, setError, setValue } = useForm<SignInFormData>({
 		mode: 'onChange',
 		defaultValues: {
-			email: '',
+			username: '',
 			password: '',
 			remember: false
 		},
@@ -44,7 +44,7 @@ function AdminSignInForm() {
 
 		const result = await signIn('credentials', {
 			...formData,
-			side: 'admin',
+			as: 'admin',
 			redirect: false
 		});
 
@@ -78,17 +78,17 @@ function AdminSignInForm() {
 				</Alert>
 			)}
 			<Controller
-				name="email"
+				name="username"
 				control={control}
 				render={({ field }) => (
 					<TextField
 						{...field}
 						className="mb-24"
-						label="Email"
+						label="Username"
 						autoFocus
-						type="email"
-						error={!!errors.email}
-						helperText={errors?.email?.message}
+						type="text"
+						error={!!errors.username}
+						helperText={errors?.username?.message}
 						variant="outlined"
 						required
 						fullWidth
@@ -132,7 +132,7 @@ function AdminSignInForm() {
 
 				<Link
 					className="text-md font-medium"
-					to="/forgot-password"
+					to="/office/forgot-password"
 				>
 					Forgot password?
 				</Link>

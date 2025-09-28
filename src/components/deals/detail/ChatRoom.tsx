@@ -97,7 +97,7 @@ export default function ChatRoom({ deal, side, allowSend }: ChatRoomProps) {
 															</div>
 															<a
 																href={
-																	'https://bricslink.sgp1.cdn.digitaloceanspaces.com/' +
+																	'https://basslink.sgp1.cdn.digitaloceanspaces.com/' +
 																	file
 																}
 																target="_blank"
@@ -145,7 +145,7 @@ export default function ChatRoom({ deal, side, allowSend }: ChatRoomProps) {
 															</div>
 															<a
 																href={
-																	'https://bricslink.sgp1.cdn.digitaloceanspaces.com/' +
+																	'https://basslink.sgp1.cdn.digitaloceanspaces.com/' +
 																	file
 																}
 																target="_blank"

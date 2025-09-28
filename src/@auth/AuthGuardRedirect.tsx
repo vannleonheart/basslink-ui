@@ -20,7 +20,7 @@ type AuthGuardProps = {
 };
 
 function AuthGuardRedirect({ auth, children, loginRedirectUrl = '/' }: AuthGuardProps) {
-	const { data: user, side } = useUser();
+	const { data: user, as } = useUser();
 	const navigate = useNavigate();
 	const [accessGranted, setAccessGranted] = useState<boolean>(false);
 	const pathname = usePathname();
@@ -38,7 +38,17 @@ function AuthGuardRedirect({ auth, children, loginRedirectUrl = '/' }: AuthGuard
 		const redirectUrl = getSessionRedirectUrl() || loginRedirectUrl;
 
 		if (!user) {
-			navigate(side === 'agent' ? '/agent/signin' : '/signin');
+			switch (as) {
+				case 'agent':
+					navigate('/agent/signin');
+					break;
+				case 'admin':
+					navigate('/office/signin');
+					break;
+				default:
+					navigate('/signin');
+					break;
+			}
 		} else {
 			navigate(redirectUrl);
 			resetSessionRedirectUrl();

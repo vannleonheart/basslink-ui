@@ -45,7 +45,7 @@ function ListItem(props: AgentListItemPropsType) {
 				<ListItemAvatar>
 					<Avatar
 						alt={agent.name}
-						src={agent.image}
+						src={null}
 					/>
 				</ListItemAvatar>
 				<ListItemText

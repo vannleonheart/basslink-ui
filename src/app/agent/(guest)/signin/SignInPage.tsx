@@ -1,7 +1,5 @@
 import Typography from '@mui/material/Typography';
 import Paper from '@mui/material/Paper';
-import CardContent from '@mui/material/CardContent';
-import FormSideBox from '@/components/commons/FormSideBox';
 import { Alert } from '@mui/material';
 import AgentSignInForm from '@/components/forms/AgentSignInForm';
 import { useSearchParams } from 'next/navigation';
@@ -13,21 +11,22 @@ function SignInPage() {
 	const error = getErrorMessage(errorType);
 
 	return (
-		<div className="flex min-w-0 flex-1 flex-col items-center sm:flex-row sm:justify-center md:items-start md:justify-start">
-			<Paper className="h-full w-full px-16 py-8 ltr:border-r-1 rtl:border-l-1 sm:h-auto sm:w-auto sm:rounded-xl sm:p-48 sm:shadow md:flex md:h-full md:w-1/2 md:items-center md:justify-end md:rounded-none md:p-64 md:shadow-none">
-				<CardContent className="mx-auto w-full">
-					<Typography className="mt-32 text-4xl font-extrabold leading-tight tracking-tight">
-						Sign in
+		<div className="flex min-w-0 flex-auto flex-col items-center sm:justify-center">
+			<Paper className="bg-white min-h-full w-full rounded-0 px-16 py-32 sm:min-h-auto sm:w-auto sm:rounded-xl sm:p-48 sm:shadow md:shadow-2">
+				<div className="mx-auto w-full max-w-320 sm:mx-0 sm:w-320">
+					<Typography className="text-4xl font-extrabold leading-4 tracking-tight text-center text-red-700 uppercase">
+						<span className="block text-xl font-extrabold leading-tight tracking-tight text-center text-blue-700">
+							BassLink
+						</span>
+						Agent
 					</Typography>
-
-					<Typography className="mt-16 text-lg font-medium leading-6 tracking-tight text-gray-600">
-						Hi Agent, please sign in to access your account.
+					<Typography className="mt-16 text-lg font-medium leading-6 tracking-tight text-gray-600 text-center">
+						Please sign in to access agent dashboard.
 					</Typography>
-
 					<div className="flex flex-col space-y-32">
 						{error && (
 							<Alert
-								className="mt-16"
+								className=""
 								severity="error"
 								sx={(theme) => ({
 									backgroundColor: theme.palette.error.light,
@@ -39,10 +38,8 @@ function SignInPage() {
 						)}
 						<AgentSignInForm />
 					</div>
-				</CardContent>
+				</div>
 			</Paper>
-
-			<FormSideBox />
 		</div>
 	);
 }

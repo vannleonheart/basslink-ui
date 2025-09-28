@@ -2,10 +2,10 @@ import { styled } from '@mui/material/styles';
 import FusePageSimple from '@fuse/core/FusePageSimple/FusePageSimple';
 import Header from './Header';
 import { useSession } from 'next-auth/react';
-import ListPage from '@/app/(control-panel)/clients/ListPage';
+import Content from './Content';
 import apiService from '@/store/apiService';
 import { useMemo } from 'react';
-import { Client } from '@/types';
+import { Agent } from '@/types';
 
 const Root = styled(FusePageSimple)(({ theme }) => ({
 	'& .container': {
@@ -19,35 +19,32 @@ const Root = styled(FusePageSimple)(({ theme }) => ({
 
 export default function App() {
 	const {
-		data: { accessToken, side, db: user }
+		data: { accessToken, side }
 	} = useSession();
 	const {
-		data: clientsData,
+		data: agentsData,
 		isLoading,
 		refetch
-	} = apiService.useGetClientsQuery({
+	} = apiService.useGetAgentsQuery({
 		side,
 		accessToken
 	});
-	const clients = useMemo(() => (clientsData ?? []) as Client[], [clientsData]);
-	const allowedRolesToCreateAndUpdate = ['owner', 'admin'];
+	const agents = useMemo(() => (agentsData ?? []) as Agent[], [agentsData]);
 
 	return (
 		<Root
 			header={
 				<Header
-					data={clients}
+					data={agents}
 					isLoading={isLoading}
 					fetch={refetch}
-					allowCreate={side === 'agent' && allowedRolesToCreateAndUpdate.includes(user.role)}
 				/>
 			}
 			content={
-				<ListPage
-					data={clients}
+				<Content
+					data={agents}
 					isLoading={isLoading}
 					fetch={refetch}
-					allowUpdate={side === 'agent' && allowedRolesToCreateAndUpdate.includes(user.role)}
 				/>
 			}
 		/>

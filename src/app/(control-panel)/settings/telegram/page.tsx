@@ -93,8 +93,8 @@ export default function TelegramSettingsPage() {
 				<ListItem>
 					1. Open Telegram and search for user
 					<div className="flex gap-8 ml-6 px-6 py-3 pr-3 border border-gray-500 rounded font-bold bg-white">
-						<span>@BRICSLinkIO_Bot</span>
-						<CopyButton value="@BRICSLinkIO_Bot" />
+						<span>@BassLinkID_Bot</span>
+						<CopyButton value="@BassLinkID_Bot" />
 					</div>
 				</ListItem>
 				<ListItem>2. Start a chat with the bot or invite it to a group.</ListItem>

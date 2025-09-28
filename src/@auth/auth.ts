@@ -13,7 +13,7 @@ import {
 	clientAuthSignin,
 	clientGetProfile
 } from '@/utils/apiCall';
-import { ApiResponse, SignInFormData, SigninResponse, User } from '@/types';
+import { AdminUser, AgentUser, ApiResponse, SignInFormData, SigninResponse, User } from '@/types';
 
 const storage = createStorage({
 	driver: memoryDriver()
@@ -34,43 +34,37 @@ export const providers: Provider[] = [
 	Credentials({
 		async authorize(credentials) {
 			try {
-				const { email, password, side } = credentials;
+				const { username, password, as } = credentials;
 
 				let response: ApiResponse;
 
-				switch (side) {
+				switch (as) {
 					default:
 						response = await clientAuthSignin({
-							email,
+							username,
 							password
 						} as SignInFormData);
 						break;
 					case 'agent':
 						response = await agentAuthSignin({
-							email,
+							username,
 							password
 						} as SignInFormData);
 						break;
 					case 'admin':
 						response = await adminAuthSignin({
-							email,
+							username,
 							password
 						} as SignInFormData);
 						break;
 				}
 
-				if (response.status === 'success') {
-					const result = ((await response?.data) ?? {}) as SigninResponse;
+				const result = response.data as SigninResponse;
 
-					return {
-						name: side,
-						id: result?.token
-					};
-				} else {
-					const { code, message } = response;
-
-					throw new InvalidLoginError(message, code);
-				}
+				return {
+					name: as,
+					id: result?.token
+				};
 			} catch (err) {
 				const data = err?.data;
 
@@ -101,7 +95,7 @@ const config = {
 		},
 		jwt({ token, account, user }) {
 			if (account?.provider === 'credentials') {
-				return { ...token, accessToken: user?.id, side: user?.name };
+				return { ...token, accessToken: user.id, as: user.name };
 			}
 
 			return token;
@@ -109,37 +103,58 @@ const config = {
 		async session({ session, token }) {
 			if (token && token.accessToken && typeof token.accessToken === 'string' && token.accessToken.length) {
 				session.accessToken = token.accessToken;
-				session.side = token.side as string;
+				session.side = token.as as string;
 
-				let response: ApiResponse;
+				try {
+					let response: ApiResponse;
 
-				switch (token.side) {
-					default:
-						response = await clientGetProfile(session.accessToken);
-						break;
-					case 'agent':
-						response = await agentGetProfile(session.accessToken);
-						break;
-					case 'admin':
-						response = await adminGetProfile(session.accessToken);
-						break;
-				}
-
-				if (response.status === 'success') {
-					session.db = response?.data as User;
+					switch (token.as) {
+						default:
+							response = await clientGetProfile(session.accessToken);
+							session.db = response.data as User;
+							session.db.as = `${token.as}`;
+							session.as = session.db.as;
+							break;
+						case 'agent':
+							response = await agentGetProfile(session.accessToken);
+							session.db = response.data as AgentUser;
+							session.db.as = `${token.as}.${session.db?.role}`;
+							session.as = session.db.as;
+							break;
+						case 'admin':
+							response = await adminGetProfile(session.accessToken);
+							session.db = response.data as AdminUser;
+							session.db.as = `${token.as}.${session.db?.role}`;
+							session.as = session.db.as;
+							break;
+					}
 
 					return session;
+				} catch (_err) {
+					return null;
 				}
 			}
 
 			return null;
 		}
 	},
+	experimental: {
+		enableWebAuthn: true
+	},
 	session: {
 		strategy: 'jwt',
-		maxAge: 259200
+		maxAge: 30 * 24 * 60 * 60
 	},
 	debug: process.env.NODE_ENV !== 'production'
 } satisfies NextAuthConfig;
 
-export const { handlers, auth } = NextAuth(config);
+export type AuthJsProvider = {
+	id: string;
+	name: string;
+	style?: {
+		text?: string;
+		bg?: string;
+	};
+};
+
+export const { handlers, auth, signIn, signOut } = NextAuth(config);

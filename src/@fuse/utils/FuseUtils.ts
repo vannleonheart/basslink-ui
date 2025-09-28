@@ -1,6 +1,6 @@
 import _ from 'lodash';
 import EventEmitter from './EventEmitter';
-import { AuthType, User, AgentUser, ClientUser, AdminUser } from '@/types';
+import { AuthType, UserType } from '@/types';
 
 type TreeNode = {
 	id: string;
@@ -104,156 +104,52 @@ class FuseUtils {
 
 	static EventEmitter = EventEmitter;
 
-	static hasPermission(authTypes: AuthType, user: User): boolean {
-		if (null === authTypes || undefined === authTypes) {
+	static hasPermission(auth: AuthType, user: UserType): boolean {
+		if (null === auth || undefined === auth) {
 			return true;
 		}
 
-		if (typeof authTypes === 'boolean') {
-			if (false === authTypes && !user) {
+		if (typeof auth === 'boolean') {
+			if (false === auth && !user) {
 				return true;
 			}
 
-			return !!(true === authTypes && user);
+			return !!(true === auth && user);
 		}
 
-		if (typeof authTypes === 'string') {
-			if (!authTypes.length) {
+		if (typeof auth === 'string') {
+			if (!auth.length) {
 				return true;
 			}
 
-			if (authTypes === 'agent') {
-				const agentUser = user as AgentUser;
-
-				if (agentUser?.agent) {
-					return true;
-				}
+			if (user && user?.as.includes(auth)) {
+				return true;
 			}
 
-			if (authTypes === 'client') {
-				const clientUser = user as ClientUser;
-
-				if (clientUser?.client) {
-					return true;
-				}
-			}
-
-			if (authTypes === 'admin') {
-				const adminUser = user as AdminUser;
-
-				if (adminUser?.username) {
-					return true;
-				}
+			if (!user && auth === 'guest') {
+				return true;
 			}
 
 			return false;
 		}
 
-		if (Array.isArray(authTypes)) {
-			if (!authTypes.length) {
+		if (Array.isArray(auth)) {
+			if (!auth.length) {
 				return true;
 			}
 
-			if (user) {
-				for (const currentAuthType of authTypes) {
-					if (currentAuthType && typeof currentAuthType === 'string') {
-						if (!currentAuthType.length) {
-							return true;
-						}
-
-						if (currentAuthType === 'agent') {
-							const agentUser = user as AgentUser;
-
-							if (agentUser?.agent) {
-								return true;
-							}
-						}
-
-						if (currentAuthType === 'client') {
-							const clientUser = user as ClientUser;
-
-							if (clientUser?.client) {
-								return true;
-							}
-						}
-
-						if (currentAuthType === 'admin') {
-							const adminUser = user as AdminUser;
-
-							if (adminUser?.username) {
-								return true;
-							}
-						}
+			for (const currentAuth of auth) {
+				if (currentAuth && typeof currentAuth === 'string') {
+					if (!currentAuth.length) {
+						continue;
 					}
 
-					if (currentAuthType && typeof currentAuthType === 'object') {
-						const currentAuth = currentAuthType as { type: string; roles?: string | string[] };
+					if (!user && currentAuth === 'guest') {
+						return true;
+					}
 
-						if (currentAuth.type === 'agent') {
-							const agentUser = user as AgentUser;
-
-							if (!agentUser?.agent) {
-								return false;
-							}
-
-							const roles = currentAuth.roles;
-
-							if (!roles) {
-								return true;
-							}
-
-							if (typeof roles === 'string' && roles === user?.role) {
-								return true;
-							}
-
-							if (Array.isArray(roles) && roles.includes(user?.role)) {
-								return true;
-							}
-						}
-
-						if (currentAuth.type === 'client') {
-							const clientUser = user as ClientUser;
-
-							if (!clientUser?.client) {
-								return false;
-							}
-
-							const roles = currentAuth.roles;
-
-							if (!roles) {
-								return true;
-							}
-
-							if (typeof roles === 'string' && roles === user?.role) {
-								return true;
-							}
-
-							if (Array.isArray(roles) && roles.includes(user?.role)) {
-								return true;
-							}
-						}
-
-						if (currentAuth.type === 'admin') {
-							const adminUser = user as AdminUser;
-
-							if (!adminUser?.username) {
-								return false;
-							}
-
-							const roles = currentAuth.roles;
-
-							if (!roles) {
-								return true;
-							}
-
-							if (typeof roles === 'string' && roles === user?.role) {
-								return true;
-							}
-
-							if (Array.isArray(roles) && roles.includes(user?.role)) {
-								return true;
-							}
-						}
+					if (user && user?.as.includes(currentAuth)) {
+						return true;
 					}
 				}
 			}

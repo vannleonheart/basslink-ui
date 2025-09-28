@@ -10,7 +10,7 @@ import { setSearchText, resetSearchText, selectSearchText } from './AppSlice';
 import { selectFilteredAgentUserList } from './Api';
 import { AgentUser } from '@/types';
 import { openDialog } from '@fuse/core/FuseDialog/fuseDialogSlice';
-import DialogAgentUserCreateOrEdit from '@/components/dialogs/DialogAgentUserCreateOrEdit';
+import DialogUserCreateOrEdit from '@/components/dialogs/DialogUserCreateOrEdit';
 
 function Header({ data, isLoading, fetch }: { data: AgentUser[]; isLoading: boolean; fetch: () => void }) {
 	const dispatch = useAppDispatch();
@@ -19,7 +19,7 @@ function Header({ data, isLoading, fetch }: { data: AgentUser[]; isLoading: bool
 	const handleNewUser = () => {
 		dispatch(
 			openDialog({
-				children: <DialogAgentUserCreateOrEdit callbackAction={fetch} />,
+				children: <DialogUserCreateOrEdit callbackAction={fetch} />,
 				fullWidth: true,
 				disableBackdropClick: true,
 				disableEscapeKeyDown: true

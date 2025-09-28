@@ -16,9 +16,9 @@ function SignInPage() {
 				<div className="mx-auto w-full max-w-320 sm:mx-0 sm:w-320">
 					<Typography className="text-4xl font-extrabold leading-4 tracking-tight text-center text-red-700 uppercase">
 						<span className="block text-xl font-extrabold leading-tight tracking-tight text-center text-blue-700">
-							BRICS
+							BassLink
 						</span>
-						Link
+						Office
 					</Typography>
 					<Typography className="mt-16 text-lg font-medium leading-6 tracking-tight text-gray-600 text-center">
 						Please sign in to access office dashboard.

@@ -7,7 +7,7 @@ import ListItemButton from '@mui/material/ListItemButton';
 import { AgentUser } from '@/types';
 import { openDialog } from '@fuse/core/FuseDialog/fuseDialogSlice';
 import { useAppDispatch } from '@/store/hooks';
-import DialogAgentUserCreateOrEdit from '@/components/dialogs/DialogAgentUserCreateOrEdit';
+import DialogAgentUserCreateOrEdit from '@/components/dialogs/DialogUserCreateOrEdit';
 
 type AgentUserListItemPropsType = {
 	agentUser: AgentUser;

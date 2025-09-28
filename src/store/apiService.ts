@@ -12,8 +12,17 @@ const baseQuery: BaseQueryFn<string | FetchArgs, unknown, FetchBaseQueryError, o
 		baseUrl: API_BASE_URL,
 		prepareHeaders: (headers) => {
 			Object.entries(globalHeaders).forEach(([key, value]) => {
-				headers.set(key, value);
+				if (!headers.has(key)) {
+					headers.set(key, value);
+				}
 			});
+
+			headers.forEach((value, key) => {
+				if (value === undefined || value === null || value === '') {
+					headers.delete(key);
+				}
+			});
+
 			return headers;
 		}
 	})(args, api, extraOptions);
@@ -185,6 +194,21 @@ export const apiService = createApi({
 					method: 'POST',
 					body: data,
 					headers: {
+						Authorization: `Bearer ${accessToken}`
+					}
+				};
+			}
+		}),
+		uploadFile: build.mutation({
+			query: (args) => {
+				const { accessToken, data = {}, path = '/upload' } = args;
+
+				return {
+					url: path,
+					method: 'POST',
+					body: data,
+					headers: {
+						'Content-Type': '',
 						Authorization: `Bearer ${accessToken}`
 					}
 				};

@@ -10,7 +10,7 @@ export default function SupportContent() {
 				<h2 className="text-3xl uppercase text-gray-900 mb-28 drop-shadow-lg">Support</h2>
 				<p className="text-2xl text-gray-700 leading-7">
 					If you have any questions or need help, please contact us at{' '}
-					<a href="mailto:help@bricslink.io">help@bricslink.io</a>.
+					<a href="mailto:help@basslink.id">help@basslink.id</a>.
 					<br />
 					We will respond to your inquiry as soon as possible.
 				</p>

@@ -37,7 +37,7 @@ export default function FileList({ deal }: { deal: Deal }) {
 									)}
 									<div className="p-8 pr-12">
 										<a
-											href={'https://bricslink.sgp1.cdn.digitaloceanspaces.com/' + file.filename}
+											href={'https://basslink.sgp1.cdn.digitaloceanspaces.com/' + file.filename}
 											target="_blank"
 											rel="noreferrer"
 											className="text-blue-500 bg-transparent no-underline"

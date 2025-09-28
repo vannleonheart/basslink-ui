@@ -1,7 +1,7 @@
 import { redirect } from 'next/navigation';
 
 function MainPage() {
-	redirect(`/deals`);
+	redirect(`/dashboard`);
 }
 
 export default MainPage;

@@ -1,11 +1,11 @@
 'use client';
 
 import AuthGuardRedirect from '@auth/AuthGuardRedirect';
-import App from '@/app/(control-panel)/clients/App';
+import App from './App';
 
 export default function Layout() {
 	return (
-		<AuthGuardRedirect auth={['admin', 'agent']}>
+		<AuthGuardRedirect auth={['user', 'agent']}>
 			<App />
 		</AuthGuardRedirect>
 	);

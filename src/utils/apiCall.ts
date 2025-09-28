@@ -43,8 +43,48 @@ export async function post(url: string, data: unknown, accessToken?: string): Pr
 	});
 }
 
+export async function put(url: string, data: unknown, accessToken?: string): Promise<Response> {
+	const headers = {};
+
+	if (accessToken && accessToken.length) {
+		headers['Authorization'] = `Bearer ${accessToken}`;
+	}
+
+	return apiFetch(url, {
+		method: 'PUT',
+		body: jsonify(data),
+		headers
+	});
+}
+
+export async function del(url: string, data: unknown, accessToken?: string): Promise<Response> {
+	const headers = {};
+
+	if (accessToken && accessToken.length) {
+		headers['Authorization'] = `Bearer ${accessToken}`;
+	}
+
+	return apiFetch(url, {
+		method: 'DELETE',
+		body: jsonify(data),
+		headers
+	});
+}
+
 export async function postJson(url: string, data: unknown, accessToken?: string): Promise<ApiResponse> {
 	const resp = await post(url, data, accessToken);
+
+	return await resp.json();
+}
+
+export async function putJson(url: string, data: unknown, accessToken?: string): Promise<ApiResponse> {
+	const resp = await put(url, data, accessToken);
+
+	return await resp.json();
+}
+
+export async function deleteJson(url: string, data: unknown, accessToken?: string): Promise<ApiResponse> {
+	const resp = await del(url, data, accessToken);
 
 	return await resp.json();
 }
@@ -227,43 +267,39 @@ export async function agentUploadFiles(files: File[], accessToken: string): Prom
 /** Client Endpoints **/
 
 export async function clientAuthSignin(data: SignInFormData): Promise<ApiResponse> {
-	return await postJson('/client/auth/signin', data);
+	return await postJson('/user/auth/signin', data);
 }
 
 export async function clientAuthRecover(data: ForgotPasswordFormData): Promise<ApiResponse> {
-	return await postJson('/client/auth/recover', data);
+	return await postJson('/user/auth/recover', data);
 }
 
 export async function clientAuthReset(data: ResetPasswordFormData): Promise<ApiResponse> {
-	return await postJson('/client/auth/reset', data);
+	return await postJson('/user/auth/reset', data);
 }
 
 export async function clientAuthVerifyEmail(id: string, token: string): Promise<ApiResponse> {
-	return await postJson('/client/auth/verify/email', { id, token });
+	return await postJson('/user/auth/verify/email', { id, token });
 }
 
 export async function clientAuthResendEmailVerification(data: ResendEmailVerificationFormData): Promise<ApiResponse> {
-	return await postJson('/client/auth/resend/email/verification', data);
+	return await postJson('/user/auth/resend/email/verification', data);
 }
 
 export async function clientGetProfile(accessToken: string): Promise<ApiResponse> {
-	return await getJson('/client/account/profile', accessToken);
+	return await getJson('/user/account/profile', accessToken);
 }
 
 export async function clientUpdateProfile(data: ProfileSettings, accessToken: string): Promise<ApiResponse> {
-	return await postJson('/client/account/profile/update', data, accessToken);
+	return await postJson('/user/account/profile/update', data, accessToken);
 }
 
 export async function clientUpdatePassword(data: SecuritySettings, accessToken: string): Promise<ApiResponse> {
-	return await postJson('/client/account/profile/update_password', data, accessToken);
-}
-
-export async function clientGetTelegramConnects(accessToken: string): Promise<ApiResponse> {
-	return await getJson('/client/account/telegramconnects', accessToken);
+	return await postJson('/user/account/profile/update_password', data, accessToken);
 }
 
 export async function clientCreateContact(data: ClientContact, accessToken: string): Promise<ApiResponse> {
-	return await postJson('/client/contacts', data, accessToken);
+	return await postJson('/user/contacts', data, accessToken);
 }
 
 export async function clientUpdateContactById(
@@ -383,9 +419,9 @@ export async function adminUpdateAgentById(
 	data: CreateOrEditAgentFormData,
 	accessToken: string
 ): Promise<ApiResponse> {
-	return await postJson(`/admin/agents/${agentId}/update`, data, accessToken);
+	return await putJson(`/admin/agents/${agentId}`, data, accessToken);
 }
 
 export async function adminDeleteAgentById(agentId: string, accessToken: string): Promise<ApiResponse> {
-	return await postJson(`/admin/agents/${agentId}/delete`, {}, accessToken);
+	return await deleteJson(`/admin/agents/${agentId}`, accessToken);
 }

@@ -5,14 +5,7 @@ import App from './App';
 
 export default function Layout() {
 	return (
-		<AuthGuardRedirect
-			auth={[
-				{
-					type: 'agent',
-					roles: ['owner', 'admin']
-				}
-			]}
-		>
+		<AuthGuardRedirect auth={['agent']}>
 			<App />
 		</AuthGuardRedirect>
 	);

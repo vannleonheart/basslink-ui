@@ -1,4 +1,4 @@
-const sessionStorageKey = 'bricslinkRedirectUrl';
+const sessionStorageKey = 'basslinkRedirectUrl';
 
 export const getSessionRedirectUrl = () => {
 	return window.sessionStorage.getItem(sessionStorageKey);

@@ -4,32 +4,16 @@ import { User } from '@/types';
 
 type useUser = {
 	data: User | null;
-	side: string;
+	as: string;
 	isGuest: boolean;
 	signOut: typeof signOut;
 };
 
 function useUser(): useUser {
 	const { data } = useSession();
-	const user = useMemo(() => data?.db ?? null, [data]);
-	const side = useMemo(() => {
-		if (user) {
-			if (user?.agent) {
-				return 'agent';
-			}
-
-			if (user?.client) {
-				return 'client';
-			}
-
-			if (user?.username) {
-				return 'admin';
-			}
-		}
-
-		return '';
-	}, [user]);
-	const isGuest = useMemo(() => !user || !user?.id || user?.id?.length === 0, [user]);
+	const user = useMemo(() => data?.db, [data]);
+	const as = useMemo(() => data?.as, [data]);
+	const isGuest = useMemo(() => !user, [user]);
 
 	async function handleSignOut() {
 		return signOut();
@@ -37,7 +21,7 @@ function useUser(): useUser {
 
 	return {
 		data: user,
-		side,
+		as,
 		isGuest,
 		signOut: handleSignOut
 	};

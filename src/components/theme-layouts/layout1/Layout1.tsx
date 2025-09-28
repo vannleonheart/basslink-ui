@@ -32,9 +32,6 @@ type Layout1Props = {
 	children?: ReactNode;
 };
 
-/**
- * The layout 1.
- */
 function Layout1(props: Layout1Props) {
 	const { children } = props;
 	const settings = useFuseLayoutSettings();

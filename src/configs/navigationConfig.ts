@@ -2,61 +2,20 @@ import { FuseNavItemType } from '@fuse/core/FuseNavigation/types/FuseNavItemType
 
 const navigationConfig: FuseNavItemType[] = [
 	{
-		id: 'sidebar-menu-deals',
-		title: 'Deals',
+		id: 'sidebar-menu-disbursements',
+		title: 'Disbursements',
 		type: 'item',
 		icon: 'heroicons-solid:banknotes',
-		url: '/deals',
+		url: '/disbursements',
 		end: true,
-		auth: ['admin', 'agent', 'client']
+		auth: true
 	},
 	{
 		id: 'sidebar-menu-agents',
 		title: 'Agents',
 		type: 'item',
-		icon: 'heroicons-solid:users',
-		url: '/agents',
-		end: true,
-		auth: 'admin'
-	},
-	{
-		id: 'sidebar-menu-clients',
-		title: 'Clients',
-		type: 'item',
 		icon: 'heroicons-solid:briefcase',
-		url: '/clients',
-		end: true,
-		auth: ['admin', 'agent']
-	},
-	{
-		id: 'sidebar-menu-payment-companies',
-		title: 'Payment Companies',
-		type: 'item',
-		icon: 'heroicons-solid:building-office-2',
-		url: '/companies',
-		end: true,
-		auth: [
-			{
-				type: 'agent',
-				roles: ['owner', 'admin']
-			}
-		]
-	},
-	{
-		id: 'sidebar-menu-contacts',
-		title: 'Contacts',
-		type: 'item',
-		icon: 'heroicons-solid:user-group',
-		url: '/contacts',
-		end: true,
-		auth: 'client'
-	},
-	{
-		id: 'sidebar-menu-rates',
-		title: 'Rates',
-		type: 'item',
-		icon: 'heroicons-outline:currency-dollar',
-		url: '/rates',
+		url: '/agents',
 		end: true,
 		auth: 'admin'
 	},
@@ -67,21 +26,50 @@ const navigationConfig: FuseNavItemType[] = [
 		icon: 'heroicons-solid:users',
 		url: '/users',
 		end: true,
-		auth: [
-			{
-				type: 'agent',
-				roles: ['owner', 'admin']
-			}
-		]
+		auth: 'agent'
+	},
+	{
+		id: 'sidebar-menu-contacts',
+		title: 'Contacts',
+		type: 'item',
+		icon: 'heroicons-solid:user-group',
+		url: '/contacts',
+		end: true,
+		auth: ['user', 'agent']
 	},
 	{
 		id: 'sidebar-menu-settings',
 		title: 'Settings',
-		type: 'item',
+		type: 'collapse',
 		icon: 'heroicons-solid:cog-6-tooth',
 		end: false,
-		url: '/settings',
-		auth: ['agent', 'client']
+		auth: true,
+		children: [
+			{
+				id: 'sidebar-menu-admin-users',
+				title: 'Users',
+				type: 'item',
+				url: '/admin-users',
+				end: true,
+				auth: 'admin'
+			},
+			{
+				id: 'sidebar-menu-agent-users',
+				title: 'Users',
+				type: 'item',
+				url: '/agent-users',
+				end: true,
+				auth: 'agent'
+			},
+			{
+				id: 'sidebar-menu-rates',
+				title: 'Rates',
+				type: 'item',
+				url: '/rates',
+				end: true,
+				auth: 'admin'
+			}
+		]
 	}
 ];
 

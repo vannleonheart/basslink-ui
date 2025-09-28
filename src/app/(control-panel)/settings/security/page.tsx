@@ -79,7 +79,7 @@ export default function SecuritySettingsPage() {
 
 			const message = getErrorMessage(error?.data?.message ?? error.message ?? 'Failed to update password');
 
-			if (message === 'ERR_VALIDATION') {
+			if (message === 'ERROR_VALIDATION') {
 				const errorData = error.data.data as ValidationError[];
 
 				if (errorData && errorData.length) {

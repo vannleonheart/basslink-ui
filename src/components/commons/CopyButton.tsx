@@ -1,4 +1,4 @@
-import { FileCopy } from '@mui/icons-material';
+import FuseSvgIcon from '@fuse/core/FuseSvgIcon';
 import { useState } from 'react';
 
 export default function CopyButton({
@@ -8,7 +8,7 @@ export default function CopyButton({
 }: {
 	value: string;
 	className?: string;
-	size?: 'small' | 'medium' | 'large' | 'inherit';
+	size?: number | 'small' | 'medium' | 'large' | 'inherit';
 }) {
 	const [color, setColor] = useState<'inherit' | 'primary'>('inherit');
 
@@ -23,10 +23,12 @@ export default function CopyButton({
 			onMouseDown={() => setColor('primary')}
 			onMouseUp={() => setColor('inherit')}
 		>
-			<FileCopy
+			<FuseSvgIcon
 				color={color}
 				fontSize={size || 'small'}
-			/>
+			>
+				heroicons-outline:document-duplicate
+			</FuseSvgIcon>
 		</div>
 	);
 }
