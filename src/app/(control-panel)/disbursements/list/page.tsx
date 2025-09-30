@@ -1,11 +1,7 @@
 import { styled } from '@mui/material/styles';
 import FusePageSimple from '@fuse/core/FusePageSimple/FusePageSimple';
 import Header from './Header';
-import { useSession } from 'next-auth/react';
 import Content from './Content';
-import apiService from '@/store/apiService';
-import { useMemo } from 'react';
-import { Agent } from '@/types/entity';
 
 const Root = styled(FusePageSimple)(({ theme }) => ({
 	'& .container': {
@@ -18,35 +14,23 @@ const Root = styled(FusePageSimple)(({ theme }) => ({
 }));
 
 export default function App() {
-	const {
-		data: { accessToken, side }
-	} = useSession();
-	const {
-		data: agentsData,
-		isLoading,
-		refetch
-	} = apiService.useGetAgentsQuery({
-		side,
-		accessToken
-	});
-	const agents = useMemo(() => (agentsData ?? []) as Agent[], [agentsData]);
+	// const {
+	// 	data: { accessToken, side }
+	// } = useSession();
+	// const {
+	// 	data: disbursementsData,
+	// 	isLoading,
+	// 	refetch
+	// } = apiService.useGetDisbursementsQuery({
+	// 	side,
+	// 	accessToken
+	// });
+	// const disbursements = useMemo(() => (disbursementsData ?? []) as Disbursement[], [disbursementsData]);
 
 	return (
 		<Root
-			header={
-				<Header
-					data={agents}
-					isLoading={isLoading}
-					fetch={refetch}
-				/>
-			}
-			content={
-				<Content
-					data={agents}
-					isLoading={isLoading}
-					fetch={refetch}
-				/>
-			}
+			header={<Header />}
+			content={<Content />}
 		/>
 	);
 }

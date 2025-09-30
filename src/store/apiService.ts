@@ -215,6 +215,18 @@ export const apiService = createApi({
 				};
 			}
 		}),
+		getDisbursements: build.query({
+			query: (args) => {
+				const { accessToken } = args;
+				return {
+					url: `/agent/disbursements`,
+					headers: {
+						Authorization: `Bearer ${accessToken}`
+					}
+				};
+			},
+			transformResponse
+		}),
 		createDisbursement: build.mutation({
 			query: (args) => {
 				const { accessToken, data = {} } = args;
