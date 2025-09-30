@@ -197,7 +197,6 @@ export default function NewContactForm() {
 								<TextField
 									{...field}
 									label="Contact Name"
-									type="text"
 									error={!!errors.contact_name}
 									helperText={errors?.contact_name?.message}
 									variant="outlined"
@@ -412,7 +411,6 @@ export default function NewContactForm() {
 							<TextField
 								{...field}
 								label="Address"
-								type="text"
 								error={!!errors.contact_address}
 								helperText={errors?.contact_address?.message}
 								variant="outlined"

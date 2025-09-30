@@ -55,3 +55,12 @@ export const DocumentTypes = {
 	trading_business_license: 'Trading/Business License',
 	other: 'Other'
 };
+
+export const RelationshipTypes = {
+	family: 'Family',
+	friend: 'Friend',
+	acquaintance: 'Acquaintance',
+	colleague: 'Colleague',
+	business_partner: 'Business Partner',
+	other: 'Other'
+};

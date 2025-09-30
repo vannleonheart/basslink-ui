@@ -173,7 +173,6 @@ export default function NewCustomerForm() {
 								<TextField
 									{...field}
 									label="Customer Name"
-									type="text"
 									error={!!errors.customer_name}
 									helperText={errors?.customer_name?.message}
 									variant="outlined"
@@ -388,7 +387,6 @@ export default function NewCustomerForm() {
 							<TextField
 								{...field}
 								label="Address"
-								type="text"
 								error={!!errors.customer_address}
 								helperText={errors?.customer_address?.message}
 								variant="outlined"

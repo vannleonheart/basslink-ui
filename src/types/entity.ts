@@ -53,6 +53,7 @@ export type User = {
 	id: string;
 	agent_id: string;
 	username: string;
+	user_type: string;
 	name: string;
 	gender?: string;
 	birthdate?: string;

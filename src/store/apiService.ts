@@ -215,6 +215,21 @@ export const apiService = createApi({
 				};
 			}
 		}),
+		createDisbursement: build.mutation({
+			query: (args) => {
+				const { accessToken, data = {} } = args;
+
+				return {
+					url: '/agent/disbursements',
+					method: 'POST',
+					body: jsonify(data),
+					headers: {
+						'Content-Type': 'application/json',
+						Authorization: `Bearer ${accessToken}`
+					}
+				};
+			}
+		}),
 		createCustomer: build.mutation({
 			query: (args) => {
 				const { accessToken, data = {} } = args;
@@ -229,6 +244,18 @@ export const apiService = createApi({
 					}
 				};
 			}
+		}),
+		getCustomers: build.query({
+			query: (args) => {
+				const { accessToken } = args;
+				return {
+					url: `/agent/users`,
+					headers: {
+						Authorization: `Bearer ${accessToken}`
+					}
+				};
+			},
+			transformResponse
 		}),
 		createContact: build.mutation({
 			query: (args) => {
@@ -250,6 +277,18 @@ export const apiService = createApi({
 				const { accessToken } = args;
 				return {
 					url: `/agent/contacts`,
+					headers: {
+						Authorization: `Bearer ${accessToken}`
+					}
+				};
+			},
+			transformResponse
+		}),
+		getContactAccounts: build.query({
+			query: (args) => {
+				const { accessToken, id } = args;
+				return {
+					url: `/agent/contacts/${id}/accounts`,
 					headers: {
 						Authorization: `Bearer ${accessToken}`
 					}

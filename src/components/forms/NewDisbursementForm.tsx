@@ -5,11 +5,10 @@ import _ from 'lodash';
 import TextField from '@mui/material/TextField';
 import Button from '@mui/material/Button';
 import { Alert, Checkbox, FormControl, FormControlLabel } from '@mui/material';
-import { CreateDisbursementFormData, Currency, Disbursement } from '@/types/entity';
-import { useRouter } from 'next/navigation';
+import { Contact, ContactAccount, Currency, User } from '@/types/entity';
 import MenuItem from '@mui/material/MenuItem';
 import { CountryCodeList } from '@/data/country-code';
-import { clientCreateDealSendMoney, clientUpdateDealSendMoney, clientUploadFiles } from '@/utils/apiCall';
+import { clientUploadFiles } from '@/utils/apiCall';
 import { useSession } from 'next-auth/react';
 import { useMemo, useState } from 'react';
 import Box from '@mui/material/Box';
@@ -19,12 +18,19 @@ import UploadedFileItem from '@/components/forms/fields/UploadedFileItem';
 import apiService from '@/store/apiService';
 import getErrorMessage from '@/data/errors';
 import CurrencyField from './fields/CurrencyField';
-import FileUploadInput from './fields/FileUploadInput';
 import { useAppDispatch } from '@/store/hooks';
 import { openDialog } from '@fuse/core/FuseDialog/fuseDialogSlice';
-import ContactListDialog from '@/app/(control-panel)/deals/ContactListDialog';
+import { CreateDisbursementFormData } from '@/types/form';
+import ContactListDialog from '../dialogs/ContactListDialog';
+import useNavigate from '@fuse/hooks/useNavigate';
+import { ApiResponse } from '@/types/component';
+import { showMessage } from '@fuse/core/FuseMessage/fuseMessageSlice';
+import { Gender, IdentityTypes, Occupations, RelationshipTypes, UserTypes } from '@/data/static-data';
+import UserListDialog from '../dialogs/UserListDialog';
+import ContactBankAccountListDialog from '../dialogs/ContactBankAccountListDialog';
 
 const schema = z.object({
+	from_customer: z.string().min(1, 'You must choose the sender'),
 	from_currency: z.string().min(1, 'You must choose the currency'),
 	from_amount: z.string().min(1, 'You must enter the amount'),
 	to_currency: z.string().min(1, 'You must choose the currency'),
@@ -42,13 +48,7 @@ const schema = z.object({
 	files: z.array(z.string())
 });
 
-export default function NewDisbursementForm({
-	disbursement,
-	fetch
-}: {
-	disbursement?: Disbursement;
-	fetch?: () => void;
-}) {
+export default function NewDisbursementForm() {
 	const { control, formState, handleSubmit, setError, getValues, setValue } = useForm<CreateDisbursementFormData>({
 		mode: 'onChange',
 		resolver: zodResolver(schema),
@@ -57,6 +57,23 @@ export default function NewDisbursementForm({
 			from_amount: '',
 			to_currency: '',
 			to_amount: '',
+			from_customer: '',
+			customer_type: '',
+			customer_name: '',
+			customer_gender: '',
+			customer_birthdate: '',
+			customer_citizenship: '',
+			customer_country: '',
+			customer_region: '',
+			customer_city: '',
+			customer_address: '',
+			customer_email: '',
+			customer_phone_code: '',
+			customer_phone_no: '',
+			customer_occupation: '',
+			customer_identity_type: '',
+			customer_identity_no: '',
+			customer_notes: '',
 			to_contact: '',
 			beneficiary_type: '',
 			beneficiary_name: '',
@@ -73,8 +90,6 @@ export default function NewDisbursementForm({
 			beneficiary_occupation: '',
 			beneficiary_identity_type: '',
 			beneficiary_identity_no: '',
-			beneficiary_portrait_image: '',
-			beneficiary_identity_image: '',
 			beneficiary_notes: '',
 			beneficiary_relationship: '',
 			to_account: '',
@@ -104,70 +119,69 @@ export default function NewDisbursementForm({
 		}
 	});
 	const { isValid, dirtyFields, errors } = formState;
-	const router = useRouter();
 	const { data } = useSession() ?? {};
 	const { accessToken } = data ?? {};
-	const [submitting, setSubmitting] = useState(false);
 	const [uploading, setUploading] = useState(false);
 	const { data: currenciesData } = apiService.useGetCurrenciesQuery({});
 	const currencies = useMemo(() => (currenciesData ?? []) as Currency[], [currenciesData]);
 	const dispatch = useAppDispatch();
+	const [createDisbursement, { isLoading: submitting }] = apiService.useCreateDisbursementMutation();
+	const navigate = useNavigate();
 
 	async function onSubmit(formData: CreateDisbursementFormData) {
-		try {
-			if (submitting) {
-				return;
-			}
+		if (submitting) {
+			return;
+		}
 
-			setSubmitting(true);
+		const { error } = await createDisbursement({
+			accessToken,
+			data: formData
+		});
 
-			let message = '';
-
-			if (!disbursement) {
-				const result = await clientCreateDealSendMoney(formData, accessToken);
-
-				if (result?.status === 'success') {
-					if (fetch) {
-						fetch();
-					}
-
-					router.push('/deals');
-					return;
-				}
-
-				message = result?.message;
-			} else {
-				const result = await clientUpdateDealSendMoney(disbursement.id, formData, accessToken);
-
-				if (result?.status === 'success') {
-					if (fetch) {
-						fetch();
-					}
-
-					router.push(`/disbursements/${disbursement.id}`);
-					return;
-				}
-
-				message = result?.message;
-			}
-
-			setSubmitting(false);
-			setError('root', { type: 'manual', message });
-			return false;
-		} catch (error) {
-			const { message, data } = error;
-
-			setSubmitting(false);
-
-			if (!data) {
-				setError('root', { type: 'manual', message });
-			} else {
-				setError('root', { type: 'manual', message: data?.message });
-			}
-
+		if (error) {
+			const errorData = error as { data: ApiResponse };
+			dispatch(
+				showMessage({
+					variant: 'error',
+					message: errorData?.data?.message
+				})
+			);
 			return false;
 		}
+
+		navigate(`/disbursements/list`);
 	}
+
+	const selectCustomerFromUserList = () => {
+		dispatch(
+			openDialog({
+				fullWidth: true,
+				children: (
+					<UserListDialog
+						onSelect={(user: User) => {
+							setValue('from_customer', user.id);
+							setValue('customer_type', user.user_type);
+							setValue('customer_name', user.name);
+							setValue('customer_gender', user?.gender ?? '');
+							setValue('customer_birthdate', user?.birthdate ?? '');
+							setValue('customer_citizenship', user?.citizenship ?? '');
+							setValue('customer_identity_type', user?.identity_type ?? '');
+							setValue('customer_identity_no', user?.identity_no ?? '');
+							setValue('customer_occupation', user?.occupation ?? '');
+							setValue('customer_country', user?.country ?? '');
+							setValue('customer_region', user?.region ?? '');
+							setValue('customer_city', user?.city ?? '');
+							setValue('customer_address', user?.address ?? '');
+							setValue('customer_email', user?.email ?? '');
+							setValue('customer_phone_code', user?.phone_code ? `+${user.phone_code}` : '');
+							setValue('customer_phone_no', user?.phone_no ?? '');
+							setValue('customer_notes', user?.notes ?? '');
+						}}
+					/>
+				)
+			})
+		);
+	};
 
 	const selectBeneficiaryFromContact = () => {
 		dispatch(
@@ -175,15 +189,52 @@ export default function NewDisbursementForm({
 				fullWidth: true,
 				children: (
 					<ContactListDialog
-						onSelect={(contact: ClientContact) => {
-							setValue('receiver_name', contact.name ?? '');
-							setValue('receiver_country', contact.country ?? '');
-							setValue('receiver_address', contact.address ?? '');
-							setValue('receiver_bank_country', contact.bank_country ?? '');
-							setValue('receiver_bank_address', contact.bank_address ?? '');
-							setValue('receiver_bank_swift_code', contact.bank_swift_code ?? '');
-							setValue('receiver_bank_name', contact.bank_name ?? '');
-							setValue('receiver_bank_account_no', contact.bank_account_no ?? '');
+						onSelect={(contact: Contact) => {
+							setValue('to_contact', contact.id);
+							setValue('beneficiary_type', contact.contact_type);
+							setValue('beneficiary_name', contact.name);
+							setValue('beneficiary_gender', contact.gender);
+							setValue('beneficiary_birthdate', contact.birthdate);
+							setValue('beneficiary_citizenship', contact.citizenship);
+							setValue('beneficiary_identity_type', contact.identity_type);
+							setValue('beneficiary_identity_no', contact.identity_no);
+							setValue('beneficiary_occupation', contact.occupation);
+							setValue('beneficiary_country', contact.country);
+							setValue('beneficiary_region', contact.region);
+							setValue('beneficiary_city', contact.city);
+							setValue('beneficiary_address', contact.address);
+							setValue('beneficiary_email', contact.email);
+							setValue('beneficiary_phone_code', contact.phone_code ? `+${contact.phone_code}` : '');
+							setValue('beneficiary_phone_no', contact.phone_no);
+							setValue('beneficiary_notes', contact.notes);
+						}}
+					/>
+				)
+			})
+		);
+	};
+
+	const selectAccountFromContactAccounts = (id: string) => {
+		dispatch(
+			openDialog({
+				fullWidth: true,
+				children: (
+					<ContactBankAccountListDialog
+						id={id}
+						onSelect={(account: ContactAccount) => {
+							setValue('to_account', account.id);
+							setValue('bank_name', account.bank_name);
+							setValue('bank_account_no', account.no);
+							setValue('bank_account_name', account.owner_name);
+							setValue('bank_country', account.country);
+							setValue('bank_swift_code', account.bank_swift);
+							setValue('bank_code', account.bank_code);
+							setValue('bank_address', account.address);
+							setValue('bank_email', account.email);
+							setValue('bank_phone_code', account.phone_code ? `+${account.phone_code}` : '');
+							setValue('bank_phone_no', account.phone_no);
+							setValue('bank_website', account.website);
+							setValue('bank_notes', account.notes);
 						}}
 					/>
 				)
@@ -214,6 +265,381 @@ export default function NewDisbursementForm({
 			)}
 			<div className="flex flex-col items-center justify-center gap-20">
 				<div className="w-full p-24 bg-white shadow-2 rounded">
+					<div className="mb-24 flex flex-col items-start justify-start gap-12 md:flex-row md:items-center md:justify-between">
+						<h4 className="font-bold">Who are you ?</h4>
+						<div>
+							<Button
+								variant="text"
+								size="small"
+								color="primary"
+								onClick={(e) => {
+									e.preventDefault();
+									selectCustomerFromUserList();
+								}}
+							>
+								Select from customer list
+							</Button>
+						</div>
+					</div>
+					<div className="flex flex-col items-start justify-between gap-12 md:flex-row mb-12">
+						<Controller
+							name="customer_type"
+							control={control}
+							render={({ field }) => (
+								<TextField
+									{...field}
+									autoFocus
+									label="Customer Type"
+									error={!!errors.customer_type}
+									helperText={errors?.customer_type?.message}
+									variant="outlined"
+									required
+									fullWidth
+									select
+									className="w-full md:w-1/3"
+								>
+									{Object.keys(UserTypes).map((key) => (
+										<MenuItem
+											key={`customer-type-${key}`}
+											value={key}
+										>
+											{UserTypes[key as keyof typeof UserTypes]}
+										</MenuItem>
+									))}
+								</TextField>
+							)}
+						/>
+						<Controller
+							name="customer_name"
+							control={control}
+							render={({ field }) => (
+								<TextField
+									{...field}
+									label="Customer Name"
+									error={!!errors.customer_name}
+									helperText={errors?.customer_name?.message}
+									variant="outlined"
+									required
+									fullWidth
+									className="w-full md:w-2/3"
+								/>
+							)}
+						/>
+					</div>
+					<div className="flex flex-col items-start justify-between gap-12 md:flex-row mb-12">
+						<Controller
+							name="customer_gender"
+							control={control}
+							render={({ field }) => (
+								<TextField
+									{...field}
+									label="Gender"
+									error={!!errors.customer_gender}
+									helperText={errors?.customer_gender?.message}
+									variant="outlined"
+									required
+									fullWidth
+									select
+									className="w-full md:w-1/3"
+								>
+									{Object.entries(Gender).map(([key, value]) => (
+										<MenuItem
+											key={`customer-gender-${key}`}
+											value={key}
+										>
+											{value}
+										</MenuItem>
+									))}
+								</TextField>
+							)}
+						/>
+						<div className="w-full md:w-2/3 flex flex-col items-start justify-between gap-12 md:flex-row">
+							<Controller
+								name="customer_birthdate"
+								control={control}
+								render={({ field }) => (
+									<TextField
+										{...field}
+										label="Birth Date"
+										type="date"
+										error={!!errors.customer_birthdate}
+										helperText={errors?.customer_birthdate?.message}
+										variant="outlined"
+										required
+										fullWidth
+									/>
+								)}
+							/>
+							<Controller
+								name="customer_citizenship"
+								control={control}
+								render={({ field }) => (
+									<TextField
+										{...field}
+										label="Citizenship"
+										error={!!errors.customer_citizenship}
+										helperText={errors?.customer_citizenship?.message}
+										variant="outlined"
+										required
+										fullWidth
+										select
+									>
+										{countryList.map((country) => (
+											<MenuItem
+												key={`customer_citizenship_${country.code}`}
+												value={country.code}
+											>
+												{country.name}
+											</MenuItem>
+										))}
+									</TextField>
+								)}
+							/>
+						</div>
+					</div>
+					<div className="flex flex-col items-start justify-between gap-12 md:flex-row mb-12">
+						<Controller
+							name="customer_identity_type"
+							control={control}
+							render={({ field }) => (
+								<TextField
+									{...field}
+									label="Identity Type"
+									error={!!errors.customer_identity_type}
+									helperText={errors?.customer_identity_type?.message}
+									variant="outlined"
+									required
+									fullWidth
+									select
+									className="w-full md:w-1/3"
+								>
+									{Object.entries(IdentityTypes).map(([key, value]) => (
+										<MenuItem
+											key={`customer-identity-type-${key}`}
+											value={key}
+										>
+											{value}
+										</MenuItem>
+									))}
+								</TextField>
+							)}
+						/>
+						<div className="w-full md:w-2/3 flex flex-col items-start justify-between gap-12 md:flex-row">
+							<Controller
+								name="customer_identity_no"
+								control={control}
+								render={({ field }) => (
+									<TextField
+										{...field}
+										label="Identity Number"
+										error={!!errors.customer_identity_no}
+										helperText={errors?.customer_identity_no?.message}
+										variant="outlined"
+										required
+										fullWidth
+									/>
+								)}
+							/>
+							<Controller
+								name="customer_occupation"
+								control={control}
+								render={({ field }) => (
+									<TextField
+										{...field}
+										label="Occupation"
+										error={!!errors.customer_occupation}
+										helperText={errors?.customer_occupation?.message}
+										variant="outlined"
+										fullWidth
+										select
+									>
+										{Object.entries(Occupations).map(([key, value]) => (
+											<MenuItem
+												key={`occupation-${key}`}
+												value={key}
+											>
+												{value}
+											</MenuItem>
+										))}
+									</TextField>
+								)}
+							/>
+						</div>
+					</div>
+					<div className="flex flex-col items-start justify-between gap-12 md:flex-row mb-12">
+						<Controller
+							name="customer_country"
+							control={control}
+							render={({ field }) => (
+								<TextField
+									{...field}
+									label="Country"
+									error={!!errors.customer_country}
+									helperText={errors?.customer_country?.message}
+									variant="outlined"
+									required
+									fullWidth
+									select
+									className="w-full md:w-1/3"
+								>
+									{countryList.map((country) => (
+										<MenuItem
+											key={`receiver_country_${country.code}`}
+											value={country.code}
+										>
+											{country.name}
+										</MenuItem>
+									))}
+								</TextField>
+							)}
+						/>
+						<div className="w-full md:w-2/3 flex flex-col items-start justify-between gap-12 md:flex-row">
+							<Controller
+								name="customer_region"
+								control={control}
+								render={({ field }) => (
+									<TextField
+										{...field}
+										label="Region"
+										error={!!errors.customer_region}
+										helperText={errors?.customer_region?.message}
+										variant="outlined"
+										fullWidth
+									/>
+								)}
+							/>
+							<Controller
+								name="customer_city"
+								control={control}
+								render={({ field }) => (
+									<TextField
+										{...field}
+										label="City"
+										error={!!errors.customer_city}
+										helperText={errors?.customer_city?.message}
+										variant="outlined"
+										fullWidth
+									/>
+								)}
+							/>
+						</div>
+					</div>
+					<Controller
+						name="customer_address"
+						control={control}
+						render={({ field }) => (
+							<TextField
+								{...field}
+								label="Address"
+								error={!!errors.customer_address}
+								helperText={errors?.customer_address?.message}
+								variant="outlined"
+								required
+								fullWidth
+								multiline
+								minRows={3}
+								maxRows={5}
+								className="mb-12"
+							/>
+						)}
+					/>
+					<div className="flex flex-col items-start justify-between gap-12 md:flex-row mb-12">
+						<Controller
+							name="customer_email"
+							control={control}
+							render={({ field }) => (
+								<TextField
+									{...field}
+									label="Email"
+									type="email"
+									error={!!errors.customer_email}
+									helperText={errors?.customer_email?.message}
+									variant="outlined"
+									fullWidth
+									className="w-full md:w-1/3"
+								/>
+							)}
+						/>
+						<div className="w-full md:w-2/3 flex flex-col items-start justify-between gap-12 md:flex-row">
+							<Controller
+								name="customer_phone_code"
+								control={control}
+								render={({ field }) => (
+									<TextField
+										{...field}
+										label="Phone Code"
+										type="tel"
+										error={!!errors.customer_phone_code}
+										helperText={errors?.customer_phone_code?.message}
+										variant="outlined"
+										fullWidth
+										select
+									>
+										{countryList.map((country) => (
+											<MenuItem
+												key={`customer_phone_code_${country.code}`}
+												value={country.dial_code}
+											>
+												{country.name} ({country.dial_code})
+											</MenuItem>
+										))}
+									</TextField>
+								)}
+							/>
+							<Controller
+								name="customer_phone_no"
+								control={control}
+								render={({ field }) => (
+									<TextField
+										{...field}
+										label="Phone Number"
+										type="tel"
+										error={!!errors.customer_phone_no}
+										helperText={errors?.customer_phone_no?.message}
+										variant="outlined"
+										fullWidth
+									/>
+								)}
+							/>
+						</div>
+					</div>
+					<Controller
+						name="customer_notes"
+						control={control}
+						render={({ field }) => (
+							<TextField
+								{...field}
+								label="Notes"
+								error={!!errors.customer_notes}
+								helperText={errors?.customer_notes?.message}
+								variant="outlined"
+								fullWidth
+								multiline
+								minRows={3}
+								maxRows={5}
+								className="mb-12"
+							/>
+						)}
+					/>
+					<Controller
+						name="customer_update"
+						control={control}
+						render={({ field }) => (
+							<FormControl>
+								<FormControlLabel
+									label="Save/update customer details for future transactions"
+									control={
+										<Checkbox
+											size="small"
+											{...field}
+										/>
+									}
+								/>
+							</FormControl>
+						)}
+					/>
+				</div>
+				<div className="w-full p-24 bg-white shadow-2 rounded">
 					<h4 className="mb-24 font-bold">How much are you sending ?</h4>
 					<div className="flex flex-col gap-24">
 						<div className="flex flex-col items-start justify-between gap-12 md:flex-row">
@@ -224,7 +650,6 @@ export default function NewDisbursementForm({
 									<TextField
 										{...field}
 										label="I am sending in"
-										autoFocus
 										error={!!errors.from_currency}
 										helperText={errors?.from_currency?.message}
 										variant="outlined"
@@ -373,18 +798,14 @@ export default function NewDisbursementForm({
 									fullWidth
 									select
 								>
-									<MenuItem
-										key={'beneficiary-type-individual'}
-										value="individual"
-									>
-										Individual
-									</MenuItem>
-									<MenuItem
-										key={'beneficiary-type-institutional'}
-										value="institutional"
-									>
-										Institutional
-									</MenuItem>
+									{Object.keys(UserTypes).map((key) => (
+										<MenuItem
+											key={`beneficiary-type-${key}`}
+											value={key}
+										>
+											{UserTypes[key as keyof typeof UserTypes]}
+										</MenuItem>
+									))}
 								</TextField>
 							)}
 						/>
@@ -395,7 +816,6 @@ export default function NewDisbursementForm({
 								<TextField
 									{...field}
 									label="Beneficiary Name"
-									type="text"
 									error={!!errors.beneficiary_name}
 									helperText={errors?.beneficiary_name?.message}
 									variant="outlined"
@@ -418,30 +838,14 @@ export default function NewDisbursementForm({
 									fullWidth
 									select
 								>
-									<MenuItem
-										key={'beneficiary-relationship-family'}
-										value="family"
-									>
-										Family
-									</MenuItem>
-									<MenuItem
-										key={'beneficiary-relationship-friend'}
-										value="friend"
-									>
-										Friend
-									</MenuItem>
-									<MenuItem
-										key={'beneficiary-relationship-business-partner'}
-										value="business_partner"
-									>
-										Business Partner
-									</MenuItem>
-									<MenuItem
-										key={'beneficiary-relationship-business-other'}
-										value="other"
-									>
-										Other
-									</MenuItem>
+									{Object.keys(RelationshipTypes).map((key) => (
+										<MenuItem
+											key={`beneficiary-relationship-${key}`}
+											value={key}
+										>
+											{RelationshipTypes[key as keyof typeof RelationshipTypes]}
+										</MenuItem>
+									))}
 								</TextField>
 							)}
 						/>
@@ -461,18 +865,14 @@ export default function NewDisbursementForm({
 									fullWidth
 									select
 								>
-									<MenuItem
-										key={'gender-male'}
-										value="male"
-									>
-										Male
-									</MenuItem>
-									<MenuItem
-										key={'gender-female'}
-										value="female"
-									>
-										Female
-									</MenuItem>
+									{Object.entries(Gender).map(([key, value]) => (
+										<MenuItem
+											key={`beneficiary-gender-${key}`}
+											value={key}
+										>
+											{value}
+										</MenuItem>
+									))}
 								</TextField>
 							)}
 						/>
@@ -533,24 +933,14 @@ export default function NewDisbursementForm({
 									fullWidth
 									select
 								>
-									<MenuItem
-										key={'identity-type-national-id'}
-										value="national_id"
-									>
-										National ID
-									</MenuItem>
-									<MenuItem
-										key={'identity-type-passport'}
-										value="passport"
-									>
-										Passport
-									</MenuItem>
-									<MenuItem
-										key={'identity-type-other'}
-										value="other"
-									>
-										Other
-									</MenuItem>
+									{Object.entries(IdentityTypes).map(([key, value]) => (
+										<MenuItem
+											key={`beneficiary-identity-type-${key}`}
+											value={key}
+										>
+											{value}
+										</MenuItem>
+									))}
 								</TextField>
 							)}
 						/>
@@ -580,7 +970,17 @@ export default function NewDisbursementForm({
 									helperText={errors?.beneficiary_occupation?.message}
 									variant="outlined"
 									fullWidth
-								/>
+									select
+								>
+									{Object.entries(Occupations).map(([key, value]) => (
+										<MenuItem
+											key={`beneficiary-occupation-${key}`}
+											value={key}
+										>
+											{value}
+										</MenuItem>
+									))}
+								</TextField>
 							)}
 						/>
 					</div>
@@ -646,7 +1046,6 @@ export default function NewDisbursementForm({
 							<TextField
 								{...field}
 								label="Address"
-								type="text"
 								error={!!errors.beneficiary_address}
 								helperText={errors?.beneficiary_address?.message}
 								variant="outlined"
@@ -734,36 +1133,6 @@ export default function NewDisbursementForm({
 							/>
 						)}
 					/>
-					<div className="flex flex-col items-start justify-between gap-12 md:flex-row mb-12">
-						<Controller
-							name="beneficiary_portrait_image"
-							control={control}
-							render={({ field }) => (
-								<FileUploadInput
-									{...field}
-									label="Portrait Image"
-									error={!!errors.beneficiary_portrait_image}
-									helperText={errors?.beneficiary_portrait_image?.message}
-									variant="outlined"
-									fullWidth
-								/>
-							)}
-						/>
-						<Controller
-							name="beneficiary_identity_image"
-							control={control}
-							render={({ field }) => (
-								<FileUploadInput
-									{...field}
-									label="Identity Image"
-									error={!!errors.beneficiary_identity_image}
-									helperText={errors?.beneficiary_identity_image?.message}
-									variant="outlined"
-									fullWidth
-								/>
-							)}
-						/>
-					</div>
 					<Controller
 						name="beneficiary_update"
 						control={control}
@@ -792,7 +1161,7 @@ export default function NewDisbursementForm({
 								color="primary"
 								onClick={(e) => {
 									e.preventDefault();
-									selectBeneficiaryFromContact();
+									selectAccountFromContactAccounts(getValues('to_contact'));
 								}}
 							>
 								Select from contact bank accounts
@@ -807,8 +1176,6 @@ export default function NewDisbursementForm({
 								<TextField
 									{...field}
 									label="Bank name"
-									autoFocus
-									type="text"
 									error={!!errors.bank_name}
 									helperText={errors?.bank_name?.message}
 									variant="outlined"
@@ -824,8 +1191,6 @@ export default function NewDisbursementForm({
 								<TextField
 									{...field}
 									label="Bank account number (IBAN)"
-									autoFocus
-									type="text"
 									error={!!errors.bank_account_no}
 									helperText={errors?.bank_account_no?.message}
 									variant="outlined"
@@ -841,8 +1206,6 @@ export default function NewDisbursementForm({
 								<TextField
 									{...field}
 									label="Bank account name"
-									autoFocus
-									type="text"
 									error={!!errors.bank_account_name}
 									helperText={errors?.bank_account_name?.message}
 									variant="outlined"
@@ -860,7 +1223,6 @@ export default function NewDisbursementForm({
 								<TextField
 									{...field}
 									label="Bank Country"
-									autoFocus
 									error={!!errors.bank_country}
 									helperText={errors?.bank_country?.message}
 									variant="outlined"
@@ -886,8 +1248,6 @@ export default function NewDisbursementForm({
 								<TextField
 									{...field}
 									label="Bank code"
-									autoFocus
-									type="text"
 									error={!!errors.bank_code}
 									helperText={errors?.bank_code?.message}
 									variant="outlined"
@@ -903,8 +1263,6 @@ export default function NewDisbursementForm({
 								<TextField
 									{...field}
 									label="Bank SWIFT code"
-									autoFocus
-									type="text"
 									error={!!errors.bank_swift_code}
 									helperText={errors?.bank_swift_code?.message}
 									variant="outlined"
@@ -1096,7 +1454,6 @@ export default function NewDisbursementForm({
 								<TextField
 									{...field}
 									label="Purpose of Transfer"
-									type="text"
 									error={!!errors.purpose}
 									helperText={errors?.purpose?.message}
 									variant="outlined"
@@ -1111,7 +1468,6 @@ export default function NewDisbursementForm({
 								<TextField
 									{...field}
 									label="Source of Funds"
-									type="text"
 									error={!!errors.fund_source}
 									helperText={errors?.fund_source?.message}
 									variant="outlined"
@@ -1127,7 +1483,6 @@ export default function NewDisbursementForm({
 							<TextField
 								{...field}
 								label="Notes (optional)"
-								type="text"
 								error={!!errors.notes}
 								helperText={errors?.notes?.message}
 								variant="outlined"
