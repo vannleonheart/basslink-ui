@@ -1,7 +1,7 @@
 import { DialogContent } from '@mui/material';
 import TextField from '@mui/material/TextField';
 import React, { useEffect, useState } from 'react';
-import { ClientContact } from '@/types';
+import { ClientContact } from '@/types/entity';
 import { useSession } from 'next-auth/react';
 import { clientGetContacts } from '@/utils/apiCall';
 import { closeDialog } from '@fuse/core/FuseDialog/fuseDialogSlice';
@@ -52,7 +52,7 @@ export default function ContactListDialog({ onSelect }: ContactListDialogProps) 
 		<React.Fragment>
 			<DialogContent>
 				<div>
-					<h4 className="mb-12 font-bold">Select from your contact</h4>
+					<h4 className="mb-12 font-bold">Select from contact</h4>
 					<TextField
 						autoFocus
 						className="w-full"

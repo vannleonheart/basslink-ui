@@ -8,7 +8,7 @@ import { Controller, useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import TextField from '@mui/material/TextField';
 import _ from 'lodash';
-import { ProfileSettings } from '@/types';
+import { ProfileSettings } from '@/types/entity';
 import { CountryCodeList } from '@/data/country-code';
 import MenuItem from '@mui/material/MenuItem';
 import { useSession } from 'next-auth/react';

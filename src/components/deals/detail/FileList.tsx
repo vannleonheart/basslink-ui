@@ -1,4 +1,4 @@
-import { Deal } from '@/types';
+import { Deal } from '@/types/entity';
 import { Accordion, AccordionDetails, AccordionSummary } from '@mui/material';
 import { ExpandMoreRounded } from '@mui/icons-material';
 

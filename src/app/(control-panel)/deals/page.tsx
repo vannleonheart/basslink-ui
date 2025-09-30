@@ -2,7 +2,7 @@
 
 import DealListAgent from '@/components/deals/list/DealListAgent';
 import DealListClient from '@/components/deals/list/DealListClient';
-import Container from '@/app/(control-panel)/deals/Container';
+import Container from '@/components/PageContainer';
 import DealListAdmin from '@/components/deals/list/DealListAdmin';
 import { useSession } from 'next-auth/react';
 

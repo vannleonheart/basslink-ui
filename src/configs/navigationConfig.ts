@@ -4,11 +4,27 @@ const navigationConfig: FuseNavItemType[] = [
 	{
 		id: 'sidebar-menu-disbursements',
 		title: 'Disbursements',
-		type: 'item',
+		type: 'collapse',
 		icon: 'heroicons-solid:banknotes',
-		url: '/disbursements',
-		end: true,
-		auth: true
+		auth: true,
+		children: [
+			{
+				id: 'sidebar-menu-disbursement-list',
+				title: 'Disbursement List',
+				type: 'item',
+				url: '/disbursements/list',
+				end: true,
+				auth: true
+			},
+			{
+				id: 'sidebar-menu-new-disbursement',
+				title: 'New Disbursement',
+				type: 'item',
+				url: '/disbursements/new',
+				end: true,
+				auth: 'agent'
+			}
+		]
 	},
 	{
 		id: 'sidebar-menu-agents',
@@ -20,22 +36,54 @@ const navigationConfig: FuseNavItemType[] = [
 		auth: 'admin'
 	},
 	{
-		id: 'sidebar-menu-users',
-		title: 'Users',
-		type: 'item',
+		id: 'sidebar-menu-customers',
+		title: 'Customers',
+		type: 'collapse',
 		icon: 'heroicons-solid:users',
-		url: '/users',
-		end: true,
-		auth: 'agent'
+		auth: ['agent', 'admin'],
+		children: [
+			{
+				id: 'sidebar-menu-customer-list',
+				title: 'Customer List',
+				type: 'item',
+				url: '/customers/list',
+				end: true,
+				auth: ['agent', 'admin']
+			},
+			{
+				id: 'sidebar-menu-new-customer',
+				title: 'New Customer',
+				type: 'item',
+				url: '/customers/new',
+				end: true,
+				auth: 'agent'
+			}
+		]
 	},
 	{
 		id: 'sidebar-menu-contacts',
 		title: 'Contacts',
-		type: 'item',
+		type: 'collapse',
 		icon: 'heroicons-solid:user-group',
-		url: '/contacts',
-		end: true,
-		auth: ['user', 'agent']
+		auth: ['agent', 'admin'],
+		children: [
+			{
+				id: 'sidebar-menu-contact-list',
+				title: 'Contact List',
+				type: 'item',
+				url: '/contacts/list',
+				end: true,
+				auth: ['agent', 'admin']
+			},
+			{
+				id: 'sidebar-menu-new-contact',
+				title: 'New Contact',
+				type: 'item',
+				url: '/contacts/new',
+				end: true,
+				auth: 'agent'
+			}
+		]
 	},
 	{
 		id: 'sidebar-menu-settings',

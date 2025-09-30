@@ -9,7 +9,7 @@ import { useDispatch } from 'react-redux';
 import { closeDialog } from '@fuse/core/FuseDialog/fuseDialogSlice';
 import { z } from 'zod';
 import { Controller, useForm } from 'react-hook-form';
-import { Agent, CreateOrEditAgentFormData, ValidationError } from '@/types';
+import { Agent, CreateOrEditAgentFormData, ValidationError } from '@/types/entity';
 import { zodResolver } from '@hookform/resolvers/zod';
 import _ from 'lodash';
 import { CountryCodeList } from '@/data/country-code';

@@ -5,7 +5,7 @@ import Content from './Content';
 import apiService from '@/store/apiService';
 import { useSession } from 'next-auth/react';
 import { useMemo } from 'react';
-import { Rate } from '@/types';
+import { Rate } from '@/types/entity';
 
 const Root = styled(FusePageSimple)(({ theme }) => ({
 	'& .FusePageSimple-header': {

@@ -1,4 +1,4 @@
-import { Deal } from '@/types';
+import { Deal } from '@/types/entity';
 import { Accordion, AccordionDetails, AccordionSummary, FilledInput, FormLabel } from '@mui/material';
 import { CountryCodeList } from '@/data/country-code';
 import { ExpandMoreRounded } from '@mui/icons-material';

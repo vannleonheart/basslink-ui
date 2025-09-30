@@ -1,5 +1,7 @@
+import { redirect } from 'next/navigation';
+
 function ContactsPage() {
-	return null;
+	redirect('/contacts/list');
 }
 
 export default ContactsPage;

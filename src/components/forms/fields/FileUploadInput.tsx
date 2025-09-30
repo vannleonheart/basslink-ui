@@ -5,7 +5,7 @@ import styled from 'styled-components';
 import { ChangeEvent, useRef, useState } from 'react';
 import apiService from '@/store/apiService';
 import { useSession } from 'next-auth/react';
-import { ApiResponse } from '@/types';
+import { ApiResponse } from '@/types/entity';
 
 const VisuallyHiddenInput = styled('input')({
 	clip: 'rect(0 0 0 0)',

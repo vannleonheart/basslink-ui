@@ -1,4 +1,4 @@
-import { AuthComponentProps, Deal, DealFilter } from '@/types';
+import { AuthComponentProps, Deal, DealFilter } from '@/types/entity';
 import { DateTime } from 'luxon';
 import { CountryCodeList } from '@/data/country-code';
 import { Button } from '@mui/material';

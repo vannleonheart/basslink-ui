@@ -1,6 +1,6 @@
 import apiService from '@/store/apiService';
 import { useAppDispatch } from '@/store/hooks';
-import { ApiResponse, AuthComponentProps, Rate, UpdateRatesFormData } from '@/types';
+import { ApiResponse, AuthComponentProps, Rate, UpdateRatesFormData } from '@/types/entity';
 import { closeDialog } from '@fuse/core/FuseDialog/fuseDialogSlice';
 import FuseSvgIcon from '@fuse/core/FuseSvgIcon';
 import { Alert, Button, DialogActions, DialogContent, DialogTitle, TextField, Typography } from '@mui/material';

@@ -12,7 +12,7 @@ import { alpha } from '@mui/system/colorManipulator';
 import clsx from 'clsx';
 import Popover, { PopoverProps } from '@mui/material/Popover/Popover';
 import useUser from '@auth/useUser';
-import { AdminUser, AgentUser, ClientUser } from '@/types';
+import { AdminUser, AgentUser, ClientUser } from '@/types/entity';
 
 type UserMenuProps = {
 	className?: string;

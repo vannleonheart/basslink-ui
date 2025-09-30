@@ -1,7 +1,8 @@
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
 import { BaseQueryFn, FetchArgs, FetchBaseQueryError, FetchBaseQueryMeta } from '@reduxjs/toolkit/query';
 import { API_BASE_URL, globalHeaders } from '@/utils/apiFetch';
-import { ApiResponse } from '@/types';
+import { ApiResponse } from '@/types/component';
+import { jsonify } from '@/utils/apiCall';
 
 const baseQuery: BaseQueryFn<string | FetchArgs, unknown, FetchBaseQueryError, object, FetchBaseQueryMeta> = async (
 	args,
@@ -192,7 +193,7 @@ export const apiService = createApi({
 				return {
 					url: `/admin/rates/update`,
 					method: 'POST',
-					body: data,
+					body: jsonify(data),
 					headers: {
 						Authorization: `Bearer ${accessToken}`
 					}
@@ -213,6 +214,33 @@ export const apiService = createApi({
 					}
 				};
 			}
+		}),
+		createContact: build.mutation({
+			query: (args) => {
+				const { accessToken, data = {} } = args;
+
+				return {
+					url: '/agent/contacts',
+					method: 'POST',
+					body: jsonify(data),
+					headers: {
+						'Content-Type': 'application/json',
+						Authorization: `Bearer ${accessToken}`
+					}
+				};
+			}
+		}),
+		getContacts: build.query({
+			query: (args) => {
+				const { accessToken } = args;
+				return {
+					url: `/agent/contacts`,
+					headers: {
+						Authorization: `Bearer ${accessToken}`
+					}
+				};
+			},
+			transformResponse
 		})
 	}),
 	reducerPath: 'apiService'

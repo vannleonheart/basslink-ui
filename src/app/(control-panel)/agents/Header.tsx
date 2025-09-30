@@ -8,7 +8,7 @@ import { useAppDispatch, useAppSelector } from 'src/store/hooks';
 import { ChangeEvent, useEffect } from 'react';
 import { setSearchText, resetSearchText, selectSearchText } from './AppSlice';
 import { selectFilteredAgentList } from './Api';
-import { Agent } from '@/types';
+import { Agent } from '@/types/entity';
 import { openDialog } from '@fuse/core/FuseDialog/fuseDialogSlice';
 import DialogAgentCreateOrEdit from '@/components/dialogs/DialogAgentCreateOrEdit';
 

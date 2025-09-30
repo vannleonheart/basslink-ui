@@ -6,7 +6,7 @@ import FuseLoading from '@fuse/core/FuseLoading';
 import { useAppSelector } from 'src/store/hooks';
 import ListItem from './ListItem';
 import { GroupedAgents, selectFilteredAgentList, selectGroupedFilteredAgents } from './Api';
-import { Agent } from '@/types';
+import { Agent } from '@/types/entity';
 
 function ListPage({ data, isLoading, fetch }: { data: Agent[]; isLoading: boolean; fetch: () => void }) {
 	const filteredData = useAppSelector(selectFilteredAgentList(data));

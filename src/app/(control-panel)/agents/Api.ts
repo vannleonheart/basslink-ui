@@ -1,7 +1,7 @@
 import { createSelector } from '@reduxjs/toolkit';
 import FuseUtils from '@fuse/utils';
 import { selectSearchText } from './AppSlice';
-import { Agent } from '@/types';
+import { Agent } from '@/types/entity';
 
 export type GroupedAgents = {
 	group: string;

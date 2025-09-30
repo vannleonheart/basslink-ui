@@ -4,7 +4,7 @@ import { z } from 'zod';
 import _ from 'lodash';
 import Button from '@mui/material/Button';
 import { Alert } from '@mui/material';
-import { ResetPasswordFormData } from '@/types';
+import { ResetPasswordFormData } from '@/types/entity';
 import { clientAuthReset } from '@/utils/apiCall';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { useState } from 'react';

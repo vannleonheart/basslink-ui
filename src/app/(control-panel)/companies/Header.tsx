@@ -9,7 +9,7 @@ import { useAppDispatch, useAppSelector } from 'src/store/hooks';
 import { ChangeEvent, useEffect } from 'react';
 import { setSearchText, resetSearchText, selectSearchText } from './AppSlice';
 import { selectFilteredCompanyList } from './Api';
-import { AgentCompany } from '@/types';
+import { AgentCompany } from '@/types/entity';
 
 function Header({ data, isLoading }: { data: AgentCompany[]; isLoading: boolean }) {
 	const dispatch = useAppDispatch();

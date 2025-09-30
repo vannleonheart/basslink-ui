@@ -5,7 +5,7 @@ import _ from 'lodash';
 import TextField from '@mui/material/TextField';
 import Button from '@mui/material/Button';
 import { Alert } from '@mui/material';
-import { ResendEmailVerificationFormData } from '@/types';
+import { ResendEmailVerificationFormData } from '@/types/entity';
 import { clientAuthResendEmailVerification } from '@/utils/apiCall';
 import { useRouter } from 'next/navigation';
 import { useState } from 'react';

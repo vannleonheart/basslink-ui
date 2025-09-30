@@ -1,6 +1,6 @@
 import RatesUpdateDialog from '@/components/dialogs/RatesUpdateDialog';
 import { useAppDispatch } from '@/store/hooks';
-import { AuthComponentProps, Rate } from '@/types';
+import { AuthComponentProps, Rate } from '@/types/entity';
 import { openDialog } from '@fuse/core/FuseDialog/fuseDialogSlice';
 import FuseSvgIcon from '@fuse/core/FuseSvgIcon';
 import { Button, Paper, Table, TableBody, TableCell, TableContainer, TableHead, TableRow } from '@mui/material';

@@ -6,7 +6,7 @@ import { CountryCodeList } from '@/data/country-code';
 import { DatePicker } from '@mui/x-date-pickers';
 import { DateTime } from 'luxon';
 import Divider from '@mui/material/Divider';
-import { Currency, DealFilter } from '@/types';
+import { Currency, DealFilter } from '@/types/entity';
 import React, { useMemo, useState } from 'react';
 import { agentDownloadDeals } from '@/utils/apiCall';
 import Menu from '@mui/material/Menu';

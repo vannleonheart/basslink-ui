@@ -1,4 +1,4 @@
-import { UserType } from '@/types';
+import { UserType } from '@/types/entity';
 
 declare module 'next-auth' {
 	interface Session {

@@ -1,8 +1,8 @@
 'use client';
 
-import NewDealSendMoneyForm from '@/components/forms/NewDealSendMoneyForm';
+import NewDealSendMoneyForm from '@/components/forms/NewDisbursementForm';
 import Header from './Header';
-import Container from '@/app/(control-panel)/deals/Container';
+import Container from '@/components/PageContainer';
 
 function NewDealPage() {
 	return (

@@ -1,5 +1,5 @@
 import { z } from 'zod';
-import { Deal, DealPropose, AgentCompany, CalculateRequest } from '@/types';
+import { Deal, DealPropose, AgentCompany, CalculateRequest } from '@/types/entity';
 import { useSession } from 'next-auth/react';
 import { useCallback, useEffect, useState } from 'react';
 import { useAppDispatch } from '@/store/hooks';

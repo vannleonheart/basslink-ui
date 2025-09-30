@@ -3,7 +3,7 @@ import Button from '@mui/material/Button';
 import clsx from 'clsx';
 import FormHelperText from '@mui/material/FormHelperText';
 import CompanyAccountInput from './CompanyAccountInput';
-import { AgentCompanyAccount } from '@/types';
+import { AgentCompanyAccount } from '@/types/entity';
 import React from 'react';
 import CompanyAccountModel from './CompanyAccountModel';
 

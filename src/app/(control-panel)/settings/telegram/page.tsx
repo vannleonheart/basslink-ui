@@ -1,7 +1,7 @@
 'use client';
 
 import { useSession } from 'next-auth/react';
-import { TelegramConnect } from '@/types';
+import { TelegramConnect } from '@/types/entity';
 import List from '@mui/material/List';
 import { Button, ListItem } from '@mui/material';
 import CopyButton from '@/components/commons/CopyButton';

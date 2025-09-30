@@ -11,7 +11,7 @@ import usePathname from '@fuse/hooks/usePathname';
 import FuseLoading from '@fuse/core/FuseLoading';
 import useNavigate from '@fuse/hooks/useNavigate';
 import useUser from './useUser';
-import { AuthType } from '@/types';
+import { AuthType } from '@/types/entity';
 
 type AuthGuardProps = {
 	auth: AuthType;

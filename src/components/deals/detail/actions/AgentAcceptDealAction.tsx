@@ -1,4 +1,4 @@
-import { AcceptDealFormData, AgentCompany, Deal } from '@/types';
+import { AcceptDealFormData, AgentCompany, Deal } from '@/types/entity';
 import { useSession } from 'next-auth/react';
 import { useDispatch } from 'react-redux';
 import useNavigate from '@fuse/hooks/useNavigate';

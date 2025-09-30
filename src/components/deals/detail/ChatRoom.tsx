@@ -1,6 +1,6 @@
 import Paper from '@mui/material/Paper';
 import { useForm } from 'react-hook-form';
-import { DealMessage, DealMessageData, Deal } from '@/types';
+import { DealMessage, DealMessageData, Deal } from '@/types/entity';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
 import { ChangeEvent, useEffect, useMemo, useRef, useState } from 'react';

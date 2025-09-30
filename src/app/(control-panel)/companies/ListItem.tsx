@@ -5,7 +5,7 @@ import ListItemText from '@mui/material/ListItemText';
 import Divider from '@mui/material/Divider';
 import NavLinkAdapter from '@fuse/core/NavLinkAdapter';
 import ListItemButton from '@mui/material/ListItemButton';
-import { AgentCompany } from '@/types';
+import { AgentCompany } from '@/types/entity';
 import { CountryCodeList } from '@/data/country-code';
 
 type CompanyListItemPropsType = {

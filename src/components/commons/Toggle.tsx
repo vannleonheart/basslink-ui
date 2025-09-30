@@ -1,7 +1,7 @@
 import t from '@/dict/t';
 import apiService from '@/store/apiService';
 import { useAppDispatch } from '@/store/hooks';
-import { ApiResponse } from '@/types';
+import { ApiResponse } from '@/types/entity';
 import { showMessage } from '@fuse/core/FuseMessage/fuseMessageSlice';
 import { Switch } from '@mui/material';
 import { useState } from 'react';

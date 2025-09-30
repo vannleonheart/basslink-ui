@@ -1,5 +1,5 @@
 import TransferDetailClient from './TransferDetailClient';
-import { AuthComponentProps, Deal } from '@/types';
+import { AuthComponentProps, Deal } from '@/types/entity';
 import FileList from './FileList';
 import ChatRoom from './ChatRoom';
 import { useParams } from 'next/navigation';

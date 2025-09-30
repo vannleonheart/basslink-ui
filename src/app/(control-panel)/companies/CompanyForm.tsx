@@ -28,7 +28,7 @@ import { useSession } from 'next-auth/react';
 import { CountryCodeList } from '@/data/country-code';
 import MenuItem from '@mui/material/MenuItem';
 import CompanyAccountSelector from './CompanyAccountSelector';
-import { AgentCompany } from '@/types';
+import { AgentCompany } from '@/types/entity';
 
 const schema = z.object({
 	name: z

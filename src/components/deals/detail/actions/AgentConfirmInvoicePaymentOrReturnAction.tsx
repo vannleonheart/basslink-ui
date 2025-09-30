@@ -1,5 +1,5 @@
 import { Button } from '@mui/material';
-import { AgentCompanyAccount, Deal, PaymentInvoiceRequest } from '@/types';
+import { AgentCompanyAccount, Deal, PaymentInvoiceRequest } from '@/types/entity';
 import {
 	agentGetCompanyAccounts,
 	agentConfirmInvoicePayment,

@@ -1,6 +1,6 @@
 import _ from 'lodash';
 import EventEmitter from './EventEmitter';
-import { AuthType, UserType } from '@/types';
+import { AuthType, UserType } from '@/types/entity';
 
 type TreeNode = {
 	id: string;

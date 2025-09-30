@@ -1,7 +1,7 @@
 import { clientConfirmReturn } from '@/utils/apiCall';
 import { showMessage } from '@fuse/core/FuseMessage/fuseMessageSlice';
 import { Button } from '@mui/material';
-import { Deal } from '@/types';
+import { Deal } from '@/types/entity';
 import { useSession } from 'next-auth/react';
 import { useDispatch } from 'react-redux';
 import { openDialog } from '@fuse/core/FuseDialog/fuseDialogSlice';

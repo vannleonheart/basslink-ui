@@ -1,6 +1,6 @@
 import _ from 'lodash';
 import { PartialDeep } from 'type-fest';
-import { AgentCompanyAccount } from '@/types';
+import { AgentCompanyAccount } from '@/types/entity';
 
 const CompanyAccountModel = (data: PartialDeep<AgentCompanyAccount>): AgentCompanyAccount =>
 	_.defaults(data || {}, {

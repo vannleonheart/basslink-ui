@@ -1,15 +1,15 @@
 'use client';
 
-import NewDealSendMoneyForm from '@/components/forms/NewDealSendMoneyForm';
+import NewDealSendMoneyForm from '@/components/forms/NewDisbursementForm';
 import Header from './Header';
 import { useEffect } from 'react';
-import { Deal } from '@/types';
+import { Deal } from '@/types/entity';
 import { useSession } from 'next-auth/react';
 import { useParams } from 'next/navigation';
 import useNavigate from '@fuse/hooks/useNavigate';
 import { useDispatch } from 'react-redux';
 import { showMessage } from '@fuse/core/FuseMessage/fuseMessageSlice';
-import Container from '@/app/(control-panel)/deals/Container';
+import Container from '@/components/PageContainer';
 import apiService from '@/store/apiService';
 
 function EditDealPage() {

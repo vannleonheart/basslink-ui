@@ -13,7 +13,7 @@ import { showMessage } from '@fuse/core/FuseMessage/fuseMessageSlice';
 import { useAppDispatch } from 'src/store/hooks';
 import useNavigate from '@fuse/hooks/useNavigate';
 import { useEffect, useState } from 'react';
-import { AgentCompany } from '@/types';
+import { AgentCompany } from '@/types/entity';
 import { agentGetCompanyById } from '@/utils/apiCall';
 import { useSession } from 'next-auth/react';
 import { CountryCodeList } from '@/data/country-code';

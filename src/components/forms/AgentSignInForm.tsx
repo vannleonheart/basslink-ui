@@ -10,7 +10,7 @@ import Link from '@fuse/core/Link';
 import Button from '@mui/material/Button';
 import { signIn } from 'next-auth/react';
 import { Alert } from '@mui/material';
-import { SignInFormData } from '@/types';
+import { SignInFormData } from '@/types/entity';
 import { redirect } from 'next/navigation';
 import { useState } from 'react';
 import PasswordField from '@/components/forms/fields/PasswordField';

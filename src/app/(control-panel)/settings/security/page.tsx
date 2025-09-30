@@ -7,7 +7,7 @@ import Divider from '@mui/material/Divider';
 import Button from '@mui/material/Button';
 import Typography from '@mui/material/Typography';
 import _ from 'lodash';
-import { SecuritySettings, ValidationError } from '@/types';
+import { SecuritySettings, ValidationError } from '@/types/entity';
 import { agentUpdatePassword, clientUpdatePassword } from '@/utils/apiCall';
 import { useState } from 'react';
 import { useSession } from 'next-auth/react';

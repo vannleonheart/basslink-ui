@@ -4,7 +4,7 @@ import { Controller, useForm } from 'react-hook-form';
 import IconButton from '@mui/material/IconButton';
 import { z } from 'zod';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { AgentCompanyAccount } from '@/types';
+import { AgentCompanyAccount } from '@/types/entity';
 import MenuItem from '@mui/material/MenuItem';
 import { CountryCodeList } from '@/data/country-code';
 import { CryptoCurrency, CryptoCurrencyNetworks } from '@/data/currency';

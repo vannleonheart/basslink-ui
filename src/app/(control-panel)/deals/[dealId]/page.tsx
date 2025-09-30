@@ -1,7 +1,7 @@
 'use client';
 
 import DealDetailAgent from '@/components/deals/detail/DealDetailAgent';
-import Container from '@/app/(control-panel)/deals/Container';
+import Container from '@/components/PageContainer';
 import DealDetailClient from '@/components/deals/detail/DealDetailClient';
 import DealDetailAdmin from '@/components/deals/detail/DealDetailAdmin';
 import { useSession } from 'next-auth/react';

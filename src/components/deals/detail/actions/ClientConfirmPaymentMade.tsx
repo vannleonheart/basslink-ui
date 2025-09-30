@@ -1,5 +1,5 @@
 import { Button } from '@mui/material';
-import { Deal } from '@/types';
+import { Deal } from '@/types/entity';
 import { useSession } from 'next-auth/react';
 import { useDispatch } from 'react-redux';
 import { clientMakeDealPayment } from '@/utils/apiCall';

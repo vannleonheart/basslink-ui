@@ -1,6 +1,6 @@
 import { SxProps } from '@mui/system';
 import { FuseNavBadgeType } from './FuseNavBadgeType';
-import { AuthType } from '@/types';
+import { AuthType } from '@/types/entity';
 
 export type FuseNavItemType = {
 	id: string;

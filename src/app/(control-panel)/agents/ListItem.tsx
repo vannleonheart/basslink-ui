@@ -4,7 +4,7 @@ import ListItemAvatar from '@mui/material/ListItemAvatar';
 import ListItemText from '@mui/material/ListItemText';
 import Divider from '@mui/material/Divider';
 import ListItemButton from '@mui/material/ListItemButton';
-import { Agent } from '@/types';
+import { Agent } from '@/types/entity';
 import { openDialog } from '@fuse/core/FuseDialog/fuseDialogSlice';
 import DialogAgentCreateOrEdit from '@/components/dialogs/DialogAgentCreateOrEdit';
 import { useAppDispatch } from '@/store/hooks';

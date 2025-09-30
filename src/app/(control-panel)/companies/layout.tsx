@@ -10,7 +10,7 @@ import Header from './Header';
 import ListPage from './ListPage';
 import SidebarContent from './SidebarContent';
 import { useSession } from 'next-auth/react';
-import { AgentCompany } from '@/types';
+import { AgentCompany } from '@/types/entity';
 import { agentGetCompanies } from '@/utils/apiCall';
 import AuthGuardRedirect from '@auth/AuthGuardRedirect';
 

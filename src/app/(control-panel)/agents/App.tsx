@@ -5,7 +5,7 @@ import { useSession } from 'next-auth/react';
 import ListPage from './ListPage';
 import apiService from '@/store/apiService';
 import { useMemo } from 'react';
-import { Agent } from '@/types';
+import { Agent } from '@/types/entity';
 
 const Root = styled(FusePageSimple)(({ theme }) => ({
 	'& .container': {

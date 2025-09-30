@@ -1,27 +1,10 @@
+import { ApiResponse, DownloadOptions, ProfileSettings, SecuritySettings } from '@/types/component';
+import { CreateOrEditAgentFormData, CreateOrEditClientFormData, SignInFormData } from '@/types/form';
 import apiFetch, { setGlobalHeaders } from '@/utils/apiFetch';
-import {
-	AcceptDealFormData,
-	AgentCompany,
-	ApiResponse,
-	CalculateRequest,
-	ClientContact,
-	CreateDealSendMoneyFormData,
-	CreateOrEditAgentFormData,
-	CreateOrEditClientFormData,
-	DealMessageData,
-	DownloadOptions,
-	ForgotPasswordFormData,
-	PaymentInvoiceRequest,
-	ProfileSettings,
-	ResendEmailVerificationFormData,
-	ResetPasswordFormData,
-	SecuritySettings,
-	SignInFormData
-} from '@/types';
 
 setGlobalHeaders({ 'Content-Type': 'application/json' });
 
-const jsonify = (data: unknown) => {
+export const jsonify = (data: unknown) => {
 	return JSON.stringify(data, (_key, value) => {
 		if (value) {
 			return value;

@@ -13,7 +13,7 @@ import {
 	clientAuthSignin,
 	clientGetProfile
 } from '@/utils/apiCall';
-import { AdminUser, AgentUser, ApiResponse, SignInFormData, SigninResponse, User } from '@/types';
+import { AdminUser, AgentUser, ApiResponse, SignInFormData, SigninResponse, User } from '@/types/entity';
 
 const storage = createStorage({
 	driver: memoryDriver()

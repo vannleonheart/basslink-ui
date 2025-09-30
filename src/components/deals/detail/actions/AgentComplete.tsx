@@ -1,5 +1,5 @@
 import { Button } from '@mui/material';
-import { Deal } from '@/types';
+import { Deal } from '@/types/entity';
 import { agentConfirmReturnSent } from '@/utils/apiCall';
 import { showMessage } from '@fuse/core/FuseMessage/fuseMessageSlice';
 import { useDispatch } from 'react-redux';

@@ -1,5 +1,5 @@
 import Alert from '@/components/deals/detail/Alert';
-import { Deal } from '@/types';
+import { Deal } from '@/types/entity';
 import { Button } from '@mui/material';
 import { openDialog } from '@fuse/core/FuseDialog/fuseDialogSlice';
 import DialogConfirm from '@/components/dialogs/DialogConfirm';

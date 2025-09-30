@@ -1,6 +1,6 @@
 import { useSession, signOut } from 'next-auth/react';
 import { useMemo } from 'react';
-import { User } from '@/types';
+import { User } from '@/types/entity';
 
 type useUser = {
 	data: User | null;

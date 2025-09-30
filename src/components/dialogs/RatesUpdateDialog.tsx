@@ -1,4 +1,4 @@
-import { AuthComponentProps, Rate } from '@/types';
+import { AuthComponentProps, Rate } from '@/types/entity';
 import React from 'react';
 import UpdateRatesForm from '../forms/UpdateRatesForm';
 
