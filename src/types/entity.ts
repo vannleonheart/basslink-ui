@@ -56,6 +56,9 @@ export type User = {
 	name: string;
 	gender?: string;
 	birthdate?: string;
+	citizenship?: string;
+	identity_type?: string;
+	identity_no?: string;
 	country?: string;
 	region?: string;
 	city?: string;
@@ -63,11 +66,7 @@ export type User = {
 	email: string;
 	phone_code: string;
 	phone_no: string;
-	identity_type?: string;
-	identity_no?: string;
 	occupation?: string;
-	portrait_image?: string;
-	identity_image?: string;
 	notes?: string;
 	is_verified: boolean;
 	email_verified: boolean;

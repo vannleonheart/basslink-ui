@@ -1,16 +1,16 @@
 import { Controller, useForm } from 'react-hook-form';
 import FileUploadInput from '../fields/FileUploadInput';
-import { CreateContactDocumentFormData } from '@/types/form';
+import { CreateCustomerDocumentFormData } from '@/types/form';
 import { Button, MenuItem, TextField } from '@mui/material';
 import FuseSvgIcon from '@fuse/core/FuseSvgIcon';
 import { DocumentTypes } from '@/data/static-data';
 
-type NewContactDocumentProps = {
-	value: CreateContactDocumentFormData[];
-	onChange: (value: CreateContactDocumentFormData[]) => void;
+type NewCustomerDocumentProps = {
+	value: CreateCustomerDocumentFormData[];
+	onChange: (value: CreateCustomerDocumentFormData[]) => void;
 };
 
-export default function NewContactDocument({ value, onChange }: NewContactDocumentProps) {
+export default function NewCustomerDocument({ value, onChange }: NewCustomerDocumentProps) {
 	const handleAddDocument = () => {
 		onChange([...value, { document_data: null, document_type: '', notes: '', is_verified: false }]);
 	};
@@ -26,7 +26,7 @@ export default function NewContactDocument({ value, onChange }: NewContactDocume
 		onChange(newValue);
 	};
 
-	const handleDocumentChange = (index: number, newValue: CreateContactDocumentFormData) => {
+	const handleDocumentChange = (index: number, newValue: CreateCustomerDocumentFormData) => {
 		const newValues = [...value].map((item, i) => (i === index ? newValue : item));
 
 		onChange(newValues);
@@ -39,7 +39,7 @@ export default function NewContactDocument({ value, onChange }: NewContactDocume
 				<Button onClick={handleAddDocument}>Add Document</Button>
 			</div>
 			{value.map((item, index) => (
-				<ContactDocument
+				<CustomerDocument
 					key={index}
 					value={item}
 					onRemove={() => handleRemoveDocument(index)}
@@ -50,14 +50,14 @@ export default function NewContactDocument({ value, onChange }: NewContactDocume
 	);
 }
 
-type ContactDocumentProps = {
-	value?: CreateContactDocumentFormData;
-	onChange?: (value: CreateContactDocumentFormData) => void;
+type CustomerDocumentProps = {
+	value?: CreateCustomerDocumentFormData;
+	onChange?: (value: CreateCustomerDocumentFormData) => void;
 	onRemove?: () => void;
 };
 
-function ContactDocument({ value, onChange, onRemove }: ContactDocumentProps) {
-	const { control, formState, handleSubmit } = useForm<CreateContactDocumentFormData>({
+function CustomerDocument({ value, onChange, onRemove }: CustomerDocumentProps) {
+	const { control, formState, handleSubmit } = useForm<CreateCustomerDocumentFormData>({
 		mode: 'all',
 		defaultValues: {
 			document_data: value?.document_data || null,
@@ -68,7 +68,7 @@ function ContactDocument({ value, onChange, onRemove }: ContactDocumentProps) {
 	});
 	const { errors } = formState;
 
-	const onSubmit = (data: CreateContactDocumentFormData) => {
+	const onSubmit = (data: CreateCustomerDocumentFormData) => {
 		onChange?.(data);
 	};
 

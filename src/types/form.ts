@@ -122,24 +122,33 @@ export type CreateDisbursementFormData = {
 };
 
 export type CreateCustomerFormData = {
-	contact_type?: string;
-	contact_name?: string;
-	contact_gender?: string;
-	contact_birthdate?: string;
-	contact_citizenship?: string;
-	contact_identity_type?: string;
-	contact_identity_no?: string;
-	contact_country?: string;
-	contact_region?: string;
-	contact_city?: string;
-	contact_address?: string;
-	contact_email?: string;
-	contact_phone_code?: string;
-	contact_phone_no?: string;
-	contact_occupation?: string;
-	contact_portrait_image?: string;
-	contact_identity_image?: string;
-	contact_notes?: string;
+	customer_type?: string;
+	customer_name?: string;
+	customer_gender?: string;
+	customer_birthdate?: string;
+	customer_citizenship?: string;
+	customer_identity_type?: string;
+	customer_identity_no?: string;
+	customer_country?: string;
+	customer_region?: string;
+	customer_city?: string;
+	customer_address?: string;
+	customer_email?: string;
+	customer_phone_code?: string;
+	customer_phone_no?: string;
+	customer_occupation?: string;
+	customer_notes?: string;
+	customer_documents?: CreateCustomerDocumentFormData[];
+	username?: string;
+	password?: string;
+	password_confirmation?: string;
+};
+
+export type CreateCustomerDocumentFormData = {
+	document_type: string;
+	document_data: string;
+	notes?: string;
+	is_verified: boolean;
 };
 
 export type UpdateRatesFormData = {

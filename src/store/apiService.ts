@@ -215,6 +215,21 @@ export const apiService = createApi({
 				};
 			}
 		}),
+		createCustomer: build.mutation({
+			query: (args) => {
+				const { accessToken, data = {} } = args;
+
+				return {
+					url: '/agent/users',
+					method: 'POST',
+					body: jsonify(data),
+					headers: {
+						'Content-Type': 'application/json',
+						Authorization: `Bearer ${accessToken}`
+					}
+				};
+			}
+		}),
 		createContact: build.mutation({
 			query: (args) => {
 				const { accessToken, data = {} } = args;

@@ -16,9 +16,10 @@ import { ApiResponse } from '@/types/component';
 import { useAppDispatch } from '@/store/hooks';
 import { showMessage } from '@fuse/core/FuseMessage/fuseMessageSlice';
 import useNavigate from '@fuse/hooks/useNavigate';
+import { Gender, IdentityTypes, Occupations, UserTypes } from '@/data/static-data';
 
 const schema = z.object({
-	contact_type: z.enum(['individual', 'institutionals']),
+	contact_type: z.enum(['individual', 'institutional']),
 	contact_name: z
 		.string()
 		.min(3, 'Name should be at least 3 characters long')
@@ -64,7 +65,7 @@ const schema = z.object({
 });
 
 export default function NewContactForm() {
-	const { control, formState, handleSubmit, watch } = useForm<CreateContactFormData>({
+	const { control, formState, handleSubmit } = useForm<CreateContactFormData>({
 		mode: 'onChange',
 		resolver: zodResolver(schema),
 		defaultValues: {
@@ -169,26 +170,23 @@ export default function NewContactForm() {
 							render={({ field }) => (
 								<TextField
 									{...field}
-									label="Beneficiary Type"
+									label="Contact Type"
 									error={!!errors.contact_type}
 									helperText={errors?.contact_type?.message}
 									variant="outlined"
 									required
 									fullWidth
 									select
+									className="w-full md:w-1/3"
 								>
-									<MenuItem
-										key={'beneficiary-type-individual'}
-										value="individual"
-									>
-										Individual
-									</MenuItem>
-									<MenuItem
-										key={'beneficiary-type-institutional'}
-										value="institutional"
-									>
-										Institutional
-									</MenuItem>
+									{Object.keys(UserTypes).map((key) => (
+										<MenuItem
+											key={`contact-type-${key}`}
+											value={key}
+										>
+											{UserTypes[key as keyof typeof UserTypes]}
+										</MenuItem>
+									))}
 								</TextField>
 							)}
 						/>
@@ -198,13 +196,14 @@ export default function NewContactForm() {
 							render={({ field }) => (
 								<TextField
 									{...field}
-									label="Beneficiary Name"
+									label="Contact Name"
 									type="text"
 									error={!!errors.contact_name}
 									helperText={errors?.contact_name?.message}
 									variant="outlined"
 									required
 									fullWidth
+									className="w-full md:w-2/3"
 								/>
 							)}
 						/>
@@ -222,63 +221,62 @@ export default function NewContactForm() {
 									variant="outlined"
 									fullWidth
 									select
+									className="w-full md:w-1/3"
 								>
-									<MenuItem
-										key={'gender-male'}
-										value="male"
-									>
-										Male
-									</MenuItem>
-									<MenuItem
-										key={'gender-female'}
-										value="female"
-									>
-										Female
-									</MenuItem>
-								</TextField>
-							)}
-						/>
-						<Controller
-							name="contact_birthdate"
-							control={control}
-							render={({ field }) => (
-								<TextField
-									{...field}
-									label="Birth Date"
-									type="date"
-									error={!!errors.contact_birthdate}
-									helperText={errors?.contact_birthdate?.message}
-									variant="outlined"
-									required
-									fullWidth
-								/>
-							)}
-						/>
-						<Controller
-							name="contact_citizenship"
-							control={control}
-							render={({ field }) => (
-								<TextField
-									{...field}
-									label="Citizenship"
-									error={!!errors.contact_citizenship}
-									helperText={errors?.contact_citizenship?.message}
-									variant="outlined"
-									required
-									fullWidth
-									select
-								>
-									{countryList.map((country) => (
+									{Object.entries(Gender).map(([key, value]) => (
 										<MenuItem
-											key={`contact_citizenship_${country.code}`}
-											value={country.code}
+											key={`gender-${key}`}
+											value={key}
 										>
-											{country.name}
+											{value}
 										</MenuItem>
 									))}
 								</TextField>
 							)}
 						/>
+						<div className="w-full md:w-2/3 flex flex-col items-start justify-between gap-12 md:flex-row">
+							<Controller
+								name="contact_birthdate"
+								control={control}
+								render={({ field }) => (
+									<TextField
+										{...field}
+										label="Birth Date"
+										type="date"
+										error={!!errors.contact_birthdate}
+										helperText={errors?.contact_birthdate?.message}
+										variant="outlined"
+										required
+										fullWidth
+									/>
+								)}
+							/>
+							<Controller
+								name="contact_citizenship"
+								control={control}
+								render={({ field }) => (
+									<TextField
+										{...field}
+										label="Citizenship"
+										error={!!errors.contact_citizenship}
+										helperText={errors?.contact_citizenship?.message}
+										variant="outlined"
+										required
+										fullWidth
+										select
+									>
+										{countryList.map((country) => (
+											<MenuItem
+												key={`contact_citizenship_${country.code}`}
+												value={country.code}
+											>
+												{country.name}
+											</MenuItem>
+										))}
+									</TextField>
+								)}
+							/>
+						</div>
 					</div>
 					<div className="flex flex-col items-start justify-between gap-12 md:flex-row mb-12">
 						<Controller
@@ -294,57 +292,60 @@ export default function NewContactForm() {
 									required
 									fullWidth
 									select
+									className="w-full md:w-1/3"
 								>
-									<MenuItem
-										key={'identity-type-national-id'}
-										value="national_id"
-									>
-										National ID
-									</MenuItem>
-									<MenuItem
-										key={'identity-type-passport'}
-										value="passport"
-									>
-										Passport
-									</MenuItem>
-									<MenuItem
-										key={'identity-type-other'}
-										value="other"
-									>
-										Other
-									</MenuItem>
+									{Object.entries(IdentityTypes).map(([key, value]) => (
+										<MenuItem
+											key={`identity-type-${key}`}
+											value={key}
+										>
+											{value}
+										</MenuItem>
+									))}
 								</TextField>
 							)}
 						/>
-						<Controller
-							name="contact_identity_no"
-							control={control}
-							render={({ field }) => (
-								<TextField
-									{...field}
-									label="Identity Number"
-									error={!!errors.contact_identity_no}
-									helperText={errors?.contact_identity_no?.message}
-									variant="outlined"
-									required
-									fullWidth
-								/>
-							)}
-						/>
-						<Controller
-							name="contact_occupation"
-							control={control}
-							render={({ field }) => (
-								<TextField
-									{...field}
-									label="Occupation"
-									error={!!errors.contact_occupation}
-									helperText={errors?.contact_occupation?.message}
-									variant="outlined"
-									fullWidth
-								/>
-							)}
-						/>
+						<div className="w-full md:w-2/3 flex flex-col items-start justify-between gap-12 md:flex-row">
+							<Controller
+								name="contact_identity_no"
+								control={control}
+								render={({ field }) => (
+									<TextField
+										{...field}
+										label="Identity Number"
+										error={!!errors.contact_identity_no}
+										helperText={errors?.contact_identity_no?.message}
+										variant="outlined"
+										required
+										fullWidth
+									/>
+								)}
+							/>
+							<Controller
+								name="contact_occupation"
+								control={control}
+								render={({ field }) => (
+									<TextField
+										{...field}
+										label="Occupation"
+										error={!!errors.contact_occupation}
+										helperText={errors?.contact_occupation?.message}
+										variant="outlined"
+										fullWidth
+										select
+									>
+										{Object.entries(Occupations).map(([key, value]) => (
+											<MenuItem
+												key={`occupation-${key}`}
+												value={key}
+											>
+												{value}
+											</MenuItem>
+										))}
+									</TextField>
+								)}
+							/>
+						</div>
 					</div>
 					<div className="flex flex-col items-start justify-between gap-12 md:flex-row mb-12">
 						<Controller
@@ -360,6 +361,7 @@ export default function NewContactForm() {
 									required
 									fullWidth
 									select
+									className="w-full md:w-1/3"
 								>
 									{countryList.map((country) => (
 										<MenuItem
@@ -372,34 +374,36 @@ export default function NewContactForm() {
 								</TextField>
 							)}
 						/>
-						<Controller
-							name="contact_region"
-							control={control}
-							render={({ field }) => (
-								<TextField
-									{...field}
-									label="Region"
-									error={!!errors.contact_region}
-									helperText={errors?.contact_region?.message}
-									variant="outlined"
-									fullWidth
-								/>
-							)}
-						/>
-						<Controller
-							name="contact_city"
-							control={control}
-							render={({ field }) => (
-								<TextField
-									{...field}
-									label="City"
-									error={!!errors.contact_city}
-									helperText={errors?.contact_city?.message}
-									variant="outlined"
-									fullWidth
-								/>
-							)}
-						/>
+						<div className="w-full md:w-2/3 flex flex-col items-start justify-between gap-12 md:flex-row">
+							<Controller
+								name="contact_region"
+								control={control}
+								render={({ field }) => (
+									<TextField
+										{...field}
+										label="Region"
+										error={!!errors.contact_region}
+										helperText={errors?.contact_region?.message}
+										variant="outlined"
+										fullWidth
+									/>
+								)}
+							/>
+							<Controller
+								name="contact_city"
+								control={control}
+								render={({ field }) => (
+									<TextField
+										{...field}
+										label="City"
+										error={!!errors.contact_city}
+										helperText={errors?.contact_city?.message}
+										variant="outlined"
+										fullWidth
+									/>
+								)}
+							/>
+						</div>
 					</div>
 					<Controller
 						name="contact_address"
@@ -434,49 +438,52 @@ export default function NewContactForm() {
 									helperText={errors?.contact_email?.message}
 									variant="outlined"
 									fullWidth
+									className="w-full md:w-1/3"
 								/>
 							)}
 						/>
-						<Controller
-							name="contact_phone_code"
-							control={control}
-							render={({ field }) => (
-								<TextField
-									{...field}
-									label="Phone Code"
-									type="tel"
-									error={!!errors.contact_phone_code}
-									helperText={errors?.contact_phone_code?.message}
-									variant="outlined"
-									fullWidth
-									select
-								>
-									{countryList.map((country) => (
-										<MenuItem
-											key={`contact_phone_code${country.code}`}
-											value={country.dial_code}
-										>
-											{country.name} ({country.dial_code})
-										</MenuItem>
-									))}
-								</TextField>
-							)}
-						/>
-						<Controller
-							name="contact_phone_no"
-							control={control}
-							render={({ field }) => (
-								<TextField
-									{...field}
-									label="Phone Number"
-									type="tel"
-									error={!!errors.contact_phone_no}
-									helperText={errors?.contact_phone_no?.message}
-									variant="outlined"
-									fullWidth
-								/>
-							)}
-						/>
+						<div className="w-full md:w-2/3 flex flex-col items-start justify-between gap-12 md:flex-row">
+							<Controller
+								name="contact_phone_code"
+								control={control}
+								render={({ field }) => (
+									<TextField
+										{...field}
+										label="Phone Code"
+										type="tel"
+										error={!!errors.contact_phone_code}
+										helperText={errors?.contact_phone_code?.message}
+										variant="outlined"
+										fullWidth
+										select
+									>
+										{countryList.map((country) => (
+											<MenuItem
+												key={`contact_phone_code${country.code}`}
+												value={country.dial_code}
+											>
+												{country.name} ({country.dial_code})
+											</MenuItem>
+										))}
+									</TextField>
+								)}
+							/>
+							<Controller
+								name="contact_phone_no"
+								control={control}
+								render={({ field }) => (
+									<TextField
+										{...field}
+										label="Phone Number"
+										type="tel"
+										error={!!errors.contact_phone_no}
+										helperText={errors?.contact_phone_no?.message}
+										variant="outlined"
+										fullWidth
+									/>
+								)}
+							/>
+						</div>
 					</div>
 					<Controller
 						name="contact_notes"
