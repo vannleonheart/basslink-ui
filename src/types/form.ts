@@ -55,10 +55,6 @@ export type SigninResponse = {
 	token: string;
 };
 
-export type ForgotPasswordFormData = {
-	email: string;
-};
-
 export type ResetPasswordFormData = {
 	id: string;
 	token: string;
