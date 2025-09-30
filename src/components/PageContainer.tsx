@@ -3,12 +3,16 @@ import { ReactNode } from 'react';
 import FusePageSimple from '@fuse/core/FusePageSimple/FusePageSimple';
 
 const Root = styled(FusePageSimple)(({ theme }) => ({
+	'& .container': {
+		maxWidth: '100%!important'
+	},
 	'& .FusePageSimple-header': {
 		backgroundColor: theme.palette.background.paper,
 		borderBottomWidth: 1,
 		borderStyle: 'solid',
 		borderColor: theme.palette.divider,
-		padding: '0 24px'
+		padding: '0 24px',
+		boxShadow: `inset 0 -1px 0 0px ${theme.palette.divider}`
 	},
 	'& .FusePageSimple-content': {
 		padding: '0 24px'

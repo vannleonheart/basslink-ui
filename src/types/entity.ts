@@ -105,6 +105,10 @@ export type Disbursement = {
 	is_settled?: boolean;
 	created: number;
 	updated?: number;
+	user?: User;
+	contact?: Contact;
+	target_account?: ContactAccount;
+	target_currency?: Currency;
 };
 
 export type UserType = User | AgentUser | AdminUser;
