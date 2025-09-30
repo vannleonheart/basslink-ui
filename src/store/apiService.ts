@@ -217,9 +217,9 @@ export const apiService = createApi({
 		}),
 		getDisbursements: build.query({
 			query: (args) => {
-				const { accessToken } = args;
+				const { accessToken, side = 'agent' } = args;
 				return {
-					url: `/agent/disbursements`,
+					url: `/${side}/disbursements`,
 					headers: {
 						Authorization: `Bearer ${accessToken}`
 					}
@@ -229,10 +229,10 @@ export const apiService = createApi({
 		}),
 		createDisbursement: build.mutation({
 			query: (args) => {
-				const { accessToken, data = {} } = args;
+				const { accessToken, data = {}, side = 'agent' } = args;
 
 				return {
-					url: '/agent/disbursements',
+					url: `/${side}/disbursements`,
 					method: 'POST',
 					body: jsonify(data),
 					headers: {
@@ -244,10 +244,10 @@ export const apiService = createApi({
 		}),
 		createCustomer: build.mutation({
 			query: (args) => {
-				const { accessToken, data = {} } = args;
+				const { accessToken, data = {}, side = 'agent' } = args;
 
 				return {
-					url: '/agent/users',
+					url: `/${side}/users`,
 					method: 'POST',
 					body: jsonify(data),
 					headers: {
@@ -259,9 +259,9 @@ export const apiService = createApi({
 		}),
 		getCustomers: build.query({
 			query: (args) => {
-				const { accessToken } = args;
+				const { accessToken, side = 'agent' } = args;
 				return {
-					url: `/agent/users`,
+					url: `/${side}/users`,
 					headers: {
 						Authorization: `Bearer ${accessToken}`
 					}
@@ -271,10 +271,10 @@ export const apiService = createApi({
 		}),
 		createContact: build.mutation({
 			query: (args) => {
-				const { accessToken, data = {} } = args;
+				const { accessToken, data = {}, side = 'agent' } = args;
 
 				return {
-					url: '/agent/contacts',
+					url: `/${side}/contacts`,
 					method: 'POST',
 					body: jsonify(data),
 					headers: {
@@ -286,9 +286,9 @@ export const apiService = createApi({
 		}),
 		getContacts: build.query({
 			query: (args) => {
-				const { accessToken } = args;
+				const { accessToken, side = 'agent' } = args;
 				return {
-					url: `/agent/contacts`,
+					url: `/${side}/contacts`,
 					headers: {
 						Authorization: `Bearer ${accessToken}`
 					}
@@ -298,9 +298,9 @@ export const apiService = createApi({
 		}),
 		getContactAccounts: build.query({
 			query: (args) => {
-				const { accessToken, id } = args;
+				const { accessToken, id, side = 'agent' } = args;
 				return {
-					url: `/agent/contacts/${id}/accounts`,
+					url: `/${side}/contacts/${id}/accounts`,
 					headers: {
 						Authorization: `Bearer ${accessToken}`
 					}

@@ -21,10 +21,11 @@ const Root = styled(FusePageSimple)(({ theme }) => ({
 
 function ContactsApp() {
 	const {
-		data: { accessToken }
+		data: { accessToken, side }
 	} = useSession();
 	const { data: contactsData, isLoading } = apiService.useGetContactsQuery({
-		accessToken
+		accessToken,
+		side
 	});
 	const contacts = useMemo(() => (contactsData ?? []) as Contact[], [contactsData]);
 

@@ -13,11 +13,7 @@ export default function Content() {
 	const {
 		data: { accessToken, side }
 	} = useSession();
-	const {
-		data: disbursementsData,
-		isLoading,
-		refetch
-	} = apiService.useGetDisbursementsQuery({
+	const { data: disbursementsData, isLoading } = apiService.useGetDisbursementsQuery({
 		side,
 		accessToken
 	});
