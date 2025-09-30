@@ -7,7 +7,6 @@ import Divider from '@mui/material/Divider';
 import Button from '@mui/material/Button';
 import Typography from '@mui/material/Typography';
 import _ from 'lodash';
-import { SecuritySettings, ValidationError } from '@/types/entity';
 import { agentUpdatePassword, clientUpdatePassword } from '@/utils/apiCall';
 import { useState } from 'react';
 import { useSession } from 'next-auth/react';
@@ -16,6 +15,7 @@ import useUser from '@auth/useUser';
 import { showMessage } from '@fuse/core/FuseMessage/fuseMessageSlice';
 import { useDispatch } from 'react-redux';
 import getErrorMessage from '@/data/errors';
+import { SecuritySettings, ValidationError } from '@/types/component';
 
 const defaultValues: SecuritySettings = {
 	current_password: '',
@@ -33,7 +33,7 @@ export default function SecuritySettingsPage() {
 	const {
 		data: { accessToken }
 	} = useSession();
-	const { side } = useUser();
+	const { as } = useUser();
 	const { control, reset, handleSubmit, formState, setError } = useForm<SecuritySettings>({
 		defaultValues,
 		mode: 'all',
@@ -53,7 +53,7 @@ export default function SecuritySettingsPage() {
 
 			let result;
 
-			if (side === 'agent') {
+			if (as === 'agent') {
 				result = await agentUpdatePassword(formData, accessToken);
 			} else {
 				result = await clientUpdatePassword(formData, accessToken);
@@ -69,7 +69,7 @@ export default function SecuritySettingsPage() {
 
 			dispatch(
 				showMessage({
-					message: getErrorMessage(response?.message ?? 'Failed to update password'),
+					message: getErrorMessage(result?.message ?? 'Failed to update password'),
 					variant: 'error'
 				})
 			);

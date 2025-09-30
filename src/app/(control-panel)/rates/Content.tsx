@@ -1,13 +1,14 @@
 import RatesUpdateDialog from '@/components/dialogs/RatesUpdateDialog';
 import { useAppDispatch } from '@/store/hooks';
-import { AuthComponentProps, Rate } from '@/types/entity';
+import { AuthComponentProps } from '@/types/component';
+import { Rate } from '@/types/entity';
 import { openDialog } from '@fuse/core/FuseDialog/fuseDialogSlice';
 import FuseSvgIcon from '@fuse/core/FuseSvgIcon';
 import { Button, Paper, Table, TableBody, TableCell, TableContainer, TableHead, TableRow } from '@mui/material';
 import { DateTime } from 'luxon';
 import styled from 'styled-components';
 
-const StyledTableRow = styled(TableRow)(({ theme }) => ({
+const StyledTableRow = styled(TableRow)(() => ({
 	'&:nth-of-type(odd)': {
 		backgroundColor: '#e9e9e9'
 	},

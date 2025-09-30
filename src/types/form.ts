@@ -208,3 +208,6 @@ export type CreateContactAccountFormData = {
 	bank_website?: string;
 	bank_notes?: string;
 };
+
+
+export type DisbursementChatFormData = {};

@@ -8,7 +8,6 @@ import { Controller, useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import TextField from '@mui/material/TextField';
 import _ from 'lodash';
-import { ProfileSettings } from '@/types/entity';
 import { CountryCodeList } from '@/data/country-code';
 import MenuItem from '@mui/material/MenuItem';
 import { useSession } from 'next-auth/react';
@@ -17,6 +16,8 @@ import React from 'react';
 import useUser from '@auth/useUser';
 import { showMessage } from '@fuse/core/FuseMessage/fuseMessageSlice';
 import { useDispatch } from 'react-redux';
+import { ProfileSettings, ValidationError } from '@/types/component';
+import getErrorMessage from '@/data/errors';
 
 const schema = z.object({
 	name: z.string().min(1, 'Name is required'),
@@ -28,13 +29,13 @@ export default function ProfileSettingsPage() {
 	const {
 		data: { accessToken }
 	} = useSession();
-	const { data: user, side } = useUser();
+	const { data: user, as } = useUser();
 	const defaultValues: ProfileSettings = {
 		name: user?.name || '',
 		phone_code: user?.phone_code ? '+' + user?.phone_code : '',
 		phone_no: user?.phone_no || ''
 	};
-	const { control, handleSubmit, formState } = useForm<ProfileSettings>({
+	const { control, handleSubmit, formState, setError } = useForm<ProfileSettings>({
 		defaultValues,
 		mode: 'all',
 		resolver: zodResolver(schema)
@@ -53,7 +54,7 @@ export default function ProfileSettingsPage() {
 
 			let result;
 
-			if (side === 'agent') {
+			if (as === 'agent') {
 				result = await agentUpdateProfile(formData, accessToken);
 			} else {
 				result = await clientUpdateProfile(formData, accessToken);
@@ -68,7 +69,7 @@ export default function ProfileSettingsPage() {
 
 			dispatch(
 				showMessage({
-					message: getErrorMessage(response?.message ?? 'Failed to update password'),
+					message: getErrorMessage(result?.message ?? 'Failed to update password'),
 					variant: 'error'
 				})
 			);

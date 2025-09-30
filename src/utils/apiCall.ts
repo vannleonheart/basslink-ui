@@ -1,5 +1,10 @@
 import { ApiResponse, DownloadOptions, ProfileSettings, SecuritySettings } from '@/types/component';
-import { CreateOrEditAgentFormData, CreateOrEditClientFormData, SignInFormData } from '@/types/form';
+import {
+	CreateOrEditAgentFormData,
+	CreateOrEditClientFormData,
+	DisbursementChatFormData,
+	SignInFormData
+} from '@/types/form';
 import apiFetch, { setGlobalHeaders } from '@/utils/apiFetch';
 
 setGlobalHeaders({ 'Content-Type': 'application/json' });
@@ -156,18 +161,6 @@ export async function agentGetCompanyById(companyId: string, accessToken: string
 	return await getJson(`/agent/companies/${companyId}`, accessToken);
 }
 
-export async function agentCreateCompany(data: AgentCompany, accessToken: string): Promise<ApiResponse> {
-	return await postJson('/agent/companies', data, accessToken);
-}
-
-export async function agentUpdateCompanyById(
-	companyId: string,
-	data: AgentCompany,
-	accessToken: string
-): Promise<ApiResponse> {
-	return await postJson(`/agent/companies/${companyId}/update`, data, accessToken);
-}
-
 export async function agentDeleteCompanyById(companyId: string, accessToken: string): Promise<ApiResponse> {
 	return await postJson(`/agent/companies/${companyId}/delete`, {}, accessToken);
 }
@@ -176,24 +169,8 @@ export async function agentGetCompanyAccounts(companyId: string, accessToken: st
 	return await getJson(`/agent/companies/${companyId}/accounts`, accessToken);
 }
 
-export async function agentAcceptDeal(
-	dealId: string,
-	data: AcceptDealFormData,
-	accessToken: string
-): Promise<ApiResponse> {
-	return await postJson(`/agent/deals/${dealId}/accept`, data, accessToken);
-}
-
 export async function agentRejectDeal(dealId: string, accessToken: string): Promise<ApiResponse> {
 	return await postJson(`/agent/deals/${dealId}/reject`, {}, accessToken);
-}
-
-export async function agentCalculateDeal(
-	dealId: string,
-	data: CalculateRequest,
-	accessToken: string
-): Promise<ApiResponse> {
-	return await postJson(`/agent/deals/${dealId}/calculate`, data, accessToken);
 }
 
 export async function agentSubmitTerms(dealId: string, data: unknown, accessToken: string): Promise<ApiResponse> {
@@ -208,15 +185,11 @@ export async function agentConfirmReturnSent(dealId: string, accessToken: string
 	return await postJson(`/agent/deals/${dealId}/sendReturn`, {}, accessToken);
 }
 
-export async function agentConfirmInvoicePayment(
+export async function agentSendChat(
 	dealId: string,
-	data: PaymentInvoiceRequest,
+	data: DisbursementChatFormData,
 	accessToken: string
 ): Promise<ApiResponse> {
-	return await postJson(`/agent/deals/${dealId}/paymentInvoice`, data, accessToken);
-}
-
-export async function agentSendChat(dealId: string, data: DealMessageData, accessToken: string): Promise<ApiResponse> {
 	return await postJson(`/agent/deals/${dealId}/message`, data, accessToken);
 }
 
@@ -253,20 +226,8 @@ export async function clientAuthSignin(data: SignInFormData): Promise<ApiRespons
 	return await postJson('/user/auth/signin', data);
 }
 
-export async function clientAuthRecover(data: ForgotPasswordFormData): Promise<ApiResponse> {
-	return await postJson('/user/auth/recover', data);
-}
-
-export async function clientAuthReset(data: ResetPasswordFormData): Promise<ApiResponse> {
-	return await postJson('/user/auth/reset', data);
-}
-
 export async function clientAuthVerifyEmail(id: string, token: string): Promise<ApiResponse> {
 	return await postJson('/user/auth/verify/email', { id, token });
-}
-
-export async function clientAuthResendEmailVerification(data: ResendEmailVerificationFormData): Promise<ApiResponse> {
-	return await postJson('/user/auth/resend/email/verification', data);
 }
 
 export async function clientGetProfile(accessToken: string): Promise<ApiResponse> {
@@ -281,18 +242,6 @@ export async function clientUpdatePassword(data: SecuritySettings, accessToken: 
 	return await postJson('/user/account/profile/update_password', data, accessToken);
 }
 
-export async function clientCreateContact(data: ClientContact, accessToken: string): Promise<ApiResponse> {
-	return await postJson('/user/contacts', data, accessToken);
-}
-
-export async function clientUpdateContactById(
-	contactId: string,
-	data: ClientContact,
-	accessToken: string
-): Promise<ApiResponse> {
-	return await postJson(`/client/contacts/${contactId}/update`, data, accessToken);
-}
-
 export async function clientGetContacts(accessToken: string): Promise<ApiResponse> {
 	return await getJson('/client/contacts', accessToken);
 }
@@ -303,21 +252,6 @@ export async function clientDeleteContactById(contactId: string, accessToken: st
 
 export async function clientGetContactById(contactId: string, accessToken: string): Promise<ApiResponse> {
 	return await getJson(`/client/contacts/${contactId}`, accessToken);
-}
-
-export async function clientCreateDealSendMoney(
-	data: CreateDealSendMoneyFormData,
-	accessToken: string
-): Promise<ApiResponse> {
-	return await postJson('/client/deals/send-money', data, accessToken);
-}
-
-export async function clientUpdateDealSendMoney(
-	dealId: string,
-	data: CreateDealSendMoneyFormData,
-	accessToken: string
-): Promise<ApiResponse> {
-	return await postJson(`/client/deals/${dealId}/update-send-money`, data, accessToken);
 }
 
 export async function clientDeleteDealById(dealId: string, accessToken: string): Promise<ApiResponse> {
@@ -348,7 +282,11 @@ export async function clientConfirmReturn(dealId: string, accessToken: string): 
 	return await postJson(`/client/deals/${dealId}/confirmReturn`, {}, accessToken);
 }
 
-export async function clientSendChat(dealId: string, data: DealMessageData, accessToken: string): Promise<ApiResponse> {
+export async function clientSendChat(
+	dealId: string,
+	data: DisbursementChatFormData,
+	accessToken: string
+): Promise<ApiResponse> {
 	return await postJson(`/client/deals/${dealId}/message`, data, accessToken);
 }
 
