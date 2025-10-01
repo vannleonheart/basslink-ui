@@ -3,14 +3,14 @@ import { FuseNavItemType } from '@fuse/core/FuseNavigation/types/FuseNavItemType
 const navigationConfig: FuseNavItemType[] = [
 	{
 		id: 'sidebar-menu-disbursements',
-		title: 'Disbursements',
+		title: 'Pengiriman Dana',
 		type: 'collapse',
 		icon: 'heroicons-solid:banknotes',
 		auth: true,
 		children: [
 			{
 				id: 'sidebar-menu-disbursement-list',
-				title: 'Disbursement List',
+				title: 'Daftar Pengiriman',
 				type: 'item',
 				url: '/disbursements/list',
 				end: true,
@@ -18,7 +18,7 @@ const navigationConfig: FuseNavItemType[] = [
 			},
 			{
 				id: 'sidebar-menu-new-disbursement',
-				title: 'New Disbursement',
+				title: 'Kirim Dana',
 				type: 'item',
 				url: '/disbursements/new',
 				end: true,
@@ -28,7 +28,7 @@ const navigationConfig: FuseNavItemType[] = [
 	},
 	{
 		id: 'sidebar-menu-agents',
-		title: 'Agents',
+		title: 'Agen',
 		type: 'item',
 		icon: 'heroicons-solid:briefcase',
 		url: '/agents',
@@ -37,14 +37,14 @@ const navigationConfig: FuseNavItemType[] = [
 	},
 	{
 		id: 'sidebar-menu-customers',
-		title: 'Customers',
+		title: 'Pengirim Dana',
 		type: 'collapse',
 		icon: 'heroicons-solid:users',
 		auth: ['agent', 'admin'],
 		children: [
 			{
 				id: 'sidebar-menu-customer-list',
-				title: 'Customer List',
+				title: 'Daftar Pengirim',
 				type: 'item',
 				url: '/customers/list',
 				end: true,
@@ -52,7 +52,7 @@ const navigationConfig: FuseNavItemType[] = [
 			},
 			{
 				id: 'sidebar-menu-new-customer',
-				title: 'New Customer',
+				title: 'Tambah Pengirim',
 				type: 'item',
 				url: '/customers/new',
 				end: true,
@@ -62,7 +62,7 @@ const navigationConfig: FuseNavItemType[] = [
 	},
 	{
 		id: 'sidebar-menu-contacts',
-		title: 'Contacts',
+		title: 'Penerima Dana',
 		type: 'collapse',
 		icon: 'heroicons-solid:user-group',
 		auth: ['agent', 'admin'],
@@ -70,7 +70,7 @@ const navigationConfig: FuseNavItemType[] = [
 		children: [
 			{
 				id: 'sidebar-menu-contact-list',
-				title: 'Contact List',
+				title: 'Daftar Penerima',
 				type: 'item',
 				url: '/contacts/list',
 				end: true,
@@ -78,7 +78,7 @@ const navigationConfig: FuseNavItemType[] = [
 			},
 			{
 				id: 'sidebar-menu-new-contact',
-				title: 'New Contact',
+				title: 'Tambah Penerima',
 				type: 'item',
 				url: '/contacts/new',
 				end: true,
@@ -88,7 +88,7 @@ const navigationConfig: FuseNavItemType[] = [
 	},
 	{
 		id: 'sidebar-menu-settings',
-		title: 'Settings',
+		title: 'Pengaturan',
 		type: 'collapse',
 		icon: 'heroicons-solid:cog-6-tooth',
 		end: false,
@@ -96,7 +96,7 @@ const navigationConfig: FuseNavItemType[] = [
 		children: [
 			{
 				id: 'sidebar-menu-admin-users',
-				title: 'Users',
+				title: 'Pengguna Admin',
 				type: 'item',
 				url: '/admin-users',
 				end: true,
@@ -104,7 +104,7 @@ const navigationConfig: FuseNavItemType[] = [
 			},
 			{
 				id: 'sidebar-menu-agent-users',
-				title: 'Users',
+				title: 'Pengguna Agen',
 				type: 'item',
 				url: '/agent-users',
 				end: true,
@@ -112,7 +112,7 @@ const navigationConfig: FuseNavItemType[] = [
 			},
 			{
 				id: 'sidebar-menu-rates',
-				title: 'Rates',
+				title: 'Rate',
 				type: 'item',
 				url: '/rates',
 				end: true,

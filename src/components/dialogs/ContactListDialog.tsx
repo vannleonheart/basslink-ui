@@ -77,7 +77,7 @@ export default function ContactListDialog({ onSelect }: ContactListDialogProps) 
 		<React.Fragment>
 			<DialogContent>
 				<div>
-					<h4 className="mb-12 font-bold">Select from your contact</h4>
+					<h4 className="mb-12 font-bold">Pilih dari daftar penerima</h4>
 					<TextField
 						autoFocus
 						className="w-full"
@@ -110,9 +110,9 @@ export default function ContactListDialog({ onSelect }: ContactListDialogProps) 
 								))}
 							</div>
 						) : searchText.length > 0 ? (
-							<div>No contact found!</div>
+							<div>Data penerima tidak ditemukan!</div>
 						) : (
-							<div>Type contact name or identity number to search!</div>
+							<div>Ketik nama penerima atau nomor identitas untuk mencari!</div>
 						)}
 					</div>
 				</div>

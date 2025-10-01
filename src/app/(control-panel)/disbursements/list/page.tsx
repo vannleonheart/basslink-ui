@@ -7,7 +7,7 @@ import PageContainer from '@/components/PageContainer';
 export default function App() {
 	return (
 		<PageContainer
-			header={<PageHeader title="Disbursements" />}
+			header={<PageHeader title="Daftar Pengiriman" />}
 			content={<Content />}
 		/>
 	);

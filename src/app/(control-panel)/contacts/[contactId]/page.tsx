@@ -24,7 +24,7 @@ export default function ContactDetailPage() {
 
 	return (
 		<PageContainer
-			header={<PageHeader title="Contact Detail" />}
+			header={<PageHeader title="Informasi Penerima" />}
 			content={
 				<div className="px-16 pb-28 h-full">
 					{isLoading ? <LoadingBar /> : <NewContactForm contact={contact} />}

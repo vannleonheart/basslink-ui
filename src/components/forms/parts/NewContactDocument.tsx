@@ -35,8 +35,8 @@ export default function NewContactDocument({ value, onChange }: NewContactDocume
 	return (
 		<div className={`w-full p-24 bg-white shadow-2 rounded`}>
 			<div className="mb-24 flex flex-col items-start justify-start gap-12 md:flex-row md:items-center md:justify-between">
-				<h4 className="font-bold">Document Information</h4>
-				<Button onClick={handleAddDocument}>Add Document</Button>
+				<h4 className="font-bold">Dokumen</h4>
+				<Button onClick={handleAddDocument}>Tambah Dokumen</Button>
 			</div>
 			{value.map((item, index) => (
 				<ContactDocument
@@ -82,7 +82,7 @@ function ContactDocument({ value, onChange, onRemove }: ContactDocumentProps) {
 					render={({ field }) => (
 						<TextField
 							{...field}
-							label="Document Type"
+							label="Jenis Dokumen"
 							error={!!errors.document_type}
 							helperText={errors?.document_type?.message}
 							variant="outlined"
@@ -107,7 +107,7 @@ function ContactDocument({ value, onChange, onRemove }: ContactDocumentProps) {
 					render={({ field }) => (
 						<FileUploadInput
 							{...field}
-							label="Upload Document"
+							label="Unggah Dokumen"
 							error={!!errors.document_data}
 							helperText={errors?.document_data?.message}
 							variant="outlined"
@@ -121,7 +121,7 @@ function ContactDocument({ value, onChange, onRemove }: ContactDocumentProps) {
 					render={({ field }) => (
 						<TextField
 							{...field}
-							label="Notes"
+							label="Catatan"
 							error={!!errors.notes}
 							helperText={errors?.notes?.message}
 							variant="outlined"

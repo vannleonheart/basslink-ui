@@ -31,7 +31,9 @@ function Header({ data, isLoading }: { data: User[]; isLoading: boolean }) {
 					initial={{ x: -20 }}
 					animate={{ x: 0, transition: { delay: 0.2 } }}
 				>
-					<Typography className="text-4xl font-extrabold leading-none tracking-tight">Customers</Typography>
+					<Typography className="text-4xl font-extrabold leading-none tracking-tight">
+						Daftar Pengirim
+					</Typography>
 				</motion.span>
 				<motion.span
 					initial={{ y: -20, opacity: 0 }}
@@ -42,7 +44,7 @@ function Header({ data, isLoading }: { data: User[]; isLoading: boolean }) {
 						className="text-base font-medium ml-2"
 						color="text.secondary"
 					>
-						{`${filteredData?.length} customers`}
+						{`${filteredData?.length} pengirim`}
 					</Typography>
 				</motion.span>
 			</div>
@@ -56,7 +58,7 @@ function Header({ data, isLoading }: { data: User[]; isLoading: boolean }) {
 					<FuseSvgIcon color="action">heroicons-outline:magnifying-glass</FuseSvgIcon>
 
 					<Input
-						placeholder="Search customers"
+						placeholder="Cari pengirim"
 						className="flex flex-1"
 						disableUnderline
 						fullWidth

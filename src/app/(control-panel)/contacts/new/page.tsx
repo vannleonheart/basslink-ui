@@ -7,7 +7,7 @@ import PageHeader from '@/components/PageHeader';
 export default function NewContactPage() {
 	return (
 		<PageContainer
-			header={<PageHeader title="New Contact" />}
+			header={<PageHeader title="Tambah Penerima" />}
 			content={
 				<div className="px-16 pb-28">
 					<NewContactForm />

@@ -116,30 +116,34 @@ export default function Content() {
 						</TextField>
 					</div>
 					<div className="w-full flex flex-col gap-4 md:flex-row md:items-center md:gap-16">
-						<Typography>From</Typography>
+						<Typography>Dari</Typography>
 						<TextField
 							type="date"
 							fullWidth
 							value={filter.start}
 							onChange={(e) => setFilter({ ...filter, start: e.target.value })}
-							InputLabelProps={{ shrink: true }}
+							slotProps={{
+								inputLabel: { shrink: true }
+							}}
 						/>
 					</div>
 					<div className="w-full flex flex-col gap-4 md:flex-row md:items-center md:gap-16">
-						<Typography>To</Typography>
+						<Typography>Hingga</Typography>
 						<TextField
 							type="date"
 							value={filter.end}
 							fullWidth
 							onChange={(e) => setFilter({ ...filter, end: e.target.value })}
-							InputLabelProps={{ shrink: true }}
+							slotProps={{
+								inputLabel: { shrink: true }
+							}}
 						/>
 					</div>
 					<div className="w-full flex flex-col gap-4 md:flex-row md:items-center md:gap-16">
-						<Typography>Search</Typography>
+						<Typography>Cari</Typography>
 						<TextField
 							fullWidth
-							placeholder="Search by ID, sender or recipient"
+							placeholder="Cari berdasarkan ID, pengirim atau penerima"
 							value={filter.search}
 							onChange={(e) => setFilter({ ...filter, search: e.target.value })}
 						/>
@@ -161,7 +165,7 @@ export default function Content() {
 						/>
 					))
 				) : (
-					<Empty text="There are no disbursement" />
+					<Empty text="Data tidak ditemukan" />
 				)}
 			</div>
 		</div>
@@ -277,7 +281,7 @@ function DisbursementItem({
 					}}
 				>
 					<AccordionSummary expandIcon={<FuseSvgIcon>heroicons-outline:chevron-down</FuseSvgIcon>}>
-						<Typography className="font-bold">Details</Typography>
+						<Typography className="font-bold">Detail</Typography>
 					</AccordionSummary>
 					<AccordionDetails>
 						<div className="flex flex-col gap-16">
@@ -285,44 +289,44 @@ function DisbursementItem({
 								<div className="bg-gray-200 p-12 rounded flex flex-col gap-12">
 									<div className="flex gap-6 items-center">
 										<FuseSvgIcon size={16}>heroicons-outline:paper-airplane</FuseSvgIcon>
-										<Typography className="font-bold">Sender</Typography>
+										<Typography className="font-bold">Pengirim</Typography>
 									</div>
 									<div className="flex flex-col gap-4">
 										<div className="flex gap-4 items-center items-center justify-between">
-											<Typography className="w-full md:w-1/2">Type</Typography>
+											<Typography className="w-full md:w-1/2">Jenis Pengirim</Typography>
 											<Typography className="w-full md:w-1/2 font-medium text-right">
 												{userTypes[disbursement.from_type] || disbursement.from_type}
 											</Typography>
 										</div>
 										<div className="flex gap-4 items-center items-center justify-between">
-											<Typography className="w-full md:w-1/2">Name</Typography>
+											<Typography className="w-full md:w-1/2">Nama Pengirim</Typography>
 											<Typography className="w-full md:w-1/2 font-medium text-right">
 												{disbursement.from_name}
 											</Typography>
 										</div>
 										<div className="flex gap-4 items-center items-center justify-between">
-											<Typography className="w-full md:w-1/2">Citizenship</Typography>
+											<Typography className="w-full md:w-1/2">Kewarganegaraan</Typography>
 											<Typography className="w-full md:w-1/2 font-medium text-right">
 												{countryList[disbursement.from_citizenship] ||
 													disbursement.from_citizenship}
 											</Typography>
 										</div>
 										<div className="flex gap-4 items-center items-center justify-between">
-											<Typography className="w-full md:w-1/2">Identity Type</Typography>
+											<Typography className="w-full md:w-1/2">Jenis Identitas</Typography>
 											<Typography className="w-full md:w-1/2 font-medium text-right">
 												{identityTypeList[disbursement.from_identity_type] ||
 													disbursement.from_identity_type}
 											</Typography>
 										</div>
 										<div className="flex gap-4 items-center items-center justify-between">
-											<Typography className="w-full md:w-1/2">Identity No</Typography>
+											<Typography className="w-full md:w-1/2">Nomor Identitas</Typography>
 											<Typography className="w-full md:w-1/2 font-medium text-right">
 												{disbursement.from_identity_no}
 											</Typography>
 										</div>
 										{disbursement.from_occupation && (
 											<div className="flex gap-4 items-center items-center justify-between">
-												<Typography className="w-full md:w-1/2">Occupation</Typography>
+												<Typography className="w-full md:w-1/2">Pekerjaan</Typography>
 												<Typography className="w-full md:w-1/2 font-medium text-right">
 													{occupationList[disbursement.from_occupation] ||
 														disbursement.from_occupation}
@@ -339,14 +343,14 @@ function DisbursementItem({
 										)}
 										{disbursement.from_phone_code && disbursement.from_phone_no && (
 											<div className="flex gap-4 items-center items-center justify-between">
-												<Typography className="w-full md:w-1/2">Phone</Typography>
+												<Typography className="w-full md:w-1/2">Telepon</Typography>
 												<Typography className="w-full md:w-1/2 font-medium text-right">
 													({disbursement.from_phone_code}) {disbursement.from_phone_no}
 												</Typography>
 											</div>
 										)}
 										<div className="flex gap-4 items-center items-center justify-between">
-											<Typography className="w-full md:w-1/2">Address</Typography>
+											<Typography className="w-full md:w-1/2">Alamat</Typography>
 											<Typography className="w-full md:w-1/2 font-medium text-right">
 												{disbursement.from_address}, {disbursement.from_city},{' '}
 												{disbursement.from_region},{' '}
@@ -358,44 +362,44 @@ function DisbursementItem({
 								<div className="bg-gray-200 p-12 rounded flex flex-col gap-12">
 									<div className="flex gap-6 items-center">
 										<FuseSvgIcon size={16}>heroicons-outline:gift-top</FuseSvgIcon>
-										<Typography className="font-bold">Recipient</Typography>
+										<Typography className="font-bold">Penerima</Typography>
 									</div>
 									<div className="flex flex-col gap-4">
 										<div className="flex gap-4 items-center items-center justify-between">
-											<Typography className="w-full md:w-1/2">Type</Typography>
+											<Typography className="w-full md:w-1/2">Jenis Penerima</Typography>
 											<Typography className="w-full md:w-1/2 font-medium text-right">
 												{userTypes[disbursement.to_type] || disbursement.to_type}
 											</Typography>
 										</div>
 										<div className="flex gap-4 items-center items-center justify-between">
-											<Typography className="w-full md:w-1/2">Name</Typography>
+											<Typography className="w-full md:w-1/2">Nama Penerima</Typography>
 											<Typography className="w-full md:w-1/2 font-medium text-right">
 												{disbursement.to_name}
 											</Typography>
 										</div>
 										<div className="flex gap-4 items-center items-center justify-between">
-											<Typography className="w-full md:w-1/2">Citizenship</Typography>
+											<Typography className="w-full md:w-1/2">Kewarganegaraan</Typography>
 											<Typography className="w-full md:w-1/2 font-medium text-right">
 												{countryList[disbursement.to_citizenship] ||
 													disbursement.to_citizenship}
 											</Typography>
 										</div>
 										<div className="flex gap-4 items-center items-center justify-between">
-											<Typography className="w-full md:w-1/2">Identity Type</Typography>
+											<Typography className="w-full md:w-1/2">Jenis Identitas</Typography>
 											<Typography className="w-full md:w-1/2 font-medium text-right">
 												{identityTypeList[disbursement.to_identity_type] ||
 													disbursement.to_identity_type}
 											</Typography>
 										</div>
 										<div className="flex gap-4 items-center items-center justify-between">
-											<Typography className="w-full md:w-1/2">Identity No</Typography>
+											<Typography className="w-full md:w-1/2">Nomor Identitas</Typography>
 											<Typography className="w-full md:w-1/2 font-medium text-right">
 												{disbursement.to_identity_no}
 											</Typography>
 										</div>
 										{disbursement.to_occupation && (
 											<div className="flex gap-4 items-center items-center justify-between">
-												<Typography className="w-full md:w-1/2">Occupation</Typography>
+												<Typography className="w-full md:w-1/2">Pekerjaan</Typography>
 												<Typography className="w-full md:w-1/2 font-medium text-right">
 													{occupationList[disbursement.to_occupation] ||
 														disbursement.to_occupation}
@@ -412,14 +416,14 @@ function DisbursementItem({
 										)}
 										{disbursement.to_phone_code && disbursement.to_phone_no && (
 											<div className="flex gap-4 items-center items-center justify-between">
-												<Typography className="w-full md:w-1/2">Phone</Typography>
+												<Typography className="w-full md:w-1/2">Telepon</Typography>
 												<Typography className="w-full md:w-1/2 font-medium text-right">
 													({disbursement.to_phone_code}) {disbursement.to_phone_no}
 												</Typography>
 											</div>
 										)}
 										<div className="flex gap-4 items-center items-center justify-between">
-											<Typography className="w-full md:w-1/2">Address</Typography>
+											<Typography className="w-full md:w-1/2">Alamat</Typography>
 											<Typography className="w-full md:w-1/2 font-medium text-right">
 												{disbursement.to_address}, {disbursement.to_city},{' '}
 												{disbursement.to_region},{' '}
@@ -428,7 +432,7 @@ function DisbursementItem({
 										</div>
 										{disbursement.to_relationship && (
 											<div className="flex gap-4 items-center items-center justify-between">
-												<Typography className="w-full md:w-1/2">Relationship</Typography>
+												<Typography className="w-full md:w-1/2">Hubungan</Typography>
 												<Typography className="w-full md:w-1/2 font-medium text-right">
 													{disbursement.to_relationship}
 												</Typography>
@@ -439,13 +443,13 @@ function DisbursementItem({
 							</div>
 							<div className="grid grid-cols-2 gap-16">
 								<div className="bg-gray-200 p-12 rounded flex flex-row gap-4 justify-between items-center">
-									<Typography className="font-bold">Sender Currency:</Typography>
+									<Typography className="font-bold">Mata Uang Pengirim:</Typography>
 									<Typography>
 										{disbursement?.source_currency?.name} ({disbursement?.source_currency?.symbol})
 									</Typography>
 								</div>
 								<div className="bg-gray-200 p-12 rounded flex flex-row gap-4 justify-between items-center">
-									<Typography className="font-bold">Sent Amount:</Typography>
+									<Typography className="font-bold">Jumlah Dikirim:</Typography>
 									<Typography>
 										{new Intl.NumberFormat('en-US', {
 											minimumFractionDigits: 0,
@@ -460,11 +464,11 @@ function DisbursementItem({
 									<Typography>{disbursement.rate}</Typography>
 								</div>
 								<div className="bg-gray-200 p-12 rounded flex flex-row gap-4 justify-between items-center">
-									<Typography className="font-bold">Fee Percentage:</Typography>
+									<Typography className="font-bold">Biaya Persentase:</Typography>
 									<Typography>{disbursement.fee_amount_percent} %</Typography>
 								</div>
 								<div className="bg-gray-200 p-12 rounded flex flex-row gap-4 justify-between items-center">
-									<Typography className="font-bold">Fee Fixed:</Typography>
+									<Typography className="font-bold">Biaya Tetap:</Typography>
 									<Typography>
 										{disbursement?.source_currency?.symbol}{' '}
 										{new Intl.NumberFormat('en-US', {
@@ -474,7 +478,7 @@ function DisbursementItem({
 									</Typography>
 								</div>
 								<div className="bg-gray-200 p-12 rounded flex flex-row gap-4 justify-between items-center">
-									<Typography className="font-bold">Fee Total:</Typography>
+									<Typography className="font-bold">Biaya Total:</Typography>
 									<Typography>
 										{disbursement?.source_currency?.symbol}{' '}
 										{new Intl.NumberFormat('en-US', {
@@ -486,13 +490,13 @@ function DisbursementItem({
 							</div>
 							<div className="grid grid-cols-1 md:grid-cols-2 gap-16">
 								<div className="bg-gray-200 p-12 rounded flex flex-col gap-8">
-									<Typography className="font-bold">Purpose:</Typography>
+									<Typography className="font-bold">Tujuan Pengiriman:</Typography>
 									<Typography>
 										{purposeTypes[disbursement.purpose] || disbursement.purpose}
 									</Typography>
 								</div>
 								<div className="bg-gray-200 p-12 rounded flex flex-col gap-8">
-									<Typography className="font-bold">Fund Source:</Typography>
+									<Typography className="font-bold">Sumber Dana:</Typography>
 									<Typography>
 										{fundSourceTypes[disbursement.fund_source] || disbursement.fund_source}
 									</Typography>
@@ -500,15 +504,15 @@ function DisbursementItem({
 							</div>
 							<div className="grid grid-cols-1 md:grid-cols-2 gap-16">
 								<div className="bg-gray-200 p-12 rounded flex flex-col gap-8">
-									<Typography className="font-bold">Bank Detail</Typography>
+									<Typography className="font-bold">Detail Bank</Typography>
 									<div className="flex gap-4 items-center items-center justify-between">
-										<Typography className="w-full md:w-1/2">Bank Name</Typography>
+										<Typography className="w-full md:w-1/2">Nama Bank</Typography>
 										<Typography className="w-full md:w-1/2 font-medium text-right">
 											{disbursement.to_bank_name}
 										</Typography>
 									</div>
 									<div className="flex gap-4 items-center items-center justify-between">
-										<Typography className="w-full md:w-1/2">Bank Account No</Typography>
+										<Typography className="w-full md:w-1/2">Nomor Rekening</Typography>
 										<div className="flex gap-8 items-center justify-end w-full md:w-1/2">
 											<Typography className="w-full md:w-1/2 font-medium text-right">
 												{disbursement.to_bank_account_no}
@@ -517,13 +521,13 @@ function DisbursementItem({
 										</div>
 									</div>
 									<div className="flex gap-4 items-center items-center justify-between">
-										<Typography className="w-full md:w-1/2">Account Owner</Typography>
+										<Typography className="w-full md:w-1/2">Pemilik Rekening</Typography>
 										<Typography className="w-full md:w-1/2 font-medium text-right">
 											{disbursement.to_bank_account_name}
 										</Typography>
 									</div>
 									<div className="flex gap-4 items-center items-center justify-between">
-										<Typography className="w-full md:w-1/2">Bank Code</Typography>
+										<Typography className="w-full md:w-1/2">Kode Bank</Typography>
 										<div className="flex gap-8 items-center justify-end w-full md:w-1/2">
 											<Typography className="w-full md:w-1/2 font-medium text-right">
 												{disbursement.to_bank_code}
@@ -532,7 +536,7 @@ function DisbursementItem({
 										</div>
 									</div>
 									<div className="flex gap-4 items-center items-center justify-between">
-										<Typography className="w-full md:w-1/2">Bank Swift</Typography>
+										<Typography className="w-full md:w-1/2">Kode SWIFT</Typography>
 										<div className="flex gap-8 items-center justify-end w-full md:w-1/2">
 											<Typography className="w-full md:w-1/2 font-medium text-right">
 												{disbursement.to_bank_swift}
@@ -541,13 +545,13 @@ function DisbursementItem({
 										</div>
 									</div>
 									<div className="flex gap-4 items-center items-center justify-between">
-										<Typography className="w-full md:w-1/2">Bank Country</Typography>
+										<Typography className="w-full md:w-1/2">Negara</Typography>
 										<Typography className="w-full md:w-1/2 font-medium text-right">
 											{countryList[disbursement.to_bank_country] || disbursement.to_bank_country}
 										</Typography>
 									</div>
 									<div className="flex gap-4 items-center items-center justify-between">
-										<Typography className="w-full md:w-1/2">Bank Email</Typography>
+										<Typography className="w-full md:w-1/2">Email</Typography>
 										<Typography className="w-full md:w-1/2 font-medium text-right">
 											{disbursement.to_bank_email}
 										</Typography>
@@ -555,7 +559,7 @@ function DisbursementItem({
 								</div>
 								{disbursement.attachments && disbursement.attachments.length > 0 && (
 									<div className="w-full bg-gray-200 p-12 rounded flex flex-col gap-8">
-										<Typography className="font-bold">Attachments:</Typography>
+										<Typography className="font-bold">Lampiran:</Typography>
 										{disbursement.attachments.map((attachment) => (
 											<a
 												key={attachment.id}
@@ -580,7 +584,7 @@ function DisbursementItem({
 					</AccordionDetails>
 					<AccordionActions>
 						<Typography className="text-xs text-gray-500 italic">
-							* More details will be added in the future.
+							* Beberapa informasi mungkin tidak tersedia tergantung pada jenis pengirim dan penerima
 						</Typography>
 					</AccordionActions>
 				</Accordion>

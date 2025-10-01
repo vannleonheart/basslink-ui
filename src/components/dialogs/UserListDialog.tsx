@@ -77,7 +77,7 @@ export default function UserListDialog({ onSelect }: UserListDialogProps) {
 		<React.Fragment>
 			<DialogContent>
 				<div>
-					<h4 className="mb-12 font-bold">Select from customer list</h4>
+					<h4 className="mb-12 font-bold">Pilih dari daftar pengirim</h4>
 					<TextField
 						autoFocus
 						className="w-full"
@@ -99,15 +99,16 @@ export default function UserListDialog({ onSelect }: UserListDialogProps) {
 										</div>
 										<Typography>{countryList[user.citizenship] || user.citizenship}</Typography>
 										<Typography>
-											{identityTypes[user.identity_type] || user.identity_type}: {user.identity_no}
+											{identityTypes[user.identity_type] || user.identity_type}:{' '}
+											{user.identity_no}
 										</Typography>
 									</div>
 								))}
 							</div>
 						) : searchText.length > 0 ? (
-							<div>No customer found!</div>
+							<div>Data pengirim tidak ditemukan!</div>
 						) : (
-							<div>Type customer name or identity number to search!</div>
+							<div>Ketik nama pengirim atau nomor identitas untuk mencari!</div>
 						)}
 					</div>
 				</div>

@@ -20,30 +20,30 @@ import { Gender, IdentityTypes, Occupations, UserTypes } from '@/data/static-dat
 import { Contact } from '@/types/entity';
 
 const schema = z.object({
-	contact_type: z.enum(['individual', 'institution']),
+	contact_type: z.enum(['individual', 'institution'], { message: 'Jenis penerima tidak valid' }),
 	contact_name: z
 		.string()
-		.min(3, 'Name should be at least 3 characters long')
-		.max(100, 'Name should be at most 100 characters long'),
+		.min(3, 'Nama terdiri dari minimal 3 karakter')
+		.max(100, 'Nama harus terdiri dari maksimal 100 karakter'),
 	contact_gender: z.optional(z.enum(['male', 'female']).or(z.literal(''))),
 	contact_birthdate: z.optional(z.string().or(z.literal(''))),
-	contact_citizenship: z.string().min(2, 'Citizenship is required'),
+	contact_citizenship: z.string().min(2, 'Kewarganegaraan harus diisi'),
 	contact_country: z.optional(z.string().or(z.literal(''))),
 	contact_region: z.optional(z.string().or(z.literal(''))),
 	contact_city: z.optional(z.string().or(z.literal(''))),
 	contact_address: z.optional(z.string().or(z.literal(''))),
-	contact_email: z.optional(z.string().email('Invalid email address').or(z.literal(''))),
+	contact_email: z.optional(z.string().email('Email tidak valid').or(z.literal(''))),
 	contact_phone_code: z.optional(z.string().or(z.literal(''))),
 	contact_phone_no: z.optional(z.string().or(z.literal(''))),
 	contact_occupation: z.optional(z.string().or(z.literal(''))),
 	contact_identity_type: z.enum(['national_id', 'passport', 'other']),
-	contact_identity_no: z.string().min(3, 'Identity number is required'),
+	contact_identity_no: z.string().min(3, 'Nomor identitas harus diisi'),
 	contact_notes: z.optional(z.string().or(z.literal(''))),
 	contact_documents: z.array(
 		z.object({
 			id: z.optional(z.string().or(z.literal(''))),
-			document_data: z.string().min(2, 'Document data is required'),
-			document_type: z.string().min(2, 'Document type is required'),
+			document_data: z.string().min(2, 'Data dokumen harus diisi'),
+			document_type: z.string().min(2, 'Jenis dokumen harus diisi'),
 			notes: z.optional(z.string().or(z.literal(''))),
 			is_verified: z.optional(z.boolean())
 		})
@@ -51,17 +51,17 @@ const schema = z.object({
 	contact_accounts: z.array(
 		z.object({
 			id: z.optional(z.string().or(z.literal(''))),
-			bank_name: z.string().min(2, 'Bank name is required'),
-			bank_account_no: z.string().min(2, 'Account number is required'),
-			bank_account_name: z.string().min(2, 'Account name is required'),
-			bank_country: z.string().min(2, 'Bank country is required'),
+			bank_name: z.string().min(2, 'Nama Bank harus diisi'),
+			bank_account_no: z.string().min(2, 'Nomor rekening harus diisi'),
+			bank_account_name: z.string().min(2, 'Nama pemilik rekening harus diisi'),
+			bank_country: z.string().min(2, 'Negara bank harus diisi'),
 			bank_code: z.optional(z.string().or(z.literal(''))),
 			bank_swift_code: z.optional(z.string().or(z.literal(''))),
 			bank_address: z.optional(z.string().or(z.literal(''))),
-			bank_email: z.optional(z.string().email('Invalid email address').or(z.literal(''))),
+			bank_email: z.optional(z.string().email('Email tidak valid').or(z.literal(''))),
 			bank_phone_code: z.optional(z.string().or(z.literal(''))),
 			bank_phone_no: z.optional(z.string().or(z.literal(''))),
-			bank_website: z.optional(z.string().url('Invalid URL').or(z.literal(''))),
+			bank_website: z.optional(z.string().url('URL tidak valid').or(z.literal(''))),
 			bank_notes: z.optional(z.string().or(z.literal('')))
 		})
 	)
@@ -208,7 +208,7 @@ export default function NewContactForm({ contact }: NewContactFormProps) {
 			<div className="flex flex-col items-center justify-center gap-20">
 				<div className="w-full p-24 bg-white shadow-2 rounded">
 					<div className="mb-24 flex flex-col items-start justify-start gap-12 md:flex-row md:items-center md:justify-between">
-						<h4 className="font-bold">Contact Information</h4>
+						<h4 className="font-bold">Informasi Penerima</h4>
 					</div>
 					<div className="flex flex-col items-start justify-between gap-12 md:flex-row mb-12">
 						<Controller
@@ -217,7 +217,7 @@ export default function NewContactForm({ contact }: NewContactFormProps) {
 							render={({ field }) => (
 								<TextField
 									{...field}
-									label="Contact Type"
+									label="Jenis Penerima"
 									error={!!errors.contact_type}
 									helperText={errors?.contact_type?.message}
 									variant="outlined"
@@ -243,7 +243,7 @@ export default function NewContactForm({ contact }: NewContactFormProps) {
 							render={({ field }) => (
 								<TextField
 									{...field}
-									label="Contact Name"
+									label="Nama Penerima"
 									error={!!errors.contact_name}
 									helperText={errors?.contact_name?.message}
 									variant="outlined"
@@ -261,7 +261,7 @@ export default function NewContactForm({ contact }: NewContactFormProps) {
 							render={({ field }) => (
 								<TextField
 									{...field}
-									label="Gender"
+									label="Jenis Kelamin"
 									error={!!errors.contact_gender}
 									helperText={errors?.contact_gender?.message}
 									variant="outlined"
@@ -287,7 +287,7 @@ export default function NewContactForm({ contact }: NewContactFormProps) {
 								render={({ field }) => (
 									<TextField
 										{...field}
-										label="Birth Date"
+										label="Tanggal Lahir"
 										type="date"
 										error={!!errors.contact_birthdate}
 										helperText={errors?.contact_birthdate?.message}
@@ -303,7 +303,7 @@ export default function NewContactForm({ contact }: NewContactFormProps) {
 								render={({ field }) => (
 									<TextField
 										{...field}
-										label="Citizenship"
+										label="Kewarganegaraan"
 										error={!!errors.contact_citizenship}
 										helperText={errors?.contact_citizenship?.message}
 										variant="outlined"
@@ -331,7 +331,7 @@ export default function NewContactForm({ contact }: NewContactFormProps) {
 							render={({ field }) => (
 								<TextField
 									{...field}
-									label="Identity Type"
+									label="Jenis Identitas"
 									error={!!errors.contact_identity_type}
 									helperText={errors?.contact_identity_type?.message}
 									variant="outlined"
@@ -358,7 +358,7 @@ export default function NewContactForm({ contact }: NewContactFormProps) {
 								render={({ field }) => (
 									<TextField
 										{...field}
-										label="Identity Number"
+										label="Nomor Identitas"
 										error={!!errors.contact_identity_no}
 										helperText={errors?.contact_identity_no?.message}
 										variant="outlined"
@@ -373,7 +373,7 @@ export default function NewContactForm({ contact }: NewContactFormProps) {
 								render={({ field }) => (
 									<TextField
 										{...field}
-										label="Occupation"
+										label="Pekerjaan"
 										error={!!errors.contact_occupation}
 										helperText={errors?.contact_occupation?.message}
 										variant="outlined"
@@ -400,7 +400,7 @@ export default function NewContactForm({ contact }: NewContactFormProps) {
 							render={({ field }) => (
 								<TextField
 									{...field}
-									label="Country"
+									label="Negara"
 									error={!!errors.contact_country}
 									helperText={errors?.contact_country?.message}
 									variant="outlined"
@@ -427,7 +427,7 @@ export default function NewContactForm({ contact }: NewContactFormProps) {
 								render={({ field }) => (
 									<TextField
 										{...field}
-										label="Region"
+										label="Provinsi"
 										error={!!errors.contact_region}
 										helperText={errors?.contact_region?.message}
 										variant="outlined"
@@ -441,7 +441,7 @@ export default function NewContactForm({ contact }: NewContactFormProps) {
 								render={({ field }) => (
 									<TextField
 										{...field}
-										label="City"
+										label="Kota"
 										error={!!errors.contact_city}
 										helperText={errors?.contact_city?.message}
 										variant="outlined"
@@ -457,7 +457,7 @@ export default function NewContactForm({ contact }: NewContactFormProps) {
 						render={({ field }) => (
 							<TextField
 								{...field}
-								label="Address"
+								label="Alamat"
 								error={!!errors.contact_address}
 								helperText={errors?.contact_address?.message}
 								variant="outlined"
@@ -494,7 +494,7 @@ export default function NewContactForm({ contact }: NewContactFormProps) {
 								render={({ field }) => (
 									<TextField
 										{...field}
-										label="Phone Code"
+										label="Kode Telepon"
 										type="tel"
 										error={!!errors.contact_phone_code}
 										helperText={errors?.contact_phone_code?.message}
@@ -519,7 +519,7 @@ export default function NewContactForm({ contact }: NewContactFormProps) {
 								render={({ field }) => (
 									<TextField
 										{...field}
-										label="Phone Number"
+										label="Nomor Telepon"
 										type="tel"
 										error={!!errors.contact_phone_no}
 										helperText={errors?.contact_phone_no?.message}
@@ -536,7 +536,7 @@ export default function NewContactForm({ contact }: NewContactFormProps) {
 						render={({ field }) => (
 							<TextField
 								{...field}
-								label="Notes"
+								label="Catatan"
 								error={!!errors.contact_notes}
 								helperText={errors?.contact_notes?.message}
 								variant="outlined"
@@ -575,7 +575,7 @@ export default function NewContactForm({ contact }: NewContactFormProps) {
 				size="large"
 				onClick={handleSubmit(onSubmit)}
 			>
-				{submitting || updating ? 'Saving...' : 'Save'}
+				{submitting || updating ? 'Menyimpan...' : 'Simpan'}
 			</Button>
 		</div>
 	);

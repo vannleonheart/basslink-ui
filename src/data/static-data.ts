@@ -1,107 +1,114 @@
 export const Gender = {
-	male: 'Male',
-	female: 'Female'
+	male: 'Laki-laki',
+	female: 'Perempuan'
 };
 
 export const UserTypes = {
-	individual: 'Individual',
-	institution: 'Institution'
+	individual: 'Perorangan',
+	institution: 'Institusi'
 };
 
 export const IdentityTypes = {
-	national_id: 'National ID',
-	passport: 'Passport',
-	driver_license: 'Driver License',
-	social_security: 'Social Security',
-	work_permit: 'Work Permit',
-	green_card: 'Green Card',
-	permanent_resident_card: 'Permanent Resident Card',
-	trading_business_license: 'Trading/Business License',
-	other: 'Other'
+	national_id: 'KTP',
+	passport: 'Paspor',
+	driver_license: 'SIM',
+	social_security: 'Kartu Jaminan Sosial',
+	work_permit: 'Izin Kerja',
+	green_card: 'Kartu Hijau',
+	permanent_resident_card: 'Kartu Penduduk Tetap',
+	trading_business_license: 'Surat Izin Usaha Perdagangan',
+	other: 'Lainnya'
 };
 
 export const Occupations = {
-	private_sector_employee: 'Private Sector Employee',
-	government_employee: 'Government Employee',
-	self_employed: 'Self Employed',
-	police_military: 'Police/Military',
-	unemployed: 'Unemployed',
-	student: 'Student',
-	retired: 'Retired',
-	homemaker: 'Homemaker',
-	business: 'Business',
-	other: 'Other'
+	private_sector_employee: 'Karyawan Sektor Swasta',
+	government_employee: 'Aparatur Sipil Negara',
+	self_employed: 'Wiraswasta',
+	police_military: 'Polisi/Militer',
+	unemployed: 'Tidak Bekerja',
+	student: 'Pelajar/Mahasiswa',
+	retired: 'Pensiunan',
+	homemaker: 'Ibu Rumah Tangga',
+	business: 'Pemilik Usaha',
+	other: 'Lainnya'
 };
 
 export const DocumentTypes = {
-	self_photo: 'Self Photo',
-	national_id: 'National ID',
-	passport: 'Passport',
-	driver_license: 'Driver License',
-	social_security: 'Social Security',
-	work_permit: 'Work Permit',
-	green_card: 'Green Card',
-	permanent_resident_card: 'Permanent Resident Card',
-	birth_certificate: 'Birth Certificate',
-	marriage_certificate: 'Marriage Certificate',
-	utility_bill: 'Utility Bill',
-	bank_statement: 'Bank Statement',
-	tax_document: 'Tax Document',
-	insurance_document: 'Insurance Document',
-	property_deed: 'Property Deed',
-	vehicle_registration: 'Vehicle Registration',
-	academic_transcript: 'Academic Transcript',
-	diploma: 'Diploma',
-	employment_letter: 'Employment Letter',
-	reference_letter: 'Reference Letter',
-	trading_business_license: 'Trading/Business License',
-	other: 'Other'
+	self_photo: 'Foto Diri',
+	national_id: 'KTP',
+	passport: 'Paspor',
+	driver_license: 'SIM',
+	social_security: 'Kartu Jaminan Sosial',
+	work_permit: 'Izin Kerja',
+	green_card: 'Kartu Hijau',
+	permanent_resident_card: 'Kartu Penduduk Tetap',
+	birth_certificate: 'Akta Lahir',
+	marriage_certificate: 'Akta Nikah',
+	utility_bill: 'Tagihan Utilitas',
+	bank_statement: 'Rekening Koran',
+	salary_slip: 'Slip Gaji',
+	tax_document: 'NPWP/Dokumen Pajak',
+	insurance_document: 'Dokumen Asuransi',
+	property_deed: 'Akta Properti',
+	vehicle_registration: 'BPKB/STNK',
+	academic_transcript: 'Transkrip Akademik',
+	diploma: 'Ijazah',
+	employment_letter: 'Surat Keterangan Kerja',
+	reference_letter: 'Surat Referensi',
+	trading_business_license: 'Surat Izin Usaha Perdagangan',
+	other: 'Lainnya'
 };
 
 export const RelationshipTypes = {
-	family: 'Family',
-	friend: 'Friend',
-	acquaintance: 'Acquaintance',
-	colleague: 'Colleague',
-	business_partner: 'Business Partner',
-	other: 'Other'
+	family: 'Keluarga',
+	friend: 'Teman',
+	acquaintance: 'Kenalan',
+	colleague: 'Rekan Kerja',
+	business_partner: 'Rekan Bisnis',
+	other: 'Lainnya'
 };
 
 export const TransferTypes = {
-	domestic: 'Domestic',
-	international: 'International'
+	domestic: 'Dalam Negeri',
+	international: 'Internasional'
 };
 
 export const TransferPurposes = {
-	personal: 'Personal',
-	business: 'Business',
-	gift: 'Gift',
-	donation: 'Donation',
-	family_support: 'Family Support',
-	investment: 'Investment',
-	travel: 'Travel',
-	education: 'Education',
-	medical: 'Medical',
-	other: 'Other'
+	personal: 'Pribadi',
+	business: 'Bisnis',
+	gift: 'Hadiah',
+	donation: 'Donasi',
+	family_support: 'Dukungan Keluarga',
+	investment: 'Investasi',
+	travel: 'Perjalanan',
+	education: 'Pendidikan',
+	medical: 'Medis',
+	real_estate: 'Properti',
+	loan_repayment: 'Pembayaran Pinjaman',
+	other: 'Lainnya'
 };
 
 export const FundSources = {
-	salary: 'Salary',
-	business_income: 'Business Income',
-	savings: 'Savings',
-	gift: 'Gift',
-	inheritance: 'Inheritance',
-	loan: 'Loan',
-	investment_income: 'Investment Income',
-	sale_of_assets: 'Sale of Assets',
-	other: 'Other'
+	salary: 'Gaji',
+	business_income: 'Pendapatan Bisnis',
+	savings: 'Tabungan',
+	gift: 'Hadiah',
+	donation: 'Donasi',
+	inheritance: 'Warisan',
+	loan: 'Pinjaman',
+	investment_income: 'Pendapatan Investasi',
+	sale_of_property: 'Penjualan Properti',
+	sale_of_assets: 'Penjualan Aset',
+	stock_dividends: 'Dividen Saham',
+	retirement_funds: 'Dana Pensiun',
+	other: 'Lainnya'
 };
 
 export const DisbursementStatuses = {
-	all: 'All',
-	new: 'New',
-	approved: 'Approved',
-	processing: 'Processing',
-	completed: 'Completed',
-	failed: 'Failed'
+	all: 'Semua',
+	new: 'Baru',
+	approved: 'Disetujui',
+	processing: 'Sedang Diproses',
+	completed: 'Selesai',
+	failed: 'Gagal'
 };

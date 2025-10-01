@@ -20,38 +20,38 @@ import { Gender, IdentityTypes, Occupations, UserTypes } from '@/data/static-dat
 import { User } from '@/types/entity';
 
 const schema = z.object({
-	customer_type: z.enum(['individual', 'institution'], { message: 'Invalid contact type' }),
+	customer_type: z.enum(['individual', 'institution'], { message: 'Jenis pengirim tidak valid' }),
 	customer_name: z
 		.string()
-		.min(3, 'Name should be at least 3 characters long')
-		.max(100, 'Name should be at most 100 characters long'),
+		.min(3, 'Nama harus terdiri dari minimal 3 karakter')
+		.max(100, 'Nama harus terdiri dari maksimal 100 karakter'),
 	customer_gender: z.optional(z.enum(['male', 'female']).or(z.literal(''))),
 	customer_birthdate: z.optional(z.string().or(z.literal(''))),
-	customer_citizenship: z.string().min(2, 'Citizenship is required'),
+	customer_citizenship: z.string().min(2, 'Kewarganegaraan harus diisi'),
 	customer_country: z.optional(z.string().or(z.literal(''))),
 	customer_region: z.optional(z.string().or(z.literal(''))),
 	customer_city: z.optional(z.string().or(z.literal(''))),
 	customer_address: z.optional(z.string().or(z.literal(''))),
-	customer_email: z.optional(z.string().email('Invalid email address').or(z.literal(''))),
+	customer_email: z.optional(z.string().email('Email tidak valid').or(z.literal(''))),
 	customer_phone_code: z.optional(z.string().or(z.literal(''))),
 	customer_phone_no: z.optional(z.string().or(z.literal(''))),
 	customer_occupation: z.optional(z.string().or(z.literal(''))),
 	customer_identity_type: z.enum(['national_id', 'passport', 'other']),
-	customer_identity_no: z.string().min(3, 'Identity number is required'),
+	customer_identity_no: z.string().min(3, 'Nomor identitas harus diisi'),
 	customer_notes: z.optional(z.string().or(z.literal(''))),
 	customer_documents: z.array(
 		z.object({
 			id: z.optional(z.string().or(z.literal(''))),
-			document_data: z.string().min(2, 'Document data is required'),
-			document_type: z.string().min(2, 'Document type is required'),
+			document_data: z.string().min(2, 'Data dokumen harus diisi'),
+			document_type: z.string().min(2, 'Jenis dokumen harus diisi'),
 			notes: z.optional(z.string().or(z.literal(''))),
 			is_verified: z.optional(z.boolean())
 		})
 	),
-	username: z.optional(z.string().min(5, 'Username should be at least 5 characters long').or(z.literal(''))),
-	password: z.optional(z.string().min(8, 'Password should be at least 8 characters long').or(z.literal(''))),
+	username: z.optional(z.string().min(5, 'Username harus terdiri dari minimal 5 karakter').or(z.literal(''))),
+	password: z.optional(z.string().min(8, 'Password harus terdiri dari minimal 8 karakter').or(z.literal(''))),
 	password_confirmation: z.optional(
-		z.string().min(8, 'Password confirmation should be at least 8 characters long').or(z.literal(''))
+		z.string().min(8, 'Konfirmasi password harus terdiri dari minimal 8 karakter').or(z.literal(''))
 	)
 });
 
@@ -144,7 +144,7 @@ export default function NewCustomerForm({ customer }: NewCustomerFormProps) {
 			<div className="flex flex-col items-center justify-center gap-20">
 				<div className="w-full p-24 bg-white shadow-2 rounded">
 					<div className="mb-24 flex flex-col items-start justify-start gap-12 md:flex-row md:items-center md:justify-between">
-						<h4 className="font-bold">Customer Information</h4>
+						<h4 className="font-bold">Informasi Pengirim</h4>
 					</div>
 					<div className="flex flex-col items-start justify-between gap-12 md:flex-row mb-12">
 						<Controller
@@ -153,7 +153,7 @@ export default function NewCustomerForm({ customer }: NewCustomerFormProps) {
 							render={({ field }) => (
 								<TextField
 									{...field}
-									label="Customer Type"
+									label="Jenis Pengirim"
 									error={!!errors.customer_type}
 									helperText={errors?.customer_type?.message}
 									variant="outlined"
@@ -179,7 +179,7 @@ export default function NewCustomerForm({ customer }: NewCustomerFormProps) {
 							render={({ field }) => (
 								<TextField
 									{...field}
-									label="Customer Name"
+									label="Nama Pengirim"
 									error={!!errors.customer_name}
 									helperText={errors?.customer_name?.message}
 									variant="outlined"
@@ -197,7 +197,7 @@ export default function NewCustomerForm({ customer }: NewCustomerFormProps) {
 							render={({ field }) => (
 								<TextField
 									{...field}
-									label="Gender"
+									label="Jenis Kelamin"
 									error={!!errors.customer_gender}
 									helperText={errors?.customer_gender?.message}
 									variant="outlined"
@@ -223,7 +223,7 @@ export default function NewCustomerForm({ customer }: NewCustomerFormProps) {
 								render={({ field }) => (
 									<TextField
 										{...field}
-										label="Birth Date"
+										label="Tanggal Lahir"
 										type="date"
 										error={!!errors.customer_birthdate}
 										helperText={errors?.customer_birthdate?.message}
@@ -239,7 +239,7 @@ export default function NewCustomerForm({ customer }: NewCustomerFormProps) {
 								render={({ field }) => (
 									<TextField
 										{...field}
-										label="Citizenship"
+										label="Kewarganegaraan"
 										error={!!errors.customer_citizenship}
 										helperText={errors?.customer_citizenship?.message}
 										variant="outlined"
@@ -267,7 +267,7 @@ export default function NewCustomerForm({ customer }: NewCustomerFormProps) {
 							render={({ field }) => (
 								<TextField
 									{...field}
-									label="Identity Type"
+									label="Jenis Identitas"
 									error={!!errors.customer_identity_type}
 									helperText={errors?.customer_identity_type?.message}
 									variant="outlined"
@@ -294,7 +294,7 @@ export default function NewCustomerForm({ customer }: NewCustomerFormProps) {
 								render={({ field }) => (
 									<TextField
 										{...field}
-										label="Identity Number"
+										label="Nomor Identitas"
 										error={!!errors.customer_identity_no}
 										helperText={errors?.customer_identity_no?.message}
 										variant="outlined"
@@ -309,7 +309,7 @@ export default function NewCustomerForm({ customer }: NewCustomerFormProps) {
 								render={({ field }) => (
 									<TextField
 										{...field}
-										label="Occupation"
+										label="Pekerjaan"
 										error={!!errors.customer_occupation}
 										helperText={errors?.customer_occupation?.message}
 										variant="outlined"
@@ -336,7 +336,7 @@ export default function NewCustomerForm({ customer }: NewCustomerFormProps) {
 							render={({ field }) => (
 								<TextField
 									{...field}
-									label="Country"
+									label="Negara"
 									error={!!errors.customer_country}
 									helperText={errors?.customer_country?.message}
 									variant="outlined"
@@ -363,7 +363,7 @@ export default function NewCustomerForm({ customer }: NewCustomerFormProps) {
 								render={({ field }) => (
 									<TextField
 										{...field}
-										label="Region"
+										label="Provinsi"
 										error={!!errors.customer_region}
 										helperText={errors?.customer_region?.message}
 										variant="outlined"
@@ -377,7 +377,7 @@ export default function NewCustomerForm({ customer }: NewCustomerFormProps) {
 								render={({ field }) => (
 									<TextField
 										{...field}
-										label="City"
+										label="Kota"
 										error={!!errors.customer_city}
 										helperText={errors?.customer_city?.message}
 										variant="outlined"
@@ -393,7 +393,7 @@ export default function NewCustomerForm({ customer }: NewCustomerFormProps) {
 						render={({ field }) => (
 							<TextField
 								{...field}
-								label="Address"
+								label="Alamat"
 								error={!!errors.customer_address}
 								helperText={errors?.customer_address?.message}
 								variant="outlined"
@@ -430,7 +430,7 @@ export default function NewCustomerForm({ customer }: NewCustomerFormProps) {
 								render={({ field }) => (
 									<TextField
 										{...field}
-										label="Phone Code"
+										label="Kode Telepon"
 										type="tel"
 										error={!!errors.customer_phone_code}
 										helperText={errors?.customer_phone_code?.message}
@@ -455,7 +455,7 @@ export default function NewCustomerForm({ customer }: NewCustomerFormProps) {
 								render={({ field }) => (
 									<TextField
 										{...field}
-										label="Phone Number"
+										label="Nomor Telepon"
 										type="tel"
 										error={!!errors.customer_phone_no}
 										helperText={errors?.customer_phone_no?.message}
@@ -472,7 +472,7 @@ export default function NewCustomerForm({ customer }: NewCustomerFormProps) {
 						render={({ field }) => (
 							<TextField
 								{...field}
-								label="Notes"
+								label="Catatan"
 								error={!!errors.customer_notes}
 								helperText={errors?.customer_notes?.message}
 								variant="outlined"
@@ -492,7 +492,7 @@ export default function NewCustomerForm({ customer }: NewCustomerFormProps) {
 				/>
 				<div className="w-full p-24 bg-white shadow-2 rounded">
 					<div className="mb-24 flex flex-col items-start justify-start gap-12 md:flex-row md:items-center md:justify-between">
-						<h4 className="font-bold">Account Information</h4>
+						<h4 className="font-bold">Informasi Akun</h4>
 					</div>
 					<Controller
 						name="username"
@@ -532,7 +532,7 @@ export default function NewCustomerForm({ customer }: NewCustomerFormProps) {
 							render={({ field }) => (
 								<PasswordField
 									{...field}
-									label="Confirm Password"
+									label="Konfirmasi Password"
 									error={!!errors.password_confirmation}
 									helperText={errors?.password_confirmation?.message}
 									variant="outlined"
@@ -554,7 +554,7 @@ export default function NewCustomerForm({ customer }: NewCustomerFormProps) {
 				size="large"
 				onClick={handleSubmit(onSubmit)}
 			>
-				{submitting ? 'Submitting...' : 'Submit'}
+				{submitting ? 'Menyimpan...' : 'Simpan'}
 			</Button>
 		</div>
 	);

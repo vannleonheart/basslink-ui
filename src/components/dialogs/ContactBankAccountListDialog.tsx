@@ -65,7 +65,7 @@ export default function ContactBankAccountListDialog({ id, onSelect }: ContactBa
 		<React.Fragment>
 			<DialogContent>
 				<div>
-					<h4 className="mb-12 font-bold">Select from your contact accounts</h4>
+					<h4 className="mb-12 font-bold">Pilih dari rekening penerima</h4>
 					<TextField
 						autoFocus
 						className="w-full"
@@ -90,9 +90,9 @@ export default function ContactBankAccountListDialog({ id, onSelect }: ContactBa
 								))}
 							</div>
 						) : searchText.length > 0 ? (
-							<div>No contact's account found!</div>
+							<div>Tidak ada rekening penerima yang ditemukan!</div>
 						) : (
-							<div>Type account name or number to search!</div>
+							<div>Ketik nama atau nomor rekening untuk mencari!</div>
 						)}
 					</div>
 				</div>

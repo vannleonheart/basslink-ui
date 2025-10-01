@@ -31,7 +31,9 @@ export default function Header({ data, isLoading }: { data: Contact[]; isLoading
 					initial={{ x: -20 }}
 					animate={{ x: 0, transition: { delay: 0.2 } }}
 				>
-					<Typography className="text-4xl font-extrabold leading-none tracking-tight">Contacts</Typography>
+					<Typography className="text-4xl font-extrabold leading-none tracking-tight">
+						Daftar Penerima
+					</Typography>
 				</motion.span>
 				<motion.span
 					initial={{ y: -20, opacity: 0 }}
@@ -42,7 +44,7 @@ export default function Header({ data, isLoading }: { data: Contact[]; isLoading
 						className="text-base font-medium ml-2"
 						color="text.secondary"
 					>
-						{`${filteredData?.length} contacts`}
+						{`${filteredData?.length} penerima`}
 					</Typography>
 				</motion.span>
 			</div>
@@ -56,7 +58,7 @@ export default function Header({ data, isLoading }: { data: Contact[]; isLoading
 					<FuseSvgIcon color="action">heroicons-outline:magnifying-glass</FuseSvgIcon>
 
 					<Input
-						placeholder="Search contacts"
+						placeholder="Cari penerima"
 						className="flex flex-1"
 						disableUnderline
 						fullWidth

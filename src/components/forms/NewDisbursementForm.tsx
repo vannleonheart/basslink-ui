@@ -34,54 +34,54 @@ import ContactBankAccountListDialog from '../dialogs/ContactBankAccountListDialo
 import FileUploadBar from './fields/FileUploadBar';
 
 const schema = z.object({
-	from_currency: z.string().min(1, 'You must choose the currency'),
-	from_amount: z.string().min(1, 'You must enter the amount'),
-	to_currency: z.string().min(1, 'You must choose the currency'),
-	to_amount: z.string().min(1, 'You must enter the amount'),
+	from_currency: z.string().min(1, 'Pilih mata uang pengiriman'),
+	from_amount: z.string().min(1, 'Lengkapi nominal pengiriman'),
+	to_currency: z.string().min(1, 'Pilih mata uang tujuan'),
+	to_amount: z.string().min(1, 'Lengkapi nominal tujuan'),
 	from_customer: z.optional(z.string().or(z.literal(''))),
-	customer_type: z.string().min(1, 'You must enter the customer type'),
-	customer_name: z.string().min(1, 'You must enter the customer name'),
+	customer_type: z.string().min(1, 'Anda harus memasukkan jenis pengirim'),
+	customer_name: z.string().min(1, 'Anda harus memasukkan nama pengirim'),
 	customer_gender: z.optional(z.string().or(z.literal(''))),
 	customer_birthdate: z.optional(z.string().or(z.literal(''))),
-	customer_citizenship: z.string().min(1, 'You must enter the customer citizenship'),
-	customer_identity_type: z.string().min(1, 'You must enter the customer identity type'),
-	customer_identity_no: z.string().min(1, 'You must enter the customer identity number'),
+	customer_citizenship: z.string().min(1, 'Anda harus memasukkan kewarganegaraan pengirim'),
+	customer_identity_type: z.string().min(1, 'Anda harus memasukkan jenis identitas pengirim'),
+	customer_identity_no: z.string().min(1, 'Anda harus memasukkan nomor identitas pengirim'),
 	customer_occupation: z.optional(z.string().or(z.literal(''))),
-	customer_country: z.string().min(1, 'You must enter the customer country'),
+	customer_country: z.string().min(1, 'Anda harus memasukkan negara pengirim'),
 	customer_region: z.optional(z.string().or(z.literal(''))),
 	customer_city: z.optional(z.string().or(z.literal(''))),
-	customer_address: z.string().min(1, 'You must enter the customer address'),
-	customer_email: z.optional(z.string().email('Invalid email address').or(z.literal(''))),
+	customer_address: z.string().min(1, 'Anda harus memasukkan alamat pengirim'),
+	customer_email: z.optional(z.string().email('Email pengirim tidak valid').or(z.literal(''))),
 	customer_phone_code: z.optional(z.string().or(z.literal(''))),
 	customer_phone_no: z.optional(z.string().or(z.literal(''))),
 	customer_notes: z.optional(z.string().or(z.literal(''))),
 	to_contact: z.optional(z.string().or(z.literal(''))),
-	beneficiary_type: z.string().min(1, 'You must enter the beneficiary type'),
-	beneficiary_name: z.string().min(1, 'You must enter the beneficiary name'),
+	beneficiary_type: z.string().min(1, 'Anda harus memasukkan jenis penerima'),
+	beneficiary_name: z.string().min(1, 'Anda harus memasukkan nama penerima'),
 	beneficiary_gender: z.optional(z.string().or(z.literal(''))),
 	beneficiary_birthdate: z.optional(z.string().or(z.literal(''))),
-	beneficiary_citizenship: z.string().min(1, 'You must enter the beneficiary citizenship'),
-	beneficiary_identity_type: z.string().min(1, 'You must enter the beneficiary identity type'),
-	beneficiary_identity_no: z.string().min(1, 'You must enter the beneficiary identity number'),
+	beneficiary_citizenship: z.string().min(1, 'Anda harus memasukkan kewarganegaraan penerima'),
+	beneficiary_identity_type: z.string().min(1, 'Anda harus memasukkan jenis identitas penerima'),
+	beneficiary_identity_no: z.string().min(1, 'Anda harus memasukkan nomor identitas penerima'),
 	beneficiary_occupation: z.optional(z.string().or(z.literal(''))),
-	beneficiary_country: z.string().min(1, 'You must enter the beneficiary country'),
+	beneficiary_country: z.string().min(1, 'Anda harus memasukkan negara penerima'),
 	beneficiary_region: z.optional(z.string().or(z.literal(''))),
 	beneficiary_city: z.optional(z.string().or(z.literal(''))),
-	beneficiary_address: z.string().min(1, 'You must enter the beneficiary address'),
-	beneficiary_email: z.optional(z.string().email('Invalid email address').or(z.literal(''))),
+	beneficiary_address: z.string().min(1, 'Anda harus memasukkan alamat penerima'),
+	beneficiary_email: z.optional(z.string().email('Email penerima tidak valid').or(z.literal(''))),
 	beneficiary_phone_code: z.optional(z.string().or(z.literal(''))),
 	beneficiary_phone_no: z.optional(z.string().or(z.literal(''))),
 	beneficiary_notes: z.optional(z.string().or(z.literal(''))),
 	beneficiary_relationship: z.optional(z.string().or(z.literal(''))),
 	to_account: z.optional(z.string().or(z.literal(''))),
-	bank_name: z.string().min(1, 'You must enter the bank name'),
-	bank_account_no: z.string().min(1, 'You must enter the bank account number'),
-	bank_account_name: z.string().min(1, 'You must enter the bank account name'),
-	bank_country: z.string().min(1, 'You must enter the bank country'),
+	bank_name: z.string().min(1, 'Anda harus memasukkan nama bank'),
+	bank_account_no: z.string().min(1, 'Anda harus memasukkan nomor rekening'),
+	bank_account_name: z.string().min(1, 'Anda harus memasukkan nama pemilik rekening'),
+	bank_country: z.string().min(1, 'Anda harus memasukkan negara bank'),
 	bank_swift_code: z.optional(z.string().or(z.literal(''))),
 	bank_code: z.optional(z.string().or(z.literal(''))),
 	bank_address: z.optional(z.string().or(z.literal(''))),
-	bank_email: z.optional(z.string().email('Invalid email address').or(z.literal(''))),
+	bank_email: z.optional(z.string().email('Email bank tidak valid').or(z.literal(''))),
 	bank_phone_code: z.optional(z.string().or(z.literal(''))),
 	bank_phone_no: z.optional(z.string().or(z.literal(''))),
 	bank_website: z.optional(z.string().or(z.literal(''))),
@@ -89,9 +89,9 @@ const schema = z.object({
 	transfer_type: z.optional(z.string().or(z.literal(''))),
 	transfer_date: z.optional(z.string().or(z.literal(''))),
 	transfer_reference: z.optional(z.string().or(z.literal(''))),
-	rate: z.string().min(1, 'You must enter the exchange rate'),
-	fee_percent: z.string().min(1, 'You must enter the fee percentage'),
-	fee_fixed: z.string().min(1, 'You must enter the fee fixed amount'),
+	rate: z.string().min(1, 'Anda harus memasukkan rate tukar'),
+	fee_percent: z.string().min(1, 'Anda harus memasukkan persentase biaya'),
+	fee_fixed: z.string().min(1, 'Anda harus memasukkan jumlah biaya tetap'),
 	fund_source: z.optional(z.string().or(z.literal(''))),
 	purpose: z.optional(z.string().or(z.literal(''))),
 	notes: z.optional(z.string().or(z.literal(''))),
@@ -388,7 +388,7 @@ export default function NewDisbursementForm() {
 			<div className="flex flex-col items-center justify-center gap-20">
 				<div className="w-full p-24 bg-white shadow-2 rounded">
 					<div className="mb-24 flex flex-col items-start justify-start gap-12 md:flex-row md:items-center md:justify-between">
-						<h4 className="font-bold">Who are you ?</h4>
+						<h4 className="font-bold">Identitas Pengirim</h4>
 						<div>
 							<Button
 								variant="text"
@@ -399,7 +399,7 @@ export default function NewDisbursementForm() {
 									selectCustomerFromUserList();
 								}}
 							>
-								Select from customer list
+								Pilih dari daftar pengirim
 							</Button>
 						</div>
 					</div>
@@ -411,7 +411,7 @@ export default function NewDisbursementForm() {
 								<TextField
 									{...field}
 									autoFocus
-									label="Customer Type"
+									label="Jenis Pengirim"
 									error={!!errors.customer_type}
 									helperText={errors?.customer_type?.message}
 									variant="outlined"
@@ -437,7 +437,7 @@ export default function NewDisbursementForm() {
 							render={({ field }) => (
 								<TextField
 									{...field}
-									label="Customer Name"
+									label="Nama Pengirim"
 									error={!!errors.customer_name}
 									helperText={errors?.customer_name?.message}
 									variant="outlined"
@@ -455,7 +455,7 @@ export default function NewDisbursementForm() {
 							render={({ field }) => (
 								<TextField
 									{...field}
-									label="Gender"
+									label="Jenis Kelamin"
 									error={!!errors.customer_gender}
 									helperText={errors?.customer_gender?.message}
 									variant="outlined"
@@ -482,7 +482,7 @@ export default function NewDisbursementForm() {
 								render={({ field }) => (
 									<TextField
 										{...field}
-										label="Birth Date"
+										label="Tanggal Lahir"
 										type="date"
 										error={!!errors.customer_birthdate}
 										helperText={errors?.customer_birthdate?.message}
@@ -498,7 +498,7 @@ export default function NewDisbursementForm() {
 								render={({ field }) => (
 									<TextField
 										{...field}
-										label="Citizenship"
+										label="Kewarganegaraan"
 										error={!!errors.customer_citizenship}
 										helperText={errors?.customer_citizenship?.message}
 										variant="outlined"
@@ -526,7 +526,7 @@ export default function NewDisbursementForm() {
 							render={({ field }) => (
 								<TextField
 									{...field}
-									label="Identity Type"
+									label="Jenis Identitas"
 									error={!!errors.customer_identity_type}
 									helperText={errors?.customer_identity_type?.message}
 									variant="outlined"
@@ -553,7 +553,7 @@ export default function NewDisbursementForm() {
 								render={({ field }) => (
 									<TextField
 										{...field}
-										label="Identity Number"
+										label="Nomor Identitas"
 										error={!!errors.customer_identity_no}
 										helperText={errors?.customer_identity_no?.message}
 										variant="outlined"
@@ -568,7 +568,7 @@ export default function NewDisbursementForm() {
 								render={({ field }) => (
 									<TextField
 										{...field}
-										label="Occupation"
+										label="Pekerjaan"
 										error={!!errors.customer_occupation}
 										helperText={errors?.customer_occupation?.message}
 										variant="outlined"
@@ -595,7 +595,7 @@ export default function NewDisbursementForm() {
 							render={({ field }) => (
 								<TextField
 									{...field}
-									label="Country"
+									label="Negara"
 									error={!!errors.customer_country}
 									helperText={errors?.customer_country?.message}
 									variant="outlined"
@@ -622,7 +622,7 @@ export default function NewDisbursementForm() {
 								render={({ field }) => (
 									<TextField
 										{...field}
-										label="Region"
+										label="Provinsi"
 										error={!!errors.customer_region}
 										helperText={errors?.customer_region?.message}
 										variant="outlined"
@@ -636,7 +636,7 @@ export default function NewDisbursementForm() {
 								render={({ field }) => (
 									<TextField
 										{...field}
-										label="City"
+										label="Kota"
 										error={!!errors.customer_city}
 										helperText={errors?.customer_city?.message}
 										variant="outlined"
@@ -652,7 +652,7 @@ export default function NewDisbursementForm() {
 						render={({ field }) => (
 							<TextField
 								{...field}
-								label="Address"
+								label="Alamat"
 								error={!!errors.customer_address}
 								helperText={errors?.customer_address?.message}
 								variant="outlined"
@@ -689,7 +689,7 @@ export default function NewDisbursementForm() {
 								render={({ field }) => (
 									<TextField
 										{...field}
-										label="Phone Code"
+										label="Kode Telepon"
 										type="tel"
 										error={!!errors.customer_phone_code}
 										helperText={errors?.customer_phone_code?.message}
@@ -714,7 +714,7 @@ export default function NewDisbursementForm() {
 								render={({ field }) => (
 									<TextField
 										{...field}
-										label="Phone Number"
+										label="Nomor Telepon"
 										type="tel"
 										error={!!errors.customer_phone_no}
 										helperText={errors?.customer_phone_no?.message}
@@ -731,7 +731,7 @@ export default function NewDisbursementForm() {
 						render={({ field }) => (
 							<TextField
 								{...field}
-								label="Notes"
+								label="Catatan"
 								error={!!errors.customer_notes}
 								helperText={errors?.customer_notes?.message}
 								variant="outlined"
@@ -749,7 +749,7 @@ export default function NewDisbursementForm() {
 						render={({ field }) => (
 							<FormControl>
 								<FormControlLabel
-									label="Save/update customer details for future transactions"
+									label="Simpan/perbarui detail pengirim untuk transaksi mendatang"
 									control={
 										<Checkbox
 											size="small"
@@ -762,7 +762,7 @@ export default function NewDisbursementForm() {
 					/>
 				</div>
 				<div className="w-full p-24 bg-white shadow-2 rounded">
-					<h4 className="mb-24 font-bold">How much are you sending ?</h4>
+					<h4 className="mb-24 font-bold">Nominal Pengiriman</h4>
 					<div className="flex flex-col gap-12">
 						<div className="flex flex-col items-start justify-between gap-12 md:flex-row">
 							<Controller
@@ -772,7 +772,7 @@ export default function NewDisbursementForm() {
 									return (
 										<CurrencyField
 											{...field}
-											label="Exchange rate"
+											label="Rate Tukar"
 											error={!!errors.rate}
 											helperText={errors?.rate?.message}
 											variant="outlined"
@@ -792,7 +792,7 @@ export default function NewDisbursementForm() {
 										return (
 											<CurrencyField
 												{...field}
-												label="Fees (Percentage)"
+												label="Biaya Persentase"
 												error={!!errors.fee_percent}
 												helperText={errors?.fee_percent?.message}
 												variant="outlined"
@@ -810,7 +810,7 @@ export default function NewDisbursementForm() {
 										return (
 											<CurrencyField
 												{...field}
-												label="Fees (Fixed)"
+												label="Biaya Tetap"
 												error={!!errors.fee_fixed}
 												helperText={errors?.fee_fixed?.message}
 												variant="outlined"
@@ -830,7 +830,7 @@ export default function NewDisbursementForm() {
 								render={({ field }) => (
 									<TextField
 										{...field}
-										label="I am sending in"
+										label="Mata Uang Pengirim"
 										error={!!errors.from_currency}
 										helperText={errors?.from_currency?.message}
 										variant="outlined"
@@ -856,7 +856,7 @@ export default function NewDisbursementForm() {
 									return (
 										<CurrencyField
 											{...rest}
-											label="The amount to be sent"
+											label="Nominal Pengiriman"
 											error={!!errors.from_amount}
 											helperText={errors?.from_amount?.message}
 											variant="outlined"
@@ -877,7 +877,7 @@ export default function NewDisbursementForm() {
 								render={({ field }) => (
 									<TextField
 										{...field}
-										label="I want the beneficiary to receive in"
+										label="Mata Uang Tujuan"
 										error={!!errors.to_currency}
 										helperText={errors?.to_currency?.message}
 										variant="outlined"
@@ -903,7 +903,7 @@ export default function NewDisbursementForm() {
 									return (
 										<CurrencyField
 											{...rest}
-											label="The amount to be received"
+											label="Nominal Diterima"
 											error={!!errors.to_amount}
 											helperText={errors?.to_amount?.message}
 											variant="outlined"
@@ -923,7 +923,7 @@ export default function NewDisbursementForm() {
 				</div>
 				<div className="w-full p-24 bg-white shadow-2 rounded">
 					<div className="mb-24 flex flex-col items-start justify-start gap-12 md:flex-row md:items-center md:justify-between">
-						<h4 className="font-bold">Who are you sending to ?</h4>
+						<h4 className="font-bold">Identitas Penerima</h4>
 						<div>
 							<Button
 								variant="text"
@@ -934,7 +934,7 @@ export default function NewDisbursementForm() {
 									selectBeneficiaryFromContact();
 								}}
 							>
-								Select from contact
+								Pilih dari daftar penerima
 							</Button>
 						</div>
 					</div>
@@ -945,7 +945,7 @@ export default function NewDisbursementForm() {
 							render={({ field }) => (
 								<TextField
 									{...field}
-									label="Beneficiary Type"
+									label="Jenis Penerima"
 									error={!!errors.beneficiary_type}
 									helperText={errors?.beneficiary_type?.message}
 									variant="outlined"
@@ -970,7 +970,7 @@ export default function NewDisbursementForm() {
 							render={({ field }) => (
 								<TextField
 									{...field}
-									label="Beneficiary Name"
+									label="Nama Penerima"
 									error={!!errors.beneficiary_name}
 									helperText={errors?.beneficiary_name?.message}
 									variant="outlined"
@@ -985,7 +985,7 @@ export default function NewDisbursementForm() {
 							render={({ field }) => (
 								<TextField
 									{...field}
-									label="Beneficiary Relationship"
+									label="Hubungan"
 									error={!!errors.beneficiary_relationship}
 									helperText={errors?.beneficiary_relationship?.message}
 									variant="outlined"
@@ -1012,7 +1012,7 @@ export default function NewDisbursementForm() {
 							render={({ field }) => (
 								<TextField
 									{...field}
-									label="Gender"
+									label="Jenis Kelamin"
 									error={!!errors.beneficiary_gender}
 									helperText={errors?.beneficiary_gender?.message}
 									variant="outlined"
@@ -1037,7 +1037,7 @@ export default function NewDisbursementForm() {
 							render={({ field }) => (
 								<TextField
 									{...field}
-									label="Birth Date"
+									label="Tanggal Lahir"
 									type="date"
 									error={!!errors.beneficiary_birthdate}
 									helperText={errors?.beneficiary_birthdate?.message}
@@ -1053,7 +1053,7 @@ export default function NewDisbursementForm() {
 							render={({ field }) => (
 								<TextField
 									{...field}
-									label="Citizenship"
+									label="Kewarganegaraan"
 									error={!!errors.beneficiary_citizenship}
 									helperText={errors?.beneficiary_citizenship?.message}
 									variant="outlined"
@@ -1080,7 +1080,7 @@ export default function NewDisbursementForm() {
 							render={({ field }) => (
 								<TextField
 									{...field}
-									label="Identity Type"
+									label="Jenis Identitas"
 									error={!!errors.beneficiary_identity_type}
 									helperText={errors?.beneficiary_identity_type?.message}
 									variant="outlined"
@@ -1105,7 +1105,7 @@ export default function NewDisbursementForm() {
 							render={({ field }) => (
 								<TextField
 									{...field}
-									label="Identity Number"
+									label="Nomor Identitas"
 									error={!!errors.beneficiary_identity_no}
 									helperText={errors?.beneficiary_identity_no?.message}
 									variant="outlined"
@@ -1120,7 +1120,7 @@ export default function NewDisbursementForm() {
 							render={({ field }) => (
 								<TextField
 									{...field}
-									label="Occupation"
+									label="Pekerjaan"
 									error={!!errors.beneficiary_occupation}
 									helperText={errors?.beneficiary_occupation?.message}
 									variant="outlined"
@@ -1146,7 +1146,7 @@ export default function NewDisbursementForm() {
 							render={({ field }) => (
 								<TextField
 									{...field}
-									label="Country"
+									label="Negara"
 									error={!!errors.beneficiary_country}
 									helperText={errors?.beneficiary_country?.message}
 									variant="outlined"
@@ -1171,7 +1171,7 @@ export default function NewDisbursementForm() {
 							render={({ field }) => (
 								<TextField
 									{...field}
-									label="Region"
+									label="Provinsi"
 									error={!!errors.beneficiary_region}
 									helperText={errors?.beneficiary_region?.message}
 									variant="outlined"
@@ -1185,7 +1185,7 @@ export default function NewDisbursementForm() {
 							render={({ field }) => (
 								<TextField
 									{...field}
-									label="City"
+									label="Kota"
 									error={!!errors.beneficiary_city}
 									helperText={errors?.beneficiary_city?.message}
 									variant="outlined"
@@ -1200,7 +1200,7 @@ export default function NewDisbursementForm() {
 						render={({ field }) => (
 							<TextField
 								{...field}
-								label="Address"
+								label="Alamat"
 								error={!!errors.beneficiary_address}
 								helperText={errors?.beneficiary_address?.message}
 								variant="outlined"
@@ -1235,7 +1235,7 @@ export default function NewDisbursementForm() {
 							render={({ field }) => (
 								<TextField
 									{...field}
-									label="Phone Code"
+									label="Kode Telepon"
 									type="tel"
 									error={!!errors.beneficiary_phone_code}
 									helperText={errors?.beneficiary_phone_code?.message}
@@ -1260,7 +1260,7 @@ export default function NewDisbursementForm() {
 							render={({ field }) => (
 								<TextField
 									{...field}
-									label="Phone Number"
+									label="Nomor Telepon"
 									type="tel"
 									error={!!errors.beneficiary_phone_no}
 									helperText={errors?.beneficiary_phone_no?.message}
@@ -1276,7 +1276,7 @@ export default function NewDisbursementForm() {
 						render={({ field }) => (
 							<TextField
 								{...field}
-								label="Notes"
+								label="Catatan"
 								error={!!errors.beneficiary_notes}
 								helperText={errors?.beneficiary_notes?.message}
 								variant="outlined"
@@ -1294,7 +1294,7 @@ export default function NewDisbursementForm() {
 						render={({ field }) => (
 							<FormControl>
 								<FormControlLabel
-									label="Save/update beneficiary details for future transactions"
+									label="Simpan/perbarui detail penerima untuk transaksi mendatang"
 									control={
 										<Checkbox
 											size="small"
@@ -1308,7 +1308,7 @@ export default function NewDisbursementForm() {
 				</div>
 				<div className="w-full p-24 bg-white shadow-2 rounded">
 					<div className="mb-24 flex flex-col items-start justify-start gap-12 md:flex-row md:items-center md:justify-between">
-						<h4 className="font-bold">To which account the disbursement will be made ?</h4>
+						<h4 className="font-bold">Rekening Tujuan</h4>
 						<div>
 							<Button
 								variant="text"
@@ -1319,7 +1319,7 @@ export default function NewDisbursementForm() {
 									selectAccountFromContactAccounts(getValues('to_contact'));
 								}}
 							>
-								Select from contact bank accounts
+								Pilih dari rekening penerima
 							</Button>
 						</div>
 					</div>
@@ -1330,7 +1330,7 @@ export default function NewDisbursementForm() {
 							render={({ field }) => (
 								<TextField
 									{...field}
-									label="Bank name"
+									label="Nama Bank"
 									error={!!errors.bank_name}
 									helperText={errors?.bank_name?.message}
 									variant="outlined"
@@ -1345,7 +1345,7 @@ export default function NewDisbursementForm() {
 							render={({ field }) => (
 								<TextField
 									{...field}
-									label="Bank account number (IBAN)"
+									label="Nomor Rekening"
 									error={!!errors.bank_account_no}
 									helperText={errors?.bank_account_no?.message}
 									variant="outlined"
@@ -1360,7 +1360,7 @@ export default function NewDisbursementForm() {
 							render={({ field }) => (
 								<TextField
 									{...field}
-									label="Bank account name"
+									label="Pemilik Rekening"
 									error={!!errors.bank_account_name}
 									helperText={errors?.bank_account_name?.message}
 									variant="outlined"
@@ -1377,7 +1377,7 @@ export default function NewDisbursementForm() {
 							render={({ field }) => (
 								<TextField
 									{...field}
-									label="Bank Country"
+									label="Negara"
 									error={!!errors.bank_country}
 									helperText={errors?.bank_country?.message}
 									variant="outlined"
@@ -1402,7 +1402,7 @@ export default function NewDisbursementForm() {
 							render={({ field }) => (
 								<TextField
 									{...field}
-									label="Bank code"
+									label="Kode Bank"
 									error={!!errors.bank_code}
 									helperText={errors?.bank_code?.message}
 									variant="outlined"
@@ -1417,7 +1417,7 @@ export default function NewDisbursementForm() {
 							render={({ field }) => (
 								<TextField
 									{...field}
-									label="Bank SWIFT code"
+									label="Kode SWIFT"
 									error={!!errors.bank_swift_code}
 									helperText={errors?.bank_swift_code?.message}
 									variant="outlined"
@@ -1433,7 +1433,7 @@ export default function NewDisbursementForm() {
 						render={({ field }) => (
 							<TextField
 								{...field}
-								label="Bank address"
+								label="Alamat Bank"
 								error={!!errors.bank_address}
 								helperText={errors?.bank_address?.message}
 								variant="outlined"
@@ -1482,7 +1482,7 @@ export default function NewDisbursementForm() {
 							render={({ field }) => (
 								<TextField
 									{...field}
-									label="Phone Code"
+									label="Kode Telepon"
 									type="tel"
 									error={!!errors.bank_phone_code}
 									helperText={errors?.bank_phone_code?.message}
@@ -1507,7 +1507,7 @@ export default function NewDisbursementForm() {
 							render={({ field }) => (
 								<TextField
 									{...field}
-									label="Phone Number"
+									label="Nomor Telepon"
 									type="tel"
 									error={!!errors.bank_phone_no}
 									helperText={errors?.bank_phone_no?.message}
@@ -1523,7 +1523,7 @@ export default function NewDisbursementForm() {
 						render={({ field }) => (
 							<TextField
 								{...field}
-								label="Bank notes"
+								label="Catatan"
 								error={!!errors.bank_notes}
 								helperText={errors?.bank_notes?.message}
 								variant="outlined"
@@ -1541,7 +1541,7 @@ export default function NewDisbursementForm() {
 						render={({ field }) => (
 							<FormControl>
 								<FormControlLabel
-									label="Save/update bank details for future transactions"
+									label="Simpan/update detail bank untuk transaksi mendatang"
 									control={
 										<Checkbox
 											size="small"
@@ -1554,7 +1554,7 @@ export default function NewDisbursementForm() {
 					/>
 				</div>
 				<div className="w-full p-24 bg-white shadow-2 rounded">
-					<h4 className="mb-24 font-bold">Tell us more about the disbursement</h4>
+					<h4 className="mb-24 font-bold">Informasi Pengiriman</h4>
 					<div className="flex flex-col items-start justify-between gap-12 md:flex-row mb-12">
 						<Controller
 							name="transfer_type"
@@ -1562,7 +1562,7 @@ export default function NewDisbursementForm() {
 							render={({ field }) => (
 								<TextField
 									{...field}
-									label="Transfer Type"
+									label="Jenis Pengiriman"
 									error={!!errors.transfer_type}
 									helperText={errors?.transfer_type?.message}
 									variant="outlined"
@@ -1587,7 +1587,7 @@ export default function NewDisbursementForm() {
 							render={({ field }) => (
 								<TextField
 									{...field}
-									label="Transfer Date"
+									label="Tanggal Pengiriman"
 									type="date"
 									error={!!errors.transfer_date}
 									helperText={errors?.transfer_date?.message}
@@ -1602,7 +1602,7 @@ export default function NewDisbursementForm() {
 							render={({ field }) => (
 								<TextField
 									{...field}
-									label="Transfer Reference"
+									label="Nomor Referensi"
 									error={!!errors.transfer_reference}
 									helperText={errors?.transfer_reference?.message}
 									variant="outlined"
@@ -1618,7 +1618,7 @@ export default function NewDisbursementForm() {
 							render={({ field }) => (
 								<TextField
 									{...field}
-									label="Purpose of Transfer"
+									label="Tujuan Pengiriman"
 									error={!!errors.purpose}
 									helperText={errors?.purpose?.message}
 									variant="outlined"
@@ -1642,7 +1642,7 @@ export default function NewDisbursementForm() {
 							render={({ field }) => (
 								<TextField
 									{...field}
-									label="Source of Funds"
+									label="Sumber Dana"
 									error={!!errors.fund_source}
 									helperText={errors?.fund_source?.message}
 									variant="outlined"
@@ -1667,7 +1667,7 @@ export default function NewDisbursementForm() {
 						render={({ field }) => (
 							<TextField
 								{...field}
-								label="Notes (optional)"
+								label="Catatan (opsional)"
 								error={!!errors.notes}
 								helperText={errors?.notes?.message}
 								variant="outlined"
@@ -1702,7 +1702,7 @@ export default function NewDisbursementForm() {
 				type="submit"
 				size="large"
 			>
-				{submitting ? 'Submitting...' : 'Submit'}
+				{submitting ? 'Menyimpan...' : 'Simpan'}
 			</Button>
 		</form>
 	);

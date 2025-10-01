@@ -24,7 +24,7 @@ export default function CustomerDetailPage() {
 
 	return (
 		<PageContainer
-			header={<PageHeader title="Customer Detail" />}
+			header={<PageHeader title="Informasi Pengirim" />}
 			content={
 				<div className="px-16 pb-28 h-full">
 					{isLoading ? <LoadingBar /> : <NewCustomerForm customer={customer} />}

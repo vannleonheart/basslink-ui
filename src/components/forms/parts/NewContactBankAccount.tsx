@@ -73,7 +73,7 @@ type ContactBankAccountProps = {
 	countryList: { code: string; name: string; dial_code: string }[];
 };
 
-function ContactBankAccount({ value, onChange, onRemove, onAdd, className, countryList }: ContactBankAccountProps) {
+function ContactBankAccount({ value, onChange, onRemove, onAdd, countryList }: ContactBankAccountProps) {
 	const { control, formState, handleSubmit } = useForm<CreateContactAccountFormData>({
 		mode: 'all',
 		defaultValues: {
@@ -104,19 +104,19 @@ function ContactBankAccount({ value, onChange, onRemove, onAdd, className, count
 		>
 			<div className="w-full p-24 bg-white shadow-2 rounded">
 				<div className="mb-24 flex flex-col items-start justify-start gap-12 md:flex-row md:items-center md:justify-between">
-					<h4 className="font-bold">Bank Account Information</h4>
+					<h4 className="font-bold">Informasi Rekening</h4>
 					<div>
 						<Button
 							onClick={onAdd}
 							color="primary"
 						>
-							Add Account
+							Tambah Rekening
 						</Button>
 						<Button
 							onClick={onRemove}
 							color="error"
 						>
-							Remove
+							Hapus
 						</Button>
 					</div>
 				</div>
@@ -127,7 +127,7 @@ function ContactBankAccount({ value, onChange, onRemove, onAdd, className, count
 						render={({ field }) => (
 							<TextField
 								{...field}
-								label="Bank name"
+								label="Nama Bank"
 								autoFocus
 								type="text"
 								error={!!errors.bank_name}
@@ -144,7 +144,7 @@ function ContactBankAccount({ value, onChange, onRemove, onAdd, className, count
 						render={({ field }) => (
 							<TextField
 								{...field}
-								label="Bank account number (IBAN)"
+								label="Nomor Rekening"
 								autoFocus
 								type="text"
 								error={!!errors.bank_account_no}
@@ -161,7 +161,7 @@ function ContactBankAccount({ value, onChange, onRemove, onAdd, className, count
 						render={({ field }) => (
 							<TextField
 								{...field}
-								label="Bank account name"
+								label="Nama Pemilik"
 								autoFocus
 								type="text"
 								error={!!errors.bank_account_name}
@@ -180,7 +180,7 @@ function ContactBankAccount({ value, onChange, onRemove, onAdd, className, count
 						render={({ field }) => (
 							<TextField
 								{...field}
-								label="Bank Country"
+								label="Negara"
 								autoFocus
 								error={!!errors.bank_country}
 								helperText={errors?.bank_country?.message}
@@ -206,7 +206,7 @@ function ContactBankAccount({ value, onChange, onRemove, onAdd, className, count
 						render={({ field }) => (
 							<TextField
 								{...field}
-								label="Bank code"
+								label="Kode Bank Lokal"
 								autoFocus
 								type="text"
 								error={!!errors.bank_code}
@@ -223,7 +223,7 @@ function ContactBankAccount({ value, onChange, onRemove, onAdd, className, count
 						render={({ field }) => (
 							<TextField
 								{...field}
-								label="Bank SWIFT code"
+								label="Kode SWIFT Bank"
 								autoFocus
 								type="text"
 								error={!!errors.bank_swift_code}
@@ -241,7 +241,7 @@ function ContactBankAccount({ value, onChange, onRemove, onAdd, className, count
 					render={({ field }) => (
 						<TextField
 							{...field}
-							label="Bank address"
+							label="Alamat Bank"
 							error={!!errors.bank_address}
 							helperText={errors?.bank_address?.message}
 							variant="outlined"
@@ -290,7 +290,7 @@ function ContactBankAccount({ value, onChange, onRemove, onAdd, className, count
 						render={({ field }) => (
 							<TextField
 								{...field}
-								label="Phone Code"
+								label="Kode Telepon"
 								type="tel"
 								error={!!errors.bank_phone_code}
 								helperText={errors?.bank_phone_code?.message}
@@ -315,7 +315,7 @@ function ContactBankAccount({ value, onChange, onRemove, onAdd, className, count
 						render={({ field }) => (
 							<TextField
 								{...field}
-								label="Phone Number"
+								label="Nomor Telepon"
 								type="tel"
 								error={!!errors.bank_phone_no}
 								helperText={errors?.bank_phone_no?.message}
@@ -331,7 +331,7 @@ function ContactBankAccount({ value, onChange, onRemove, onAdd, className, count
 					render={({ field }) => (
 						<TextField
 							{...field}
-							label="Bank notes"
+							label="Catatan"
 							error={!!errors.bank_notes}
 							helperText={errors?.bank_notes?.message}
 							variant="outlined"

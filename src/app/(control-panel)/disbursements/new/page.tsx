@@ -7,7 +7,7 @@ import PageHeader from '@/components/PageHeader';
 export default function NewDisbursementPage() {
 	return (
 		<PageContainer
-			header={<PageHeader title="New Disbursement" />}
+			header={<PageHeader title="Kirim Dana" />}
 			content={
 				<div className="px-16 pb-28">
 					<NewDisbursementForm />

@@ -44,7 +44,7 @@ function Header({ data, isLoading, fetch }: { data: Agent[]; isLoading: boolean;
 					initial={{ x: -20 }}
 					animate={{ x: 0, transition: { delay: 0.2 } }}
 				>
-					<Typography className="text-4xl font-extrabold leading-none tracking-tight">Agents</Typography>
+					<Typography className="text-4xl font-extrabold leading-none tracking-tight">Agen</Typography>
 				</motion.span>
 				<motion.span
 					initial={{ y: -20, opacity: 0 }}
@@ -55,7 +55,7 @@ function Header({ data, isLoading, fetch }: { data: Agent[]; isLoading: boolean;
 						className="text-base font-medium ml-2"
 						color="text.secondary"
 					>
-						{`${filteredData?.length} agents`}
+						{`${filteredData?.length} agen`}
 					</Typography>
 				</motion.span>
 			</div>
@@ -69,7 +69,7 @@ function Header({ data, isLoading, fetch }: { data: Agent[]; isLoading: boolean;
 					<FuseSvgIcon color="action">heroicons-outline:magnifying-glass</FuseSvgIcon>
 
 					<Input
-						placeholder="Search agents"
+						placeholder="Cari agen"
 						className="flex flex-1"
 						disableUnderline
 						fullWidth
@@ -86,7 +86,7 @@ function Header({ data, isLoading, fetch }: { data: Agent[]; isLoading: boolean;
 					onClick={handleNewAgent}
 				>
 					<FuseSvgIcon size={20}>heroicons-outline:plus</FuseSvgIcon>
-					<span className="hidden sm:flex mx-8">New Agent</span>
+					<span className="hidden sm:flex mx-8">Tambah Agen</span>
 				</Button>
 			</div>
 		</div>
