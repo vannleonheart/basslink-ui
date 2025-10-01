@@ -2,7 +2,15 @@ import CopyButton from '@/components/commons/CopyButton';
 import Empty from '@/components/commons/Empty';
 import LoadingBar from '@/components/commons/LoadingBar';
 import StatusLabel from '@/components/commons/StatusLabel';
-import { DisbursementStatuses, FundSources, TransferPurposes, UserTypes } from '@/data/static-data';
+import { CountryCodeList } from '@/data/country-code';
+import {
+	DisbursementStatuses,
+	FundSources,
+	IdentityTypes,
+	Occupations,
+	TransferPurposes,
+	UserTypes
+} from '@/data/static-data';
 import apiService from '@/store/apiService';
 import { DisbursementFilter } from '@/types/component';
 import { Disbursement } from '@/types/entity';
@@ -57,6 +65,30 @@ export default function Content() {
 		const types: Record<string, string> = {};
 		Object.keys(FundSources).forEach((key) => {
 			types[key] = FundSources[key];
+		});
+		return types;
+	}, []);
+
+	const countryList = useMemo(() => {
+		const types: Record<string, string> = {};
+		CountryCodeList.forEach((item) => {
+			types[item.code] = item.name;
+		});
+		return types;
+	}, []);
+
+	const identityTypeList = useMemo(() => {
+		const types: Record<string, string> = {};
+		Object.keys(IdentityTypes).forEach((key) => {
+			types[key] = IdentityTypes[key];
+		});
+		return types;
+	}, []);
+
+	const occupationList = useMemo(() => {
+		const types: Record<string, string> = {};
+		Object.keys(Occupations).forEach((key) => {
+			types[key] = Occupations[key];
 		});
 		return types;
 	}, []);
@@ -123,6 +155,9 @@ export default function Content() {
 							userTypes={userTypes}
 							purposeTypes={purposeTypes}
 							fundSourceTypes={fundSourceTypes}
+							countryList={countryList}
+							identityTypeList={identityTypeList}
+							occupationList={occupationList}
 						/>
 					))
 				) : (
@@ -137,12 +172,18 @@ function DisbursementItem({
 	disbursement,
 	userTypes,
 	purposeTypes,
-	fundSourceTypes
+	fundSourceTypes,
+	countryList,
+	identityTypeList,
+	occupationList
 }: {
 	disbursement: Disbursement;
 	userTypes: Record<string, string>;
 	purposeTypes: Record<string, string>;
 	fundSourceTypes: Record<string, string>;
+	countryList: Record<string, string>;
+	identityTypeList: Record<string, string>;
+	occupationList: Record<string, string>;
 }) {
 	return (
 		<div className="p-12 border-b-1 cursor-pointer bg-white rounded border-gray-500 hover:shadow-md">
@@ -241,45 +282,206 @@ function DisbursementItem({
 					<AccordionDetails>
 						<div className="flex flex-col gap-16">
 							<div className="grid grid-cols-1 md:grid-cols-2 gap-16">
-								<div className="bg-gray-200 p-12 rounded flex flex-col gap-8">
-									<Typography className="font-bold">Sender</Typography>
+								<div className="bg-gray-200 p-12 rounded flex flex-col gap-12">
+									<div className="flex gap-6 items-center">
+										<FuseSvgIcon size={16}>heroicons-outline:paper-airplane</FuseSvgIcon>
+										<Typography className="font-bold">Sender</Typography>
+									</div>
 									<div className="flex flex-col gap-4">
 										<div className="flex gap-4 items-center items-center justify-between">
-											<Typography>Type</Typography>
-											<Typography className="font-medium">
+											<Typography className="w-full md:w-1/2">Type</Typography>
+											<Typography className="w-full md:w-1/2 font-medium text-right">
 												{userTypes[disbursement.from_type] || disbursement.from_type}
 											</Typography>
 										</div>
 										<div className="flex gap-4 items-center items-center justify-between">
-											<Typography>Name</Typography>
-											<Typography className="font-medium">{disbursement.from_name}</Typography>
+											<Typography className="w-full md:w-1/2">Name</Typography>
+											<Typography className="w-full md:w-1/2 font-medium text-right">
+												{disbursement.from_name}
+											</Typography>
+										</div>
+										<div className="flex gap-4 items-center items-center justify-between">
+											<Typography className="w-full md:w-1/2">Citizenship</Typography>
+											<Typography className="w-full md:w-1/2 font-medium text-right">
+												{countryList[disbursement.from_citizenship] ||
+													disbursement.from_citizenship}
+											</Typography>
+										</div>
+										<div className="flex gap-4 items-center items-center justify-between">
+											<Typography className="w-full md:w-1/2">Identity Type</Typography>
+											<Typography className="w-full md:w-1/2 font-medium text-right">
+												{identityTypeList[disbursement.from_identity_type] ||
+													disbursement.from_identity_type}
+											</Typography>
+										</div>
+										<div className="flex gap-4 items-center items-center justify-between">
+											<Typography className="w-full md:w-1/2">Identity No</Typography>
+											<Typography className="w-full md:w-1/2 font-medium text-right">
+												{disbursement.from_identity_no}
+											</Typography>
+										</div>
+										{disbursement.from_occupation && (
+											<div className="flex gap-4 items-center items-center justify-between">
+												<Typography className="w-full md:w-1/2">Occupation</Typography>
+												<Typography className="w-full md:w-1/2 font-medium text-right">
+													{occupationList[disbursement.from_occupation] ||
+														disbursement.from_occupation}
+												</Typography>
+											</div>
+										)}
+										{disbursement.from_email && (
+											<div className="flex gap-4 items-center items-center justify-between">
+												<Typography className="w-full md:w-1/2">Email</Typography>
+												<Typography className="w-full md:w-1/2 font-medium text-right">
+													{disbursement.from_email}
+												</Typography>
+											</div>
+										)}
+										{disbursement.from_phone_code && disbursement.from_phone_no && (
+											<div className="flex gap-4 items-center items-center justify-between">
+												<Typography className="w-full md:w-1/2">Phone</Typography>
+												<Typography className="w-full md:w-1/2 font-medium text-right">
+													({disbursement.from_phone_code}) {disbursement.from_phone_no}
+												</Typography>
+											</div>
+										)}
+										<div className="flex gap-4 items-center items-center justify-between">
+											<Typography className="w-full md:w-1/2">Address</Typography>
+											<Typography className="w-full md:w-1/2 font-medium text-right">
+												{disbursement.from_address}, {disbursement.from_city},{' '}
+												{disbursement.from_region},{' '}
+												{countryList[disbursement.from_country] || disbursement.from_country}
+											</Typography>
 										</div>
 									</div>
 								</div>
-								<div className="bg-gray-200 p-12 rounded flex flex-col gap-8">
-									<Typography className="font-bold">Recipient</Typography>
+								<div className="bg-gray-200 p-12 rounded flex flex-col gap-12">
+									<div className="flex gap-6 items-center">
+										<FuseSvgIcon size={16}>heroicons-outline:gift-top</FuseSvgIcon>
+										<Typography className="font-bold">Recipient</Typography>
+									</div>
 									<div className="flex flex-col gap-4">
 										<div className="flex gap-4 items-center items-center justify-between">
-											<Typography>Type</Typography>
-											<Typography className="font-medium">
+											<Typography className="w-full md:w-1/2">Type</Typography>
+											<Typography className="w-full md:w-1/2 font-medium text-right">
 												{userTypes[disbursement.to_type] || disbursement.to_type}
 											</Typography>
 										</div>
 										<div className="flex gap-4 items-center items-center justify-between">
-											<Typography>Name</Typography>
-											<Typography className="font-medium">{disbursement.to_name}</Typography>
+											<Typography className="w-full md:w-1/2">Name</Typography>
+											<Typography className="w-full md:w-1/2 font-medium text-right">
+												{disbursement.to_name}
+											</Typography>
 										</div>
+										<div className="flex gap-4 items-center items-center justify-between">
+											<Typography className="w-full md:w-1/2">Citizenship</Typography>
+											<Typography className="w-full md:w-1/2 font-medium text-right">
+												{countryList[disbursement.to_citizenship] ||
+													disbursement.to_citizenship}
+											</Typography>
+										</div>
+										<div className="flex gap-4 items-center items-center justify-between">
+											<Typography className="w-full md:w-1/2">Identity Type</Typography>
+											<Typography className="w-full md:w-1/2 font-medium text-right">
+												{identityTypeList[disbursement.to_identity_type] ||
+													disbursement.to_identity_type}
+											</Typography>
+										</div>
+										<div className="flex gap-4 items-center items-center justify-between">
+											<Typography className="w-full md:w-1/2">Identity No</Typography>
+											<Typography className="w-full md:w-1/2 font-medium text-right">
+												{disbursement.to_identity_no}
+											</Typography>
+										</div>
+										{disbursement.to_occupation && (
+											<div className="flex gap-4 items-center items-center justify-between">
+												<Typography className="w-full md:w-1/2">Occupation</Typography>
+												<Typography className="w-full md:w-1/2 font-medium text-right">
+													{occupationList[disbursement.to_occupation] ||
+														disbursement.to_occupation}
+												</Typography>
+											</div>
+										)}
+										{disbursement.to_email && (
+											<div className="flex gap-4 items-center items-center justify-between">
+												<Typography className="w-full md:w-1/2">Email</Typography>
+												<Typography className="w-full md:w-1/2 font-medium text-right">
+													{disbursement.to_email}
+												</Typography>
+											</div>
+										)}
+										{disbursement.to_phone_code && disbursement.to_phone_no && (
+											<div className="flex gap-4 items-center items-center justify-between">
+												<Typography className="w-full md:w-1/2">Phone</Typography>
+												<Typography className="w-full md:w-1/2 font-medium text-right">
+													({disbursement.to_phone_code}) {disbursement.to_phone_no}
+												</Typography>
+											</div>
+										)}
+										<div className="flex gap-4 items-center items-center justify-between">
+											<Typography className="w-full md:w-1/2">Address</Typography>
+											<Typography className="w-full md:w-1/2 font-medium text-right">
+												{disbursement.to_address}, {disbursement.to_city},{' '}
+												{disbursement.to_region},{' '}
+												{countryList[disbursement.to_country] || disbursement.to_country}
+											</Typography>
+										</div>
+										{disbursement.to_relationship && (
+											<div className="flex gap-4 items-center items-center justify-between">
+												<Typography className="w-full md:w-1/2">Relationship</Typography>
+												<Typography className="w-full md:w-1/2 font-medium text-right">
+													{disbursement.to_relationship}
+												</Typography>
+											</div>
+										)}
 									</div>
 								</div>
 							</div>
 							<div className="grid grid-cols-2 gap-16">
 								<div className="bg-gray-200 p-12 rounded flex flex-row gap-4 justify-between items-center">
+									<Typography className="font-bold">Sender Currency:</Typography>
+									<Typography>
+										{disbursement?.source_currency?.name} ({disbursement?.source_currency?.symbol})
+									</Typography>
+								</div>
+								<div className="bg-gray-200 p-12 rounded flex flex-row gap-4 justify-between items-center">
+									<Typography className="font-bold">Sent Amount:</Typography>
+									<Typography>
+										{new Intl.NumberFormat('en-US', {
+											minimumFractionDigits: 0,
+											maximumFractionDigits: 2
+										}).format(disbursement.from_amount)}
+									</Typography>
+								</div>
+							</div>
+							<div className="grid grid-cols-2 md:grid-cols-4 gap-16">
+								<div className="bg-gray-200 p-12 rounded flex flex-row gap-4 justify-between items-center">
 									<Typography className="font-bold">Rate:</Typography>
 									<Typography>{disbursement.rate}</Typography>
 								</div>
 								<div className="bg-gray-200 p-12 rounded flex flex-row gap-4 justify-between items-center">
-									<Typography className="font-bold">Fee:</Typography>
-									<Typography>{disbursement.fee_total}</Typography>
+									<Typography className="font-bold">Fee Percentage:</Typography>
+									<Typography>{disbursement.fee_amount_percent} %</Typography>
+								</div>
+								<div className="bg-gray-200 p-12 rounded flex flex-row gap-4 justify-between items-center">
+									<Typography className="font-bold">Fee Fixed:</Typography>
+									<Typography>
+										{disbursement?.source_currency?.symbol}{' '}
+										{new Intl.NumberFormat('en-US', {
+											minimumFractionDigits: 0,
+											maximumFractionDigits: 2
+										}).format(disbursement.fee_amount_fixed)}
+									</Typography>
+								</div>
+								<div className="bg-gray-200 p-12 rounded flex flex-row gap-4 justify-between items-center">
+									<Typography className="font-bold">Fee Total:</Typography>
+									<Typography>
+										{disbursement?.source_currency?.symbol}{' '}
+										{new Intl.NumberFormat('en-US', {
+											minimumFractionDigits: 0,
+											maximumFractionDigits: 2
+										}).format(disbursement.fee_total)}
+									</Typography>
 								</div>
 							</div>
 							<div className="grid grid-cols-1 md:grid-cols-2 gap-16">
@@ -296,22 +498,84 @@ function DisbursementItem({
 									</Typography>
 								</div>
 							</div>
-							{disbursement.attachments && disbursement.attachments.length > 0 && (
-								<div className="w-full bg-gray-200 p-12 rounded flex flex-col gap-8">
-									<Typography className="font-bold">Attachments:</Typography>
-									{disbursement.attachments.map((attachment) => (
-										<a
-											key={attachment.id}
-											href={attachment.attachment}
-											target="_blank"
-											rel="noopener noreferrer"
-											className="text-blue-600 hover:underline break-all"
-										>
-											{attachment.attachment}
-										</a>
-									))}
+							<div className="grid grid-cols-1 md:grid-cols-2 gap-16">
+								<div className="bg-gray-200 p-12 rounded flex flex-col gap-8">
+									<Typography className="font-bold">Bank Detail</Typography>
+									<div className="flex gap-4 items-center items-center justify-between">
+										<Typography className="w-full md:w-1/2">Bank Name</Typography>
+										<Typography className="w-full md:w-1/2 font-medium text-right">
+											{disbursement.to_bank_name}
+										</Typography>
+									</div>
+									<div className="flex gap-4 items-center items-center justify-between">
+										<Typography className="w-full md:w-1/2">Bank Account No</Typography>
+										<div className="flex gap-8 items-center justify-end w-full md:w-1/2">
+											<Typography className="w-full md:w-1/2 font-medium text-right">
+												{disbursement.to_bank_account_no}
+											</Typography>
+											<CopyButton value={disbursement?.to_bank_account_no || ''} />
+										</div>
+									</div>
+									<div className="flex gap-4 items-center items-center justify-between">
+										<Typography className="w-full md:w-1/2">Account Owner</Typography>
+										<Typography className="w-full md:w-1/2 font-medium text-right">
+											{disbursement.to_bank_account_name}
+										</Typography>
+									</div>
+									<div className="flex gap-4 items-center items-center justify-between">
+										<Typography className="w-full md:w-1/2">Bank Code</Typography>
+										<div className="flex gap-8 items-center justify-end w-full md:w-1/2">
+											<Typography className="w-full md:w-1/2 font-medium text-right">
+												{disbursement.to_bank_code}
+											</Typography>
+											<CopyButton value={disbursement?.to_bank_code || ''} />
+										</div>
+									</div>
+									<div className="flex gap-4 items-center items-center justify-between">
+										<Typography className="w-full md:w-1/2">Bank Swift</Typography>
+										<div className="flex gap-8 items-center justify-end w-full md:w-1/2">
+											<Typography className="w-full md:w-1/2 font-medium text-right">
+												{disbursement.to_bank_swift}
+											</Typography>
+											<CopyButton value={disbursement?.to_bank_swift || ''} />
+										</div>
+									</div>
+									<div className="flex gap-4 items-center items-center justify-between">
+										<Typography className="w-full md:w-1/2">Bank Country</Typography>
+										<Typography className="w-full md:w-1/2 font-medium text-right">
+											{countryList[disbursement.to_bank_country] || disbursement.to_bank_country}
+										</Typography>
+									</div>
+									<div className="flex gap-4 items-center items-center justify-between">
+										<Typography className="w-full md:w-1/2">Bank Email</Typography>
+										<Typography className="w-full md:w-1/2 font-medium text-right">
+											{disbursement.to_bank_email}
+										</Typography>
+									</div>
 								</div>
-							)}
+								{disbursement.attachments && disbursement.attachments.length > 0 && (
+									<div className="w-full bg-gray-200 p-12 rounded flex flex-col gap-8">
+										<Typography className="font-bold">Attachments:</Typography>
+										{disbursement.attachments.map((attachment) => (
+											<a
+												key={attachment.id}
+												href={attachment.attachment}
+												target="_blank"
+												rel="noopener noreferrer"
+												className="text-blue-600 hover:underline break-all p-12"
+											>
+												<FuseSvgIcon
+													className="inline-block mr-4"
+													size={16}
+												>
+													heroicons-outline:paper-clip
+												</FuseSvgIcon>
+												{attachment.attachment.split('/').pop()}
+											</a>
+										))}
+									</div>
+								)}
+							</div>
 						</div>
 					</AccordionDetails>
 					<AccordionActions>

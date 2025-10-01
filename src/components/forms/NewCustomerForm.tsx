@@ -17,6 +17,7 @@ import { showMessage } from '@fuse/core/FuseMessage/fuseMessageSlice';
 import NewCustomerDocument from './parts/NewCustomerDocument';
 import PasswordField from './fields/PasswordField';
 import { Gender, IdentityTypes, Occupations, UserTypes } from '@/data/static-data';
+import { User } from '@/types/entity';
 
 const schema = z.object({
 	customer_type: z.enum(['individual', 'institution'], { message: 'Invalid contact type' }),
@@ -40,6 +41,7 @@ const schema = z.object({
 	customer_notes: z.optional(z.string().or(z.literal(''))),
 	customer_documents: z.array(
 		z.object({
+			id: z.optional(z.string().or(z.literal(''))),
 			document_data: z.string().min(2, 'Document data is required'),
 			document_type: z.string().min(2, 'Document type is required'),
 			notes: z.optional(z.string().or(z.literal(''))),
@@ -53,29 +55,34 @@ const schema = z.object({
 	)
 });
 
-export default function NewCustomerForm() {
+type NewCustomerFormProps = {
+	customer?: User;
+};
+
+export default function NewCustomerForm({ customer }: NewCustomerFormProps) {
 	const { control, formState, handleSubmit } = useForm<CreateCustomerFormData>({
 		mode: 'onChange',
 		resolver: zodResolver(schema),
 		defaultValues: {
-			customer_type: '',
-			customer_name: '',
-			customer_gender: '',
-			customer_birthdate: '',
-			customer_citizenship: '',
-			customer_country: '',
-			customer_region: '',
-			customer_city: '',
-			customer_address: '',
-			customer_email: '',
-			customer_phone_code: '',
-			customer_phone_no: '',
-			customer_occupation: '',
-			customer_identity_type: '',
-			customer_identity_no: '',
-			customer_notes: '',
+			customer_type: customer?.user_type ?? '',
+			customer_name: customer?.name ?? '',
+			customer_gender: customer?.gender ?? '',
+			customer_birthdate: customer?.birthdate ?? '',
+			customer_citizenship: customer?.citizenship ?? '',
+			customer_country: customer?.country ?? '',
+			customer_region: customer?.region ?? '',
+			customer_city: customer?.city ?? '',
+			customer_address: customer?.address ?? '',
+			customer_email: customer?.email ?? '',
+			customer_phone_code: customer?.phone_code ? `+${customer.phone_code}` : '',
+			customer_phone_no: customer?.phone_no ?? '',
+			customer_occupation: customer?.occupation ?? '',
+			customer_identity_type: customer?.identity_type ?? 'national_id',
+			customer_identity_no: customer?.identity_no ?? '',
+			customer_notes: customer?.notes ?? '',
 			customer_documents: [
 				{
+					id: '',
 					document_data: '',
 					document_type: '',
 					notes: '',

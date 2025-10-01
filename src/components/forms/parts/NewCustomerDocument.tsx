@@ -89,12 +89,12 @@ function CustomerDocument({ value, onChange, onRemove }: CustomerDocumentProps) 
 							fullWidth
 							select
 						>
-							{Object.values(DocumentTypes).map((type) => (
+							{Object.keys(DocumentTypes).map((key) => (
 								<MenuItem
-									key={type}
-									value={type}
+									key={key}
+									value={key}
 								>
-									{type}
+									{DocumentTypes[key]}
 								</MenuItem>
 							))}
 						</TextField>

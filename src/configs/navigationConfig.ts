@@ -66,6 +66,7 @@ const navigationConfig: FuseNavItemType[] = [
 		type: 'collapse',
 		icon: 'heroicons-solid:user-group',
 		auth: ['agent', 'admin'],
+		end: false,
 		children: [
 			{
 				id: 'sidebar-menu-contact-list',

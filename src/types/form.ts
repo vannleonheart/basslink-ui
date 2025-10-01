@@ -201,6 +201,7 @@ export type CreateContactFormData = {
 };
 
 export type CreateContactDocumentFormData = {
+	id?: string;
 	document_type: string;
 	document_data: string;
 	notes?: string;
@@ -208,6 +209,7 @@ export type CreateContactDocumentFormData = {
 };
 
 export type CreateContactAccountFormData = {
+	id?: string;
 	bank_name?: string;
 	bank_account_no?: string;
 	bank_account_name?: string;

@@ -17,6 +17,7 @@ import { useAppDispatch } from '@/store/hooks';
 import { showMessage } from '@fuse/core/FuseMessage/fuseMessageSlice';
 import useNavigate from '@fuse/hooks/useNavigate';
 import { Gender, IdentityTypes, Occupations, UserTypes } from '@/data/static-data';
+import { Contact } from '@/types/entity';
 
 const schema = z.object({
 	contact_type: z.enum(['individual', 'institution']),
@@ -40,6 +41,7 @@ const schema = z.object({
 	contact_notes: z.optional(z.string().or(z.literal(''))),
 	contact_documents: z.array(
 		z.object({
+			id: z.optional(z.string().or(z.literal(''))),
 			document_data: z.string().min(2, 'Document data is required'),
 			document_type: z.string().min(2, 'Document type is required'),
 			notes: z.optional(z.string().or(z.literal(''))),
@@ -48,6 +50,7 @@ const schema = z.object({
 	),
 	contact_accounts: z.array(
 		z.object({
+			id: z.optional(z.string().or(z.literal(''))),
 			bank_name: z.string().min(2, 'Bank name is required'),
 			bank_account_no: z.string().min(2, 'Account number is required'),
 			bank_account_name: z.string().min(2, 'Account name is required'),
@@ -64,79 +67,123 @@ const schema = z.object({
 	)
 });
 
-export default function NewContactForm() {
+type NewContactFormProps = {
+	contact?: Contact;
+};
+
+export default function NewContactForm({ contact }: NewContactFormProps) {
 	const { control, formState, handleSubmit } = useForm<CreateContactFormData>({
 		mode: 'onChange',
 		resolver: zodResolver(schema),
 		defaultValues: {
-			contact_type: '',
-			contact_name: '',
-			contact_gender: '',
-			contact_birthdate: '',
-			contact_citizenship: '',
-			contact_country: '',
-			contact_region: '',
-			contact_city: '',
-			contact_address: '',
-			contact_email: '',
-			contact_phone_code: '',
-			contact_phone_no: '',
-			contact_occupation: '',
-			contact_identity_type: '',
-			contact_identity_no: '',
-			contact_notes: '',
-			contact_documents: [
-				{
-					document_data: '',
-					document_type: '',
-					notes: '',
-					is_verified: false
-				}
-			] as CreateContactDocumentFormData[],
-			contact_accounts: [
-				{
-					bank_name: '',
-					bank_account_no: '',
-					bank_account_name: '',
-					bank_country: '',
-					bank_code: '',
-					bank_swift_code: '',
-					bank_address: '',
-					bank_email: '',
-					bank_phone_code: '',
-					bank_phone_no: '',
-					bank_website: '',
-					bank_notes: ''
-				}
-			] as CreateContactAccountFormData[]
+			contact_type: contact?.contact_type ?? '',
+			contact_name: contact?.name ?? '',
+			contact_gender: contact?.gender ?? '',
+			contact_birthdate: contact?.birthdate ?? '',
+			contact_citizenship: contact?.citizenship ?? '',
+			contact_country: contact?.country ?? '',
+			contact_region: contact?.region ?? '',
+			contact_city: contact?.city ?? '',
+			contact_address: contact?.address ?? '',
+			contact_email: contact?.email ?? '',
+			contact_phone_code: contact?.phone_code ? `+${contact.phone_code}` : '',
+			contact_phone_no: contact?.phone_no ?? '',
+			contact_occupation: contact?.occupation ?? '',
+			contact_identity_type: contact?.identity_type ?? '',
+			contact_identity_no: contact?.identity_no ?? '',
+			contact_notes: contact?.notes ?? '',
+			contact_documents:
+				contact?.documents ??
+				([
+					{
+						id: '',
+						document_data: '',
+						document_type: '',
+						notes: '',
+						is_verified: false
+					}
+				] as CreateContactDocumentFormData[]),
+			contact_accounts: contact?.accounts
+				? contact.accounts.map((account) => ({
+						id: account.id,
+						bank_name: account.bank_name,
+						bank_account_no: account.no,
+						bank_account_name: account.owner_name,
+						bank_country: account.country ?? '',
+						bank_code: account.bank_code ?? '',
+						bank_swift_code: account.bank_swift ?? '',
+						bank_address: account.address ?? '',
+						bank_email: account.email ?? '',
+						bank_website: account.website ?? '',
+						bank_phone_code: account.phone_code ? `+${account.phone_code}` : '',
+						bank_phone_no: account.phone_no ?? '',
+						bank_notes: account.notes ?? ''
+					}))
+				: ([
+						{
+							id: '',
+							bank_name: '',
+							bank_account_no: '',
+							bank_account_name: '',
+							bank_country: '',
+							bank_code: '',
+							bank_swift_code: '',
+							bank_address: '',
+							bank_email: '',
+							bank_phone_code: '',
+							bank_phone_no: '',
+							bank_website: '',
+							bank_notes: ''
+						}
+					] as CreateContactAccountFormData[])
 		}
 	});
 	const { isValid, dirtyFields, errors } = formState;
 	const { data } = useSession() ?? {};
 	const { accessToken } = data ?? {};
 	const [createContact, { isLoading: submitting }] = apiService.useCreateContactMutation();
+	const [updateContact, { isLoading: updating }] = apiService.useUpdateContactMutation();
 	const dispatch = useAppDispatch();
 	const navigate = useNavigate();
 
 	async function onSubmit(formData: CreateContactFormData) {
-		if (submitting) {
+		if (submitting || updating) {
 			return;
 		}
 
-		const { error } = await createContact({
-			accessToken,
-			data: formData
-		});
+		if (!contact) {
+			const { error } = await createContact({
+				accessToken,
+				data: formData
+			});
 
-		if (error) {
-			const errorData = error as { data: ApiResponse };
-			dispatch(
-				showMessage({
-					variant: 'error',
-					message: errorData?.data?.message
-				})
-			);
-			return false;
+			if (error) {
+				const errorData = error as { data: ApiResponse };
+				dispatch(
+					showMessage({
+						variant: 'error',
+						message: errorData?.data?.message
+					})
+				);
+				return false;
+			}
+		} else {
+			const { error } = await updateContact({
+				accessToken,
+				id: contact.id,
+				data: formData
+			});
+
+			if (error) {
+				const errorData = error as { data: ApiResponse };
+				dispatch(
+					showMessage({
+						variant: 'error',
+						message: errorData?.data?.message
+					})
+				);
+				return false;
+			}
 		}
 
 		navigate(`/contacts/list`);
@@ -523,12 +570,12 @@ export default function NewContactForm() {
 				color="primary"
 				className="mt-24 w-full shadow-2"
 				aria-label="Submit"
-				disabled={_.isEmpty(dirtyFields) || !isValid || submitting}
+				disabled={_.isEmpty(dirtyFields) || !isValid || submitting || updating}
 				type="submit"
 				size="large"
 				onClick={handleSubmit(onSubmit)}
 			>
-				{submitting ? 'Submitting...' : 'Submit'}
+				{submitting || updating ? 'Saving...' : 'Save'}
 			</Button>
 		</div>
 	);

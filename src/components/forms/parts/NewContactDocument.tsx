@@ -60,6 +60,7 @@ function ContactDocument({ value, onChange, onRemove }: ContactDocumentProps) {
 	const { control, formState, handleSubmit } = useForm<CreateContactDocumentFormData>({
 		mode: 'all',
 		defaultValues: {
+			id: value?.id || '',
 			document_data: value?.document_data || null,
 			document_type: value?.document_type || '',
 			notes: value?.notes || '',
@@ -89,12 +90,12 @@ function ContactDocument({ value, onChange, onRemove }: ContactDocumentProps) {
 							fullWidth
 							select
 						>
-							{Object.values(DocumentTypes).map((type) => (
+							{Object.keys(DocumentTypes).map((key) => (
 								<MenuItem
-									key={type}
-									value={type}
+									key={key}
+									value={key}
 								>
-									{type}
+									{DocumentTypes[key]}
 								</MenuItem>
 							))}
 						</TextField>
