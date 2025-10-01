@@ -93,49 +93,51 @@ export default function NewContactForm({ contact }: NewContactFormProps) {
 			contact_identity_no: contact?.identity_no ?? '',
 			contact_notes: contact?.notes ?? '',
 			contact_documents:
-				contact?.documents ??
-				([
-					{
-						id: '',
-						document_data: '',
-						document_type: '',
-						notes: '',
-						is_verified: false
-					}
-				] as CreateContactDocumentFormData[]),
-			contact_accounts: contact?.accounts
-				? contact.accounts.map((account) => ({
-						id: account.id,
-						bank_name: account.bank_name,
-						bank_account_no: account.no,
-						bank_account_name: account.owner_name,
-						bank_country: account.country ?? '',
-						bank_code: account.bank_code ?? '',
-						bank_swift_code: account.bank_swift ?? '',
-						bank_address: account.address ?? '',
-						bank_email: account.email ?? '',
-						bank_website: account.website ?? '',
-						bank_phone_code: account.phone_code ? `+${account.phone_code}` : '',
-						bank_phone_no: account.phone_no ?? '',
-						bank_notes: account.notes ?? ''
-					}))
-				: ([
-						{
-							id: '',
-							bank_name: '',
-							bank_account_no: '',
-							bank_account_name: '',
-							bank_country: '',
-							bank_code: '',
-							bank_swift_code: '',
-							bank_address: '',
-							bank_email: '',
-							bank_phone_code: '',
-							bank_phone_no: '',
-							bank_website: '',
-							bank_notes: ''
-						}
-					] as CreateContactAccountFormData[])
+				contact?.documents && contact?.documents?.length > 0
+					? contact?.documents
+					: ([
+							{
+								id: '',
+								document_data: '',
+								document_type: '',
+								notes: '',
+								is_verified: false
+							}
+						] as CreateContactDocumentFormData[]),
+			contact_accounts:
+				contact?.accounts && contact?.accounts.length > 0
+					? contact.accounts.map((account) => ({
+							id: account.id,
+							bank_name: account.bank_name,
+							bank_account_no: account.no,
+							bank_account_name: account.owner_name,
+							bank_country: account.country ?? '',
+							bank_code: account.bank_code ?? '',
+							bank_swift_code: account.bank_swift ?? '',
+							bank_address: account.address ?? '',
+							bank_email: account.email ?? '',
+							bank_website: account.website ?? '',
+							bank_phone_code: account.phone_code ? `+${account.phone_code}` : '',
+							bank_phone_no: account.phone_no ?? '',
+							bank_notes: account.notes ?? ''
+						}))
+					: ([
+							{
+								id: '',
+								bank_name: '',
+								bank_account_no: '',
+								bank_account_name: '',
+								bank_country: '',
+								bank_code: '',
+								bank_swift_code: '',
+								bank_address: '',
+								bank_email: '',
+								bank_phone_code: '',
+								bank_phone_no: '',
+								bank_website: '',
+								bank_notes: ''
+							}
+						] as CreateContactAccountFormData[])
 		}
 	});
 	const { isValid, dirtyFields, errors } = formState;

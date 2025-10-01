@@ -80,15 +80,18 @@ export default function NewCustomerForm({ customer }: NewCustomerFormProps) {
 			customer_identity_type: customer?.identity_type ?? 'national_id',
 			customer_identity_no: customer?.identity_no ?? '',
 			customer_notes: customer?.notes ?? '',
-			customer_documents: [
-				{
-					id: '',
-					document_data: '',
-					document_type: '',
-					notes: '',
-					is_verified: false
-				}
-			] as CreateContactDocumentFormData[],
+			customer_documents:
+				customer?.documents && customer.documents.length > 0
+					? customer.documents
+					: ([
+							{
+								id: '',
+								document_data: '',
+								document_type: '',
+								notes: '',
+								is_verified: false
+							}
+						] as CreateContactDocumentFormData[]),
 			username: '',
 			password: '',
 			password_confirmation: ''
@@ -96,30 +99,52 @@ export default function NewCustomerForm({ customer }: NewCustomerFormProps) {
 	});
 	const { isValid, dirtyFields, errors } = formState;
 	const { data } = useSession() ?? {};
-	const { accessToken } = data ?? {};
+	const { accessToken, side } = data ?? {};
 	const [createCustomer, { isLoading: submitting }] = apiService.useCreateCustomerMutation();
+	const [updateCustomer, { isLoading: updating }] = apiService.useUpdateCustomerMutation();
 	const dispatch = useAppDispatch();
 	const navigate = useNavigate();
 
 	async function onSubmit(formData: CreateCustomerFormData) {
-		if (submitting) {
+		if (submitting || updating) {
 			return;
 		}
 
-		const { error } = await createCustomer({
-			accessToken,
-			data: formData
-		});
+		if (!customer) {
+			const { error } = await createCustomer({
+				accessToken,
+				data: formData,
+				side
+			});
 
-		if (error) {
-			const errorData = error as { data: ApiResponse };
-			dispatch(
-				showMessage({
-					variant: 'error',
-					message: errorData?.data?.message
-				})
-			);
-			return false;
+			if (error) {
+				const errorData = error as { data: ApiResponse };
+				dispatch(
+					showMessage({
+						variant: 'error',
+						message: errorData?.data?.message
+					})
+				);
+				return false;
+			}
+		} else {
+			const { error } = await updateCustomer({
+				id: customer.id,
+				accessToken,
+				data: formData,
+				side
+			});
+
+			if (error) {
+				const errorData = error as { data: ApiResponse };
+				dispatch(
+					showMessage({
+						variant: 'error',
+						message: errorData?.data?.message
+					})
+				);
+				return false;
+			}
 		}
 
 		navigate(`/customers/list`);

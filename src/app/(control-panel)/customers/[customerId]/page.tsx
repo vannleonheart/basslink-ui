@@ -1,5 +1,6 @@
 'use client';
 
+import Empty from '@/components/commons/Empty';
 import LoadingBar from '@/components/commons/LoadingBar';
 import NewCustomerForm from '@/components/forms/NewCustomerForm';
 import PageContainer from '@/components/PageContainer';
@@ -20,14 +21,20 @@ export default function CustomerDetailPage() {
 		side,
 		accessToken
 	});
-	const customer = useMemo(() => customerData as User, [customerData]);
+	const customer: User | null = useMemo(() => customerData as User, [customerData]);
 
 	return (
 		<PageContainer
 			header={<PageHeader title="Informasi Pengirim" />}
 			content={
 				<div className="px-16 pb-28 h-full">
-					{isLoading ? <LoadingBar /> : <NewCustomerForm customer={customer} />}
+					{isLoading ? (
+						<LoadingBar />
+					) : customer ? (
+						<NewCustomerForm customer={customer} />
+					) : (
+						<Empty text="Data pengirim tidak ditemukan" />
+					)}
 				</div>
 			}
 		/>

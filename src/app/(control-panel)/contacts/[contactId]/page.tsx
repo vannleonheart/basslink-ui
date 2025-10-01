@@ -1,5 +1,6 @@
 'use client';
 
+import Empty from '@/components/commons/Empty';
 import LoadingBar from '@/components/commons/LoadingBar';
 import NewContactForm from '@/components/forms/NewContactForm';
 import PageContainer from '@/components/PageContainer';
@@ -20,14 +21,20 @@ export default function ContactDetailPage() {
 		side,
 		accessToken
 	});
-	const contact = useMemo(() => contactData as Contact, [contactData]);
+	const contact: Contact | null = useMemo(() => contactData as Contact, [contactData]);
 
 	return (
 		<PageContainer
 			header={<PageHeader title="Informasi Penerima" />}
 			content={
 				<div className="px-16 pb-28 h-full">
-					{isLoading ? <LoadingBar /> : <NewContactForm contact={contact} />}
+					{isLoading ? (
+						<LoadingBar />
+					) : contact ? (
+						<NewContactForm contact={contact} />
+					) : (
+						<Empty text="Data penerima tidak ditemukan" />
+					)}
 				</div>
 			}
 		/>

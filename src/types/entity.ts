@@ -78,6 +78,7 @@ export type User = {
 	agent?: Agent;
 	image?: string;
 	as?: string;
+	documents?: UserDocument[];
 };
 
 export type Disbursement = {
@@ -252,4 +253,15 @@ export type DisbursementAttachment = {
 	submit_by: string;
 	submit_owner: string;
 	submit_time: number;
+};
+
+export type UserDocument = {
+	id: string;
+	user_id: string;
+	document_type: string;
+	document_data: string;
+	notes?: string;
+	is_verified: boolean;
+	created: number;
+	updated?: number;
 };
