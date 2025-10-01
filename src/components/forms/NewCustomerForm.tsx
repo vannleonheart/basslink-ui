@@ -19,7 +19,7 @@ import PasswordField from './fields/PasswordField';
 import { Gender, IdentityTypes, Occupations, UserTypes } from '@/data/static-data';
 
 const schema = z.object({
-	customer_type: z.enum(['individual', 'institutional'], { message: 'Invalid contact type' }),
+	customer_type: z.enum(['individual', 'institution'], { message: 'Invalid contact type' }),
 	customer_name: z
 		.string()
 		.min(3, 'Name should be at least 3 characters long')

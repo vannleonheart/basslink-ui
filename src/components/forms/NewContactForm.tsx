@@ -19,7 +19,7 @@ import useNavigate from '@fuse/hooks/useNavigate';
 import { Gender, IdentityTypes, Occupations, UserTypes } from '@/data/static-data';
 
 const schema = z.object({
-	contact_type: z.enum(['individual', 'institutional']),
+	contact_type: z.enum(['individual', 'institution']),
 	contact_name: z
 		.string()
 		.min(3, 'Name should be at least 3 characters long')

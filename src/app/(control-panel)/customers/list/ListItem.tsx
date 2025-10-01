@@ -5,6 +5,9 @@ import ListItemText from '@mui/material/ListItemText';
 import Divider from '@mui/material/Divider';
 import ListItemButton from '@mui/material/ListItemButton';
 import { User } from '@/types/entity';
+import { useMemo } from 'react';
+import { UserTypes } from '@/data/static-data';
+import { CountryCodeList } from '@/data/country-code';
 
 type AgentUserListItemPropsType = {
 	user: User;
@@ -12,6 +15,23 @@ type AgentUserListItemPropsType = {
 };
 
 function ListItem({ user }: AgentUserListItemPropsType) {
+	const userTypes = useMemo(() => {
+		const types: Record<string, string> = {};
+		Object.keys(UserTypes).forEach((key) => {
+			types[key] = UserTypes[key];
+		});
+		return types;
+	}, []);
+
+	const countryList = useMemo(() => {
+		const countries: Record<string, string> = {};
+		Object.keys(CountryCodeList).map((key) => {
+			const country = CountryCodeList[key];
+			countries[country.code] = country.name;
+		});
+		return countries;
+	}, []);
+
 	return (
 		<>
 			<ListItemButton
@@ -35,7 +55,8 @@ function ListItem({ user }: AgentUserListItemPropsType) {
 							variant="body2"
 							color="text.secondary"
 						>
-							{user.email}
+							{countryList[user?.country] || user?.country} -{' '}
+							{userTypes[user?.user_type] || user?.user_type}
 						</Typography>
 					}
 				/>

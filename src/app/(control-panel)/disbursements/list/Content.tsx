@@ -1,9 +1,11 @@
 import CopyButton from '@/components/commons/CopyButton';
+import Empty from '@/components/commons/Empty';
 import LoadingBar from '@/components/commons/LoadingBar';
 import StatusLabel from '@/components/commons/StatusLabel';
 import { UserTypes } from '@/data/static-data';
 import apiService from '@/store/apiService';
 import { Disbursement } from '@/types/entity';
+import FuseSvgIcon from '@fuse/core/FuseSvgIcon';
 import { Accordion, AccordionActions, AccordionDetails, AccordionSummary, Typography } from '@mui/material';
 import { DateTime } from 'luxon';
 import { useSession } from 'next-auth/react';
@@ -29,7 +31,7 @@ export default function Content() {
 
 	return (
 		<div className="">
-			<div className="flex flex-col">
+			<div className="flex flex-col gap-16">
 				<div className="w-full mb-24">{/* filter */}</div>
 				{isLoading ? (
 					<LoadingBar />
@@ -42,7 +44,7 @@ export default function Content() {
 						/>
 					))
 				) : (
-					<div className="text-center py-20">There are no disbursements!</div>
+					<Empty text="There are no disbursement" />
 				)}
 			</div>
 		</div>
@@ -57,27 +59,33 @@ function DisbursementItem({
 	userTypes: Record<string, string>;
 }) {
 	return (
-		<div className="p-24 border-b-1 cursor-pointer bg-white shadow-md rounded">
-			<div className="flex flex-col gap-8">
-				<div className="flex flex-col md:flex-row md:justify-between gap-8">
-					<Typography>{disbursement.id}</Typography>
-					<Typography>
-						{DateTime.fromSeconds(disbursement.created).toFormat('LLL dd, yyyy hh:mm a')}
-					</Typography>
+		<div className="p-12 border-b-1 cursor-pointer bg-white rounded border-gray-500 hover:shadow-md">
+			<div className="flex flex-col gap-6">
+				<div className="flex flex-col md:flex-row md:justify-between gap-8 bg-gray-100 p-4 rounded border-1 border-gray-300">
+					<div className="flex gap-4 items-center">
+						<FuseSvgIcon size={18}>heroicons-outline:bookmark</FuseSvgIcon>
+						<Typography>{disbursement.id}</Typography>
+					</div>
+					<div className="flex gap-4 items-center">
+						<FuseSvgIcon size={18}>heroicons-outline:clock</FuseSvgIcon>
+						<Typography>
+							{DateTime.fromSeconds(disbursement.created).toFormat('LLL dd, yyyy hh:mm a')}
+						</Typography>
+					</div>
 				</div>
 				<div className="flex flex-col md:flex-row md:justify-between gap-4">
-					<div className="w-full md:w-1/3 bg-gray-100 p-12 rounded border-1 border-gray-300">
+					<div className="w-full md:w-1/3 bg-gray-100 p-6 rounded border-1 border-gray-300">
 						<div className="h-full flex flex-col gap-4 justify-center items-center">
 							<Typography
 								className="font-bold"
-								fontSize={20}
+								fontSize={14}
 							>
 								{disbursement?.target_account?.bank_name}
 							</Typography>
 							<div className="flex gap-8 items-center">
 								<Typography
 									className="font-medium"
-									fontSize={14}
+									fontSize={12}
 								>
 									{disbursement?.target_account?.no}
 								</Typography>
@@ -85,17 +93,17 @@ function DisbursementItem({
 							</div>
 							<Typography
 								className="font-medium"
-								fontSize={14}
+								fontSize={12}
 							>
 								{disbursement?.target_account?.owner_name}
 							</Typography>
 						</div>
 					</div>
-					<div className="w-full md:w-1/3 bg-gray-100 p-12 rounded flex flex-col gap-8 justify-center items-center border-1 border-gray-300">
+					<div className="w-full md:w-1/3 bg-gray-100 p-6	 rounded flex flex-col gap-8 justify-center items-center border-1 border-gray-300">
 						<div className="flex flex-col gap-8 justify-center items-center">
 							<Typography
 								className="font-medium"
-								fontSize={12}
+								fontSize={10}
 							>
 								STATUS
 							</Typography>
@@ -105,16 +113,19 @@ function DisbursementItem({
 							/>
 						</div>
 					</div>
-					<div className="w-full md:w-1/3 bg-gray-100 p-8 rounded flex flex-col gap-12 justify-center items-center border-1 border-gray-300">
-						<div className="w-full bg-gray-200 p-8 rounded flex flex-col gap-4 justify-center items-center">
-							<Typography className="font-medium">
+					<div className="w-full md:w-1/3 bg-gray-100 p-6 rounded flex flex-col gap-12 justify-center items-center border-1 border-gray-300">
+						<div className="w-full bg-gray-200 p-4 rounded flex flex-col gap-4 justify-center items-center">
+							<Typography
+								className="font-medium"
+								fontSize={12}
+							>
 								{disbursement?.target_currency?.name} ({disbursement?.target_currency?.symbol})
 							</Typography>
 						</div>
 						<div className="flex gap-8 justify-center items-center">
 							<Typography
 								className="font-bold"
-								fontSize={36}
+								fontSize={20}
 							>
 								{new Intl.NumberFormat('en-US', {
 									minimumFractionDigits: 0,

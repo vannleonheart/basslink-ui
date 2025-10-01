@@ -5,7 +5,7 @@ export const Gender = {
 
 export const UserTypes = {
 	individual: 'Individual',
-	institutional: 'Institutional'
+	institution: 'Institution'
 };
 
 export const IdentityTypes = {
@@ -16,6 +16,7 @@ export const IdentityTypes = {
 	work_permit: 'Work Permit',
 	green_card: 'Green Card',
 	permanent_resident_card: 'Permanent Resident Card',
+	trading_business_license: 'Trading/Business License',
 	other: 'Other'
 };
 
@@ -28,6 +29,7 @@ export const Occupations = {
 	student: 'Student',
 	retired: 'Retired',
 	homemaker: 'Homemaker',
+	business: 'Business',
 	other: 'Other'
 };
 
@@ -62,5 +64,35 @@ export const RelationshipTypes = {
 	acquaintance: 'Acquaintance',
 	colleague: 'Colleague',
 	business_partner: 'Business Partner',
+	other: 'Other'
+};
+
+export const TransferTypes = {
+	domestic: 'Domestic',
+	international: 'International'
+};
+
+export const TransferPurposes = {
+	personal: 'Personal',
+	business: 'Business',
+	gift: 'Gift',
+	donation: 'Donation',
+	family_support: 'Family Support',
+	investment: 'Investment',
+	travel: 'Travel',
+	education: 'Education',
+	medical: 'Medical',
+	other: 'Other'
+};
+
+export const FundSources = {
+	salary: 'Salary',
+	business_income: 'Business Income',
+	savings: 'Savings',
+	gift: 'Gift',
+	inheritance: 'Inheritance',
+	loan: 'Loan',
+	investment_income: 'Investment Income',
+	sale_of_assets: 'Sale of Assets',
 	other: 'Other'
 };

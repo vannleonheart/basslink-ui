@@ -10,7 +10,7 @@ import MenuItem from '@mui/material/MenuItem';
 import { CountryCodeList } from '@/data/country-code';
 import { clientUploadFiles } from '@/utils/apiCall';
 import { useSession } from 'next-auth/react';
-import { useMemo, useState } from 'react';
+import { ChangeEvent, useMemo, useState } from 'react';
 import Box from '@mui/material/Box';
 import FuseSvgIcon from '@fuse/core/FuseSvgIcon';
 import { lighten } from '@mui/material/styles';
@@ -25,9 +25,10 @@ import ContactListDialog from '../dialogs/ContactListDialog';
 import useNavigate from '@fuse/hooks/useNavigate';
 import { ApiResponse } from '@/types/component';
 import { showMessage } from '@fuse/core/FuseMessage/fuseMessageSlice';
-import { Gender, IdentityTypes, Occupations, RelationshipTypes, UserTypes } from '@/data/static-data';
+import { FundSources, Gender, IdentityTypes, Occupations, RelationshipTypes, TransferPurposes, TransferTypes, UserTypes } from '@/data/static-data';
 import UserListDialog from '../dialogs/UserListDialog';
 import ContactBankAccountListDialog from '../dialogs/ContactBankAccountListDialog';
+import { Trans } from 'react-i18next';
 
 const schema = z.object({
 	from_currency: z.string().min(1, 'You must choose the currency'),
@@ -196,6 +197,75 @@ export default function NewDisbursementForm() {
 
 		navigate(`/disbursements/list`);
 	}
+
+	const calculateToAmount = () => {
+		const fromAmount = getValues('from_amount') || '0';
+		const rateValue = getValues('rate') || '0';
+		const feeValue = getValues('fee') || '0';
+		const fAmount = parseFloat(fromAmount);
+		const rValue = parseFloat(rateValue);
+		const fValue = (parseFloat(feeValue) / 100) * fAmount;
+
+		if (!isNaN(fAmount) && !isNaN(rValue) && !isNaN(fValue)) {
+			return (fAmount - fValue) * rValue;
+		}
+
+		return '';
+	};
+
+	const calculateFromAmount = () => {
+		const toAmount = getValues('to_amount') || '0';
+		const rateValue = getValues('rate') || '0';
+		const feeValue = getValues('fee') || '0';
+		const tAmount = parseFloat(toAmount);
+		const rValue = parseFloat(rateValue);
+		const fValue = parseFloat(feeValue);
+
+		if (!isNaN(tAmount) && !isNaN(rValue) && !isNaN(fValue)) {
+			return tAmount / rValue + (fValue / 100) * (tAmount / rValue);
+		}
+
+		return '';
+	};
+
+	const onRateChange = (e: ChangeEvent<HTMLInputElement>) => {
+		const rate = e.target.value;
+		setValue('rate', rate);
+
+		const toAmount = getValues('to_amount') || '0';
+		const fromAmount = getValues('from_amount') || '0';
+		const fAmount = parseFloat(fromAmount);
+		const tAmount = parseFloat(toAmount);
+
+		if (!isNaN(fAmount) && !isNaN(tAmount)) {
+			if (fAmount > 0) {
+				const tAmount = calculateToAmount();
+				setValue('to_amount', tAmount.toString());
+			} else if (tAmount > 0) {
+				const fAmount = calculateFromAmount();
+				setValue('from_amount', fAmount.toString());
+			}
+		}
+	};
+
+	const onFeeChange = (e: ChangeEvent<HTMLInputElement>) => {
+		const fee = e.target.value;
+		setValue('fee', fee);
+		const toAmount = getValues('to_amount') || '0';
+		const fromAmount = getValues('from_amount') || '0';
+		const fAmount = parseFloat(fromAmount);
+		const tAmount = parseFloat(toAmount);
+
+		if (!isNaN(fAmount) && !isNaN(tAmount)) {
+			if (fAmount > 0) {
+				const tAmount = calculateToAmount();
+				setValue('to_amount', tAmount.toString());
+			} else if (tAmount > 0) {
+				const fAmount = calculateFromAmount();
+				setValue('from_amount', fAmount.toString());
+			}
+		}
+	};
 
 	const selectCustomerFromUserList = () => {
 		dispatch(
@@ -686,7 +756,45 @@ export default function NewDisbursementForm() {
 				</div>
 				<div className="w-full p-24 bg-white shadow-2 rounded">
 					<h4 className="mb-24 font-bold">How much are you sending ?</h4>
-					<div className="flex flex-col gap-24">
+					<div className="flex flex-col gap-12">
+						<div className="flex flex-col items-start justify-between gap-12 md:flex-row">
+							<Controller
+								name="rate"
+								control={control}
+								render={({ field }) => {
+									return (
+										<CurrencyField
+											{...field}
+											label="Exchange rate"
+											error={!!errors.rate}
+											helperText={errors?.rate?.message}
+											variant="outlined"
+											required
+											fullWidth
+											onChange={onRateChange}
+										/>
+									);
+								}}
+							/>
+							<Controller
+								name="fee"
+								control={control}
+								render={({ field }) => {
+									return (
+										<CurrencyField
+											{...field}
+											label="Fees (Percentage)"
+											error={!!errors.fee}
+											helperText={errors?.fee?.message}
+											variant="outlined"
+											required
+											fullWidth
+											onChange={onFeeChange}
+										/>
+									);
+								}}
+							/>
+						</div>
 						<div className="flex flex-col items-start justify-between gap-12 md:flex-row">
 							<Controller
 								name="from_currency"
@@ -714,6 +822,28 @@ export default function NewDisbursementForm() {
 								)}
 							/>
 							<Controller
+								name="from_amount"
+								control={control}
+								render={({ field: { onChange, ...rest } }) => {
+									return (
+										<CurrencyField
+											{...rest}
+											label="The amount to be sent"
+											error={!!errors.from_amount}
+											helperText={errors?.from_amount?.message}
+											variant="outlined"
+											required
+											fullWidth
+											onChange={(e) => {
+												onChange(e);
+												const toAmount = calculateToAmount();
+												setValue('to_amount', toAmount.toString());
+											}}
+										/>
+									);
+								}}
+							/>
+							<Controller
 								name="to_currency"
 								control={control}
 								render={({ field }) => (
@@ -739,71 +869,23 @@ export default function NewDisbursementForm() {
 								)}
 							/>
 							<Controller
-								name="rate"
-								control={control}
-								render={({ field }) => {
-									return (
-										<CurrencyField
-											{...field}
-											label="Exchange rate"
-											error={!!errors.rate}
-											helperText={errors?.rate?.message}
-											variant="outlined"
-											required
-											fullWidth
-										/>
-									);
-								}}
-							/>
-							<Controller
-								name="fee"
-								control={control}
-								render={({ field }) => {
-									return (
-										<CurrencyField
-											{...field}
-											label="Fees"
-											error={!!errors.fee}
-											helperText={errors?.fee?.message}
-											variant="outlined"
-											required
-											fullWidth
-										/>
-									);
-								}}
-							/>
-						</div>
-						<div className="flex flex-col items-start justify-between gap-12 md:flex-row">
-							<Controller
-								name="from_amount"
-								control={control}
-								render={({ field }) => {
-									return (
-										<CurrencyField
-											{...field}
-											label="The amount to be sent"
-											error={!!errors.from_amount}
-											helperText={errors?.from_amount?.message}
-											variant="outlined"
-											required
-											fullWidth
-										/>
-									);
-								}}
-							/>
-							<Controller
 								name="to_amount"
 								control={control}
-								render={({ field }) => {
+								render={({ field: { onChange, ...rest } }) => {
 									return (
 										<CurrencyField
-											{...field}
+											{...rest}
 											label="The amount to be received"
 											error={!!errors.to_amount}
 											helperText={errors?.to_amount?.message}
 											variant="outlined"
 											required
 											fullWidth
+											onChange={(e) => {
+												onChange(e);
+												const fromAmount = calculateFromAmount();
+												setValue('from_amount', fromAmount.toString());
+											}}
 										/>
 									);
 								}}
@@ -1382,7 +1464,7 @@ export default function NewDisbursementForm() {
 								>
 									{countryList.map((country) => (
 										<MenuItem
-											key={`beneficiary_phone_code${country.code}`}
+											key={`bank_phone_code${country.code}`}
 											value={country.dial_code}
 										>
 											{country.name} ({country.dial_code})
@@ -1392,15 +1474,15 @@ export default function NewDisbursementForm() {
 							)}
 						/>
 						<Controller
-							name="beneficiary_phone_no"
+							name="bank_phone_no"
 							control={control}
 							render={({ field }) => (
 								<TextField
 									{...field}
 									label="Phone Number"
 									type="tel"
-									error={!!errors.beneficiary_phone_no}
-									helperText={errors?.beneficiary_phone_no?.message}
+									error={!!errors.bank_phone_no}
+									helperText={errors?.bank_phone_no?.message}
 									variant="outlined"
 									fullWidth
 								/>
@@ -1458,7 +1540,17 @@ export default function NewDisbursementForm() {
 									variant="outlined"
 									required
 									fullWidth
-								/>
+									select
+								>
+									{Object.keys(TransferTypes).map((key) => (
+										<MenuItem
+											key={`transfer-type-${key}`}
+											value={key}
+										>
+											{TransferTypes[key as keyof typeof TransferTypes]}
+										</MenuItem>
+									))}
+								</TextField>
 							)}
 						/>
 						<Controller
@@ -1503,7 +1595,17 @@ export default function NewDisbursementForm() {
 									helperText={errors?.purpose?.message}
 									variant="outlined"
 									fullWidth
-								/>
+									select
+								>
+									{Object.keys(TransferPurposes).map((key) => (
+										<MenuItem
+											key={`purpose-${key}`}
+											value={key}
+										>
+											{TransferPurposes[key as keyof typeof TransferPurposes]}
+										</MenuItem>
+									))}
+								</TextField>
 							)}
 						/>
 						<Controller
@@ -1517,7 +1619,17 @@ export default function NewDisbursementForm() {
 									helperText={errors?.fund_source?.message}
 									variant="outlined"
 									fullWidth
-								/>
+									select
+								>
+									{Object.keys(FundSources).map((key) => (
+										<MenuItem
+											key={`fund-source-${key}`}
+											value={key}
+										>
+											{FundSources[key as keyof typeof FundSources]}
+										</MenuItem>
+									))}
+								</TextField>
 							)}
 						/>
 					</div>
