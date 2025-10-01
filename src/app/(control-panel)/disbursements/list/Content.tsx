@@ -2,22 +2,38 @@ import CopyButton from '@/components/commons/CopyButton';
 import Empty from '@/components/commons/Empty';
 import LoadingBar from '@/components/commons/LoadingBar';
 import StatusLabel from '@/components/commons/StatusLabel';
-import { UserTypes } from '@/data/static-data';
+import { DisbursementStatuses, UserTypes } from '@/data/static-data';
 import apiService from '@/store/apiService';
+import { DisbursementFilter } from '@/types/component';
 import { Disbursement } from '@/types/entity';
 import FuseSvgIcon from '@fuse/core/FuseSvgIcon';
-import { Accordion, AccordionActions, AccordionDetails, AccordionSummary, Typography } from '@mui/material';
+import {
+	Accordion,
+	AccordionActions,
+	AccordionDetails,
+	AccordionSummary,
+	MenuItem,
+	TextField,
+	Typography
+} from '@mui/material';
 import { DateTime } from 'luxon';
 import { useSession } from 'next-auth/react';
-import { useMemo } from 'react';
+import { useMemo, useState } from 'react';
 
 export default function Content() {
+	const [filter, setFilter] = useState<DisbursementFilter>({
+		status: 'all',
+		search: '',
+		start: '',
+		end: ''
+	});
 	const {
 		data: { accessToken, side }
 	} = useSession();
 	const { data: disbursementsData, isLoading } = apiService.useGetDisbursementsQuery({
 		side,
-		accessToken
+		accessToken,
+		filter
 	});
 	const disbursements = useMemo(() => (disbursementsData ?? []) as Disbursement[], [disbursementsData]);
 
@@ -31,8 +47,56 @@ export default function Content() {
 
 	return (
 		<div className="">
-			<div className="flex flex-col gap-16">
-				<div className="w-full mb-24">{/* filter */}</div>
+			<div className="flex flex-col gap-12">
+				<div className="w-full mt-24 bg-white p-12 rounded flex flex-col md:flex-row md:justify-between gap-8 shadow">
+					<div className="w-full flex flex-col gap-4 md:flex-row md:items-center md:gap-16">
+						<Typography>Status</Typography>
+						<TextField
+							select
+							value={filter.status}
+							onChange={(e) => setFilter({ ...filter, status: e.target.value })}
+							fullWidth
+						>
+							{Object.keys(DisbursementStatuses).map((key) => (
+								<MenuItem
+									key={'status-' + key}
+									value={key}
+								>
+									{DisbursementStatuses[key as keyof typeof DisbursementStatuses]}
+								</MenuItem>
+							))}
+						</TextField>
+					</div>
+					<div className="w-full flex flex-col gap-4 md:flex-row md:items-center md:gap-16">
+						<Typography>From</Typography>
+						<TextField
+							type="date"
+							fullWidth
+							value={filter.start}
+							onChange={(e) => setFilter({ ...filter, start: e.target.value })}
+							InputLabelProps={{ shrink: true }}
+						/>
+					</div>
+					<div className="w-full flex flex-col gap-4 md:flex-row md:items-center md:gap-16">
+						<Typography>To</Typography>
+						<TextField
+							type="date"
+							value={filter.end}
+							fullWidth
+							onChange={(e) => setFilter({ ...filter, end: e.target.value })}
+							InputLabelProps={{ shrink: true }}
+						/>
+					</div>
+					<div className="w-full flex flex-col gap-4 md:flex-row md:items-center md:gap-16">
+						<Typography>Search</Typography>
+						<TextField
+							fullWidth
+							placeholder="Search by ID, sender or recipient"
+							value={filter.search}
+							onChange={(e) => setFilter({ ...filter, search: e.target.value })}
+						/>
+					</div>
+				</div>
 				{isLoading ? (
 					<LoadingBar />
 				) : disbursements.length > 0 ? (
@@ -140,6 +204,13 @@ function DisbursementItem({
 					square
 					disableGutters
 					className="bg-gray-50"
+					sx={{ boxShadow: 'none',
+						border: '1px solid',
+						borderColor: 'grey.300',
+						'&:before': {
+							display: 'none'
+						 }
+					 }}
 				>
 					<AccordionSummary>
 						<Typography className="font-bold">Details</Typography>

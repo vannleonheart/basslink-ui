@@ -96,3 +96,12 @@ export const FundSources = {
 	sale_of_assets: 'Sale of Assets',
 	other: 'Other'
 };
+
+export const DisbursementStatuses = {
+	all: 'All',
+	new: 'New',
+	approved: 'Approved',
+	processing: 'Processing',
+	completed: 'Completed',
+	failed: 'Failed'
+};

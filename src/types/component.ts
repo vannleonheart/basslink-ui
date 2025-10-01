@@ -83,3 +83,10 @@ export type DealPropose = {
 	commission_fixed: string;
 	total_received: string;
 };
+
+export type DisbursementFilter = {
+	status?: string;
+	search?: string;
+	start?: string;
+	end?: string;
+};

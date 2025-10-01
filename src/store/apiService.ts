@@ -217,12 +217,13 @@ export const apiService = createApi({
 		}),
 		getDisbursements: build.query({
 			query: (args) => {
-				const { accessToken, side = 'agent' } = args;
+				const { accessToken, side = 'agent', filter = {} } = args;
 				return {
 					url: `/${side}/disbursements`,
 					headers: {
 						Authorization: `Bearer ${accessToken}`
-					}
+					},
+					params: filter
 				};
 			},
 			transformResponse
