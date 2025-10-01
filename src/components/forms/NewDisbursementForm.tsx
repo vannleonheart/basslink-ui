@@ -8,15 +8,9 @@ import { Alert, Checkbox, FormControl, FormControlLabel } from '@mui/material';
 import { Contact, ContactAccount, Currency, User } from '@/types/entity';
 import MenuItem from '@mui/material/MenuItem';
 import { CountryCodeList } from '@/data/country-code';
-import { clientUploadFiles } from '@/utils/apiCall';
 import { useSession } from 'next-auth/react';
-import { ChangeEvent, useMemo, useState } from 'react';
-import Box from '@mui/material/Box';
-import FuseSvgIcon from '@fuse/core/FuseSvgIcon';
-import { lighten } from '@mui/material/styles';
-import UploadedFileItem from '@/components/forms/fields/UploadedFileItem';
+import { ChangeEvent, useMemo } from 'react';
 import apiService from '@/store/apiService';
-import getErrorMessage from '@/data/errors';
 import CurrencyField from './fields/CurrencyField';
 import { useAppDispatch } from '@/store/hooks';
 import { openDialog } from '@fuse/core/FuseDialog/fuseDialogSlice';
@@ -25,10 +19,19 @@ import ContactListDialog from '../dialogs/ContactListDialog';
 import useNavigate from '@fuse/hooks/useNavigate';
 import { ApiResponse } from '@/types/component';
 import { showMessage } from '@fuse/core/FuseMessage/fuseMessageSlice';
-import { FundSources, Gender, IdentityTypes, Occupations, RelationshipTypes, TransferPurposes, TransferTypes, UserTypes } from '@/data/static-data';
+import {
+	FundSources,
+	Gender,
+	IdentityTypes,
+	Occupations,
+	RelationshipTypes,
+	TransferPurposes,
+	TransferTypes,
+	UserTypes
+} from '@/data/static-data';
 import UserListDialog from '../dialogs/UserListDialog';
 import ContactBankAccountListDialog from '../dialogs/ContactBankAccountListDialog';
-import { Trans } from 'react-i18next';
+import FileUploadBar from './fields/FileUploadBar';
 
 const schema = z.object({
 	from_currency: z.string().min(1, 'You must choose the currency'),
@@ -87,7 +90,8 @@ const schema = z.object({
 	transfer_date: z.optional(z.string().or(z.literal(''))),
 	transfer_reference: z.optional(z.string().or(z.literal(''))),
 	rate: z.string().min(1, 'You must enter the exchange rate'),
-	fee: z.string().min(1, 'You must enter the fee'),
+	fee_percent: z.string().min(1, 'You must enter the fee percentage'),
+	fee_fixed: z.string().min(1, 'You must enter the fee fixed amount'),
 	fund_source: z.optional(z.string().or(z.literal(''))),
 	purpose: z.optional(z.string().or(z.literal(''))),
 	notes: z.optional(z.string().or(z.literal(''))),
@@ -95,7 +99,7 @@ const schema = z.object({
 });
 
 export default function NewDisbursementForm() {
-	const { control, formState, handleSubmit, setError, getValues, setValue } = useForm<CreateDisbursementFormData>({
+	const { control, formState, handleSubmit, getValues, setValue } = useForm<CreateDisbursementFormData>({
 		mode: 'onChange',
 		resolver: zodResolver(schema),
 		defaultValues: {
@@ -156,7 +160,8 @@ export default function NewDisbursementForm() {
 			transfer_date: '',
 			transfer_reference: '',
 			rate: '',
-			fee: '',
+			fee_percent: '',
+			fee_fixed: '',
 			fund_source: '',
 			notes: '',
 			purpose: '',
@@ -167,7 +172,6 @@ export default function NewDisbursementForm() {
 	const { isValid, dirtyFields, errors } = formState;
 	const { data } = useSession() ?? {};
 	const { accessToken } = data ?? {};
-	const [uploading, setUploading] = useState(false);
 	const { data: currenciesData } = apiService.useGetCurrenciesQuery({});
 	const currencies = useMemo(() => (currenciesData ?? []) as Currency[], [currenciesData]);
 	const dispatch = useAppDispatch();
@@ -201,10 +205,11 @@ export default function NewDisbursementForm() {
 	const calculateToAmount = () => {
 		const fromAmount = getValues('from_amount') || '0';
 		const rateValue = getValues('rate') || '0';
-		const feeValue = getValues('fee') || '0';
+		const feePercentValue = getValues('fee_percent') || '0';
+		const feeFixedValue = getValues('fee_fixed') || '0';
 		const fAmount = parseFloat(fromAmount);
 		const rValue = parseFloat(rateValue);
-		const fValue = (parseFloat(feeValue) / 100) * fAmount;
+		const fValue = (parseFloat(feePercentValue) / 100) * fAmount + parseFloat(feeFixedValue);
 
 		if (!isNaN(fAmount) && !isNaN(rValue) && !isNaN(fValue)) {
 			return (fAmount - fValue) * rValue;
@@ -216,13 +221,14 @@ export default function NewDisbursementForm() {
 	const calculateFromAmount = () => {
 		const toAmount = getValues('to_amount') || '0';
 		const rateValue = getValues('rate') || '0';
-		const feeValue = getValues('fee') || '0';
+		const feePercentValue = getValues('fee_percent') || '0';
+		const feeFixedValue = getValues('fee_fixed') || '0';
 		const tAmount = parseFloat(toAmount);
 		const rValue = parseFloat(rateValue);
-		const fValue = parseFloat(feeValue);
+		const fValue = (parseFloat(feePercentValue) / 100) * (tAmount / rValue) + parseFloat(feeFixedValue);
 
 		if (!isNaN(tAmount) && !isNaN(rValue) && !isNaN(fValue)) {
-			return tAmount / rValue + (fValue / 100) * (tAmount / rValue);
+			return tAmount / rValue + fValue;
 		}
 
 		return '';
@@ -250,7 +256,8 @@ export default function NewDisbursementForm() {
 
 	const onFeeChange = (e: ChangeEvent<HTMLInputElement>) => {
 		const fee = e.target.value;
-		setValue('fee', fee);
+		setValue(e.target.name as keyof CreateDisbursementFormData, fee);
+
 		const toAmount = getValues('to_amount') || '0';
 		const fromAmount = getValues('from_amount') || '0';
 		const fAmount = parseFloat(fromAmount);
@@ -772,28 +779,49 @@ export default function NewDisbursementForm() {
 											required
 											fullWidth
 											onChange={onRateChange}
+											className="w-full md:w-1/2"
 										/>
 									);
 								}}
 							/>
-							<Controller
-								name="fee"
-								control={control}
-								render={({ field }) => {
-									return (
-										<CurrencyField
-											{...field}
-											label="Fees (Percentage)"
-											error={!!errors.fee}
-											helperText={errors?.fee?.message}
-											variant="outlined"
-											required
-											fullWidth
-											onChange={onFeeChange}
-										/>
-									);
-								}}
-							/>
+							<div className="w-full md:w-1/2 flex flex-col items-start justify-between gap-12 md:flex-row">
+								<Controller
+									name="fee_percent"
+									control={control}
+									render={({ field }) => {
+										return (
+											<CurrencyField
+												{...field}
+												label="Fees (Percentage)"
+												error={!!errors.fee_percent}
+												helperText={errors?.fee_percent?.message}
+												variant="outlined"
+												required
+												fullWidth
+												onChange={onFeeChange}
+											/>
+										);
+									}}
+								/>
+								<Controller
+									name="fee_fixed"
+									control={control}
+									render={({ field }) => {
+										return (
+											<CurrencyField
+												{...field}
+												label="Fees (Fixed)"
+												error={!!errors.fee_fixed}
+												helperText={errors?.fee_fixed?.message}
+												variant="outlined"
+												required
+												fullWidth
+												onChange={onFeeChange}
+											/>
+										);
+									}}
+								/>
+							</div>
 						</div>
 						<div className="flex flex-col items-start justify-between gap-12 md:flex-row">
 							<Controller
@@ -1655,98 +1683,11 @@ export default function NewDisbursementForm() {
 						<Controller
 							name="files"
 							control={control}
-							render={({ field: { onChange } }) => (
-								<div className="w-full flex flex-col">
-									<div className="grid grid-cols-2 gap-12 mb-12">
-										{getValues('files').map((file, index) => {
-											return (
-												<UploadedFileItem
-													key={`file_${index}`}
-													filename={file}
-													onRemove={() => {
-														const newFiles = getValues('files').filter(
-															(_, i) => i !== index
-														);
-														setValue('files', newFiles);
-													}}
-												/>
-											);
-										})}
-									</div>
-									<Box
-										sx={(theme) => ({
-											backgroundColor: lighten(theme.palette.background.default, 0.02),
-											...theme.applyStyles('light', {
-												backgroundColor: lighten(theme.palette.background.default, 0.2)
-											})
-										})}
-										component="label"
-										htmlFor="button-file"
-										className="productImageUpload flex items-center justify-center relative w-full h-128 rounded-lg mb-24 overflow-hidden cursor-pointer shadow hover:shadow-lg"
-									>
-										<input
-											className="hidden"
-											id="button-file"
-											type="file"
-											multiple
-											onChange={async (e) => {
-												function readFileAsync() {
-													setUploading(true);
-
-													return new Promise<void>((resolve, reject) => {
-														const files = e?.target?.files;
-
-														if (!files || !files.length) {
-															return reject('No file selected');
-														}
-
-														clientUploadFiles(Array.from(files), accessToken)
-															.then((result) => {
-																if (result.status === 'success') {
-																	const prevFiles = getValues('files');
-																	const uploadedFiles = result?.data as {
-																		files: string[];
-																	};
-																	const newFiles = [
-																		...prevFiles,
-																		...uploadedFiles.files
-																	];
-
-																	onChange(newFiles);
-
-																	return resolve();
-																} else {
-																	return reject(result.message);
-																}
-															})
-															.catch(reject)
-															.finally(() => {
-																setUploading(false);
-															});
-													});
-												}
-
-												try {
-													await readFileAsync();
-												} catch (error) {
-													setError('root', {
-														type: 'manual',
-														message: getErrorMessage(error?.data?.message ?? error?.message)
-													});
-												}
-											}}
-										/>
-										<div className="flex flex-col items-center gap-4">
-											<FuseSvgIcon
-												size={32}
-												color="action"
-											>
-												heroicons-outline:arrow-up-on-square
-											</FuseSvgIcon>
-											Upload Files
-										</div>
-									</Box>
-								</div>
+							render={({ field }) => (
+								<FileUploadBar
+									value={field.value}
+									onChange={(files) => setValue('files', files)}
+								/>
 							)}
 						/>
 					</div>
@@ -1757,7 +1698,7 @@ export default function NewDisbursementForm() {
 				color="primary"
 				className="mt-24 w-full shadow-2"
 				aria-label="Submit"
-				disabled={_.isEmpty(dirtyFields) || !isValid || submitting || uploading}
+				disabled={_.isEmpty(dirtyFields) || !isValid || submitting}
 				type="submit"
 				size="large"
 			>

@@ -126,7 +126,8 @@ export type CreateDisbursementFormData = {
 	transfer_date: string;
 	transfer_reference?: string;
 	rate?: string;
-	fee?: string;
+	fee_percent?: string;
+	fee_fixed?: string;
 	purpose: string;
 	fund_source: string;
 	notes?: string;

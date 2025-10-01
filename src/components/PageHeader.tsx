@@ -10,7 +10,7 @@ type HeaderProps = {
 };
 
 export default function PageHeader({ title, titleRaw, icon, actions }: HeaderProps) {
-	const isMobile = useThemeMediaQuery((theme) => theme.breakpoints.down('lg'));
+	const isMobile = useThemeMediaQuery((theme) => theme.breakpoints.down('md'));
 
 	return (
 		<div className="p-16 flex items-center justify-between gap-6">

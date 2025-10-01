@@ -2,7 +2,7 @@ import CopyButton from '@/components/commons/CopyButton';
 import Empty from '@/components/commons/Empty';
 import LoadingBar from '@/components/commons/LoadingBar';
 import StatusLabel from '@/components/commons/StatusLabel';
-import { DisbursementStatuses, UserTypes } from '@/data/static-data';
+import { DisbursementStatuses, FundSources, TransferPurposes, UserTypes } from '@/data/static-data';
 import apiService from '@/store/apiService';
 import { DisbursementFilter } from '@/types/component';
 import { Disbursement } from '@/types/entity';
@@ -41,6 +41,22 @@ export default function Content() {
 		const types: Record<string, string> = {};
 		Object.keys(UserTypes).forEach((key) => {
 			types[key] = UserTypes[key];
+		});
+		return types;
+	}, []);
+
+	const purposeTypes = useMemo(() => {
+		const types: Record<string, string> = {};
+		Object.keys(TransferPurposes).forEach((key) => {
+			types[key] = TransferPurposes[key];
+		});
+		return types;
+	}, []);
+
+	const fundSourceTypes = useMemo(() => {
+		const types: Record<string, string> = {};
+		Object.keys(FundSources).forEach((key) => {
+			types[key] = FundSources[key];
 		});
 		return types;
 	}, []);
@@ -105,6 +121,8 @@ export default function Content() {
 							key={disbursement.id}
 							disbursement={disbursement}
 							userTypes={userTypes}
+							purposeTypes={purposeTypes}
+							fundSourceTypes={fundSourceTypes}
 						/>
 					))
 				) : (
@@ -117,10 +135,14 @@ export default function Content() {
 
 function DisbursementItem({
 	disbursement,
-	userTypes
+	userTypes,
+	purposeTypes,
+	fundSourceTypes
 }: {
 	disbursement: Disbursement;
 	userTypes: Record<string, string>;
+	purposeTypes: Record<string, string>;
+	fundSourceTypes: Record<string, string>;
 }) {
 	return (
 		<div className="p-12 border-b-1 cursor-pointer bg-white rounded border-gray-500 hover:shadow-md">
@@ -144,22 +166,22 @@ function DisbursementItem({
 								className="font-bold"
 								fontSize={14}
 							>
-								{disbursement?.target_account?.bank_name}
+								{disbursement?.to_bank_name}
 							</Typography>
 							<div className="flex gap-8 items-center">
 								<Typography
 									className="font-medium"
 									fontSize={12}
 								>
-									{disbursement?.target_account?.no}
+									{disbursement?.to_bank_account_no}
 								</Typography>
-								<CopyButton value={disbursement?.target_account?.no || ''} />
+								<CopyButton value={disbursement?.to_bank_account_no || ''} />
 							</div>
 							<Typography
 								className="font-medium"
 								fontSize={12}
 							>
-								{disbursement?.target_account?.owner_name}
+								{disbursement?.to_bank_account_name}
 							</Typography>
 						</div>
 					</div>
@@ -204,15 +226,16 @@ function DisbursementItem({
 					square
 					disableGutters
 					className="bg-gray-50"
-					sx={{ boxShadow: 'none',
+					sx={{
+						boxShadow: 'none',
 						border: '1px solid',
 						borderColor: 'grey.300',
 						'&:before': {
 							display: 'none'
-						 }
-					 }}
+						}
+					}}
 				>
-					<AccordionSummary>
+					<AccordionSummary expandIcon={<FuseSvgIcon>heroicons-outline:chevron-down</FuseSvgIcon>}>
 						<Typography className="font-bold">Details</Typography>
 					</AccordionSummary>
 					<AccordionDetails>
@@ -224,13 +247,12 @@ function DisbursementItem({
 										<div className="flex gap-4 items-center items-center justify-between">
 											<Typography>Type</Typography>
 											<Typography className="font-medium">
-												{userTypes[disbursement.user?.user_type] ||
-													disbursement.user?.user_type}
+												{userTypes[disbursement.from_type] || disbursement.from_type}
 											</Typography>
 										</div>
 										<div className="flex gap-4 items-center items-center justify-between">
 											<Typography>Name</Typography>
-											<Typography className="font-medium">{disbursement.user?.name}</Typography>
+											<Typography className="font-medium">{disbursement.from_name}</Typography>
 										</div>
 									</div>
 								</div>
@@ -240,15 +262,12 @@ function DisbursementItem({
 										<div className="flex gap-4 items-center items-center justify-between">
 											<Typography>Type</Typography>
 											<Typography className="font-medium">
-												{userTypes[disbursement.contact?.contact_type] ||
-													disbursement.contact?.contact_type}
+												{userTypes[disbursement.to_type] || disbursement.to_type}
 											</Typography>
 										</div>
 										<div className="flex gap-4 items-center items-center justify-between">
 											<Typography>Name</Typography>
-											<Typography className="font-medium">
-												{disbursement.contact?.name}
-											</Typography>
+											<Typography className="font-medium">{disbursement.to_name}</Typography>
 										</div>
 									</div>
 								</div>
@@ -260,19 +279,39 @@ function DisbursementItem({
 								</div>
 								<div className="bg-gray-200 p-12 rounded flex flex-row gap-4 justify-between items-center">
 									<Typography className="font-bold">Fee:</Typography>
-									<Typography>{disbursement.fee_amount}</Typography>
+									<Typography>{disbursement.fee_total}</Typography>
 								</div>
 							</div>
 							<div className="grid grid-cols-1 md:grid-cols-2 gap-16">
 								<div className="bg-gray-200 p-12 rounded flex flex-col gap-8">
 									<Typography className="font-bold">Purpose:</Typography>
-									<Typography>{disbursement.purpose}</Typography>
+									<Typography>
+										{purposeTypes[disbursement.purpose] || disbursement.purpose}
+									</Typography>
 								</div>
 								<div className="bg-gray-200 p-12 rounded flex flex-col gap-8">
 									<Typography className="font-bold">Fund Source:</Typography>
-									<Typography>{disbursement.fund_source}</Typography>
+									<Typography>
+										{fundSourceTypes[disbursement.fund_source] || disbursement.fund_source}
+									</Typography>
 								</div>
 							</div>
+							{disbursement.attachments && disbursement.attachments.length > 0 && (
+								<div className="w-full bg-gray-200 p-12 rounded flex flex-col gap-8">
+									<Typography className="font-bold">Attachments:</Typography>
+									{disbursement.attachments.map((attachment) => (
+										<a
+											key={attachment.id}
+											href={attachment.attachment}
+											target="_blank"
+											rel="noopener noreferrer"
+											className="text-blue-600 hover:underline break-all"
+										>
+											{attachment.attachment}
+										</a>
+									))}
+								</div>
+							)}
 						</div>
 					</AccordionDetails>
 					<AccordionActions>
