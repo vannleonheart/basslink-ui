@@ -9,7 +9,7 @@ type EmptyProps = {
 
 export default function Empty({ text, fontSize = 16, color = 'grey', fontWeight = 'bold' }: EmptyProps) {
 	return (
-		<div className="flex items-center justify-center min-h-full">
+		<div className="flex items-center justify-center w-full h-full min-h-[200px]">
 			<Typography
 				fontWeight={fontWeight}
 				fontSize={fontSize}

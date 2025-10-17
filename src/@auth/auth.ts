@@ -5,15 +5,10 @@ import { UnstorageAdapter } from '@auth/unstorage-adapter';
 import type { NextAuthConfig } from 'next-auth';
 import type { Provider } from 'next-auth/providers';
 import Credentials from 'next-auth/providers/credentials';
-import {
-	adminAuthSignin,
-	adminGetProfile,
-	agentAuthSignin,
-	agentGetProfile,
-	clientAuthSignin,
-	clientGetProfile
-} from '@/utils/apiCall';
-import { AdminUser, AgentUser, ApiResponse, SignInFormData, SigninResponse, User } from '@/types/entity';
+import { adminAuthSignin, adminGetProfile, agentAuthSignin, agentGetProfile } from '@/utils/apiCall';
+import { ApiResponse } from '@/types/component';
+import { SignInFormData, SigninResponse } from '@/types/form';
+import { AdminUser, AgentUser } from '@/types/entity';
 
 const storage = createStorage({
 	driver: memoryDriver()
@@ -40,12 +35,6 @@ export const providers: Provider[] = [
 
 				switch (as) {
 					default:
-						response = await clientAuthSignin({
-							username,
-							password
-						} as SignInFormData);
-						break;
-					case 'agent':
 						response = await agentAuthSignin({
 							username,
 							password
@@ -110,12 +99,6 @@ const config = {
 
 					switch (token.as) {
 						default:
-							response = await clientGetProfile(session.accessToken);
-							session.db = response.data as User;
-							session.db.as = `${token.as}`;
-							session.as = session.db.as;
-							break;
-						case 'agent':
 							response = await agentGetProfile(session.accessToken);
 							session.db = response.data as AgentUser;
 							session.db.as = `${token.as}.${session.db?.role}`;

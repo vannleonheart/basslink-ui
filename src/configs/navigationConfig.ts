@@ -2,25 +2,25 @@ import { FuseNavItemType } from '@fuse/core/FuseNavigation/types/FuseNavItemType
 
 const navigationConfig: FuseNavItemType[] = [
 	{
-		id: 'sidebar-menu-disbursements',
-		title: 'Pengiriman Dana',
+		id: 'sidebar-menu-remittances',
+		title: 'Kirim Dana',
 		type: 'collapse',
 		icon: 'heroicons-solid:banknotes',
 		auth: true,
 		children: [
 			{
-				id: 'sidebar-menu-disbursement-list',
+				id: 'sidebar-menu-remittance-list',
 				title: 'Daftar Pengiriman',
 				type: 'item',
-				url: '/disbursements/list',
+				url: '/remittances/list',
 				end: true,
 				auth: true
 			},
 			{
-				id: 'sidebar-menu-new-disbursement',
+				id: 'sidebar-menu-new-remittance',
 				title: 'Kirim Dana',
 				type: 'item',
-				url: '/disbursements/new',
+				url: '/remittances/new',
 				end: true,
 				auth: 'agent'
 			}
@@ -46,7 +46,7 @@ const navigationConfig: FuseNavItemType[] = [
 				id: 'sidebar-menu-customer-list',
 				title: 'Daftar Pengirim',
 				type: 'item',
-				url: '/customers/list',
+				url: '/senders/list',
 				end: true,
 				auth: ['agent', 'admin']
 			},
@@ -54,7 +54,7 @@ const navigationConfig: FuseNavItemType[] = [
 				id: 'sidebar-menu-new-customer',
 				title: 'Tambah Pengirim',
 				type: 'item',
-				url: '/customers/new',
+				url: '/senders/new',
 				end: true,
 				auth: 'agent'
 			}
@@ -71,7 +71,7 @@ const navigationConfig: FuseNavItemType[] = [
 				id: 'sidebar-menu-contact-list',
 				title: 'Daftar Penerima',
 				type: 'item',
-				url: '/contacts/list',
+				url: '/recipients/list',
 				end: true,
 				auth: ['agent', 'admin']
 			},
@@ -79,7 +79,7 @@ const navigationConfig: FuseNavItemType[] = [
 				id: 'sidebar-menu-new-contact',
 				title: 'Tambah Penerima',
 				type: 'item',
-				url: '/contacts/new',
+				url: '/recipients/new',
 				end: true,
 				auth: 'agent'
 			}

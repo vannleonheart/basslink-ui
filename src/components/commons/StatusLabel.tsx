@@ -76,7 +76,7 @@ export default function StatusLabel({ status, text = '', size = 'medium', title 
 	}
 
 	return (
-		<div className={clsx(padding, 'rounded', bgClass)}>
+		<div className={clsx(padding, 'rounded', bgClass, 'inline-block', 'text-center')}>
 			<Typography
 				component="div"
 				fontSize={fontSize}

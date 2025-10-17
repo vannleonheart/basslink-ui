@@ -52,55 +52,6 @@ export const apiService = createApi({
 			},
 			transformResponse
 		}),
-		getClients: build.query({
-			query: (args) => {
-				const { side, accessToken } = args;
-				return {
-					url: `/${side}/clients`,
-					headers: {
-						Authorization: `Bearer ${accessToken}`
-					}
-				};
-			},
-			transformResponse
-		}),
-		getDeals: build.query({
-			query: (args) => {
-				const { side, accessToken, filter } = args;
-				return {
-					url: `/${side}/deals`,
-					params: filter,
-					headers: {
-						Authorization: `Bearer ${accessToken}`
-					}
-				};
-			},
-			transformResponse
-		}),
-		getDealById: build.query({
-			query: (args) => {
-				const { side, accessToken, id } = args;
-				return {
-					url: `/${side}/deals/${id}`,
-					headers: {
-						Authorization: `Bearer ${accessToken}`
-					}
-				};
-			},
-			transformResponse
-		}),
-		getDealMessagesByDealId: build.query({
-			query: (args) => {
-				const { side, accessToken, id } = args;
-				return {
-					url: `/${side}/deals/${id}/messages`,
-					headers: {
-						Authorization: `Bearer ${accessToken}`
-					}
-				};
-			},
-			transformResponse
-		}),
 		getUsers: build.query({
 			query: (args) => {
 				const { side, accessToken } = args;
@@ -215,11 +166,11 @@ export const apiService = createApi({
 				};
 			}
 		}),
-		getDisbursements: build.query({
+		getRemittances: build.query({
 			query: (args) => {
 				const { accessToken, side = 'agent', filter = {} } = args;
 				return {
-					url: `/${side}/disbursements`,
+					url: `/${side}/remittances`,
 					headers: {
 						Authorization: `Bearer ${accessToken}`
 					},
@@ -228,68 +179,11 @@ export const apiService = createApi({
 			},
 			transformResponse
 		}),
-		createDisbursement: build.mutation({
-			query: (args) => {
-				const { accessToken, data = {}, side = 'agent' } = args;
-
-				return {
-					url: `/${side}/disbursements`,
-					method: 'POST',
-					body: jsonify(data),
-					headers: {
-						'Content-Type': 'application/json',
-						Authorization: `Bearer ${accessToken}`
-					}
-				};
-			}
-		}),
-		createCustomer: build.mutation({
-			query: (args) => {
-				const { accessToken, data = {}, side = 'agent' } = args;
-
-				return {
-					url: `/${side}/users`,
-					method: 'POST',
-					body: jsonify(data),
-					headers: {
-						'Content-Type': 'application/json',
-						Authorization: `Bearer ${accessToken}`
-					}
-				};
-			}
-		}),
-		updateCustomer: build.mutation({
-			query: (args) => {
-				const { accessToken, data = {}, side = 'agent', id } = args;
-
-				return {
-					url: `/${side}/users/${id}`,
-					method: 'PUT',
-					body: jsonify(data),
-					headers: {
-						'Content-Type': 'application/json',
-						Authorization: `Bearer ${accessToken}`
-					}
-				};
-			}
-		}),
-		getCustomers: build.query({
-			query: (args) => {
-				const { accessToken, side = 'agent' } = args;
-				return {
-					url: `/${side}/users`,
-					headers: {
-						Authorization: `Bearer ${accessToken}`
-					}
-				};
-			},
-			transformResponse
-		}),
-		getCustomer: build.query({
+		getRemittanceById: build.query({
 			query: (args) => {
 				const { accessToken, side = 'agent', id } = args;
 				return {
-					url: `/${side}/users/${id}`,
+					url: `/${side}/remittances/${id}`,
 					headers: {
 						Authorization: `Bearer ${accessToken}`
 					}
@@ -297,12 +191,12 @@ export const apiService = createApi({
 			},
 			transformResponse
 		}),
-		createContact: build.mutation({
+		createRemittance: build.mutation({
 			query: (args) => {
 				const { accessToken, data = {}, side = 'agent' } = args;
 
 				return {
-					url: `/${side}/contacts`,
+					url: `/${side}/remittances`,
 					method: 'POST',
 					body: jsonify(data),
 					headers: {
@@ -312,12 +206,27 @@ export const apiService = createApi({
 				};
 			}
 		}),
-		updateContact: build.mutation({
+		createSender: build.mutation({
+			query: (args) => {
+				const { accessToken, data = {}, side = 'agent' } = args;
+
+				return {
+					url: `/${side}/senders`,
+					method: 'POST',
+					body: jsonify(data),
+					headers: {
+						'Content-Type': 'application/json',
+						Authorization: `Bearer ${accessToken}`
+					}
+				};
+			}
+		}),
+		updateSender: build.mutation({
 			query: (args) => {
 				const { accessToken, data = {}, side = 'agent', id } = args;
 
 				return {
-					url: `/${side}/contacts/${id}`,
+					url: `/${side}/senders/${id}`,
 					method: 'PUT',
 					body: jsonify(data),
 					headers: {
@@ -327,11 +236,11 @@ export const apiService = createApi({
 				};
 			}
 		}),
-		getContacts: build.query({
+		getSenders: build.query({
 			query: (args) => {
 				const { accessToken, side = 'agent' } = args;
 				return {
-					url: `/${side}/contacts`,
+					url: `/${side}/senders`,
 					headers: {
 						Authorization: `Bearer ${accessToken}`
 					}
@@ -339,11 +248,11 @@ export const apiService = createApi({
 			},
 			transformResponse
 		}),
-		getContact: build.query({
+		getSender: build.query({
 			query: (args) => {
-				const { accessToken, id, side = 'agent' } = args;
+				const { accessToken, side = 'agent', id } = args;
 				return {
-					url: `/${side}/contacts/${id}`,
+					url: `/${side}/senders/${id}`,
 					headers: {
 						Authorization: `Bearer ${accessToken}`
 					}
@@ -351,11 +260,53 @@ export const apiService = createApi({
 			},
 			transformResponse
 		}),
-		getContactAccounts: build.query({
+		createRecipient: build.mutation({
+			query: (args) => {
+				const { accessToken, data = {}, side = 'agent' } = args;
+
+				return {
+					url: `/${side}/recipients`,
+					method: 'POST',
+					body: jsonify(data),
+					headers: {
+						'Content-Type': 'application/json',
+						Authorization: `Bearer ${accessToken}`
+					}
+				};
+			}
+		}),
+		updateRecipient: build.mutation({
+			query: (args) => {
+				const { accessToken, data = {}, side = 'agent', id } = args;
+
+				return {
+					url: `/${side}/recipients/${id}`,
+					method: 'PUT',
+					body: jsonify(data),
+					headers: {
+						'Content-Type': 'application/json',
+						Authorization: `Bearer ${accessToken}`
+					}
+				};
+			}
+		}),
+		getRecipients: build.query({
+			query: (args) => {
+				const { accessToken, side = 'agent' } = args;
+				return {
+					url: `/${side}/recipients`,
+					headers: {
+						Authorization: `Bearer ${accessToken}`
+					}
+				};
+			},
+			transformResponse
+		}),
+		getRecipient: build.query({
 			query: (args) => {
 				const { accessToken, id, side = 'agent' } = args;
 				return {
-					url: `/${side}/contacts/${id}/accounts`,
+					url: `/${side}/recipients/${id}`,
 					headers: {
 						Authorization: `Bearer ${accessToken}`
 					}

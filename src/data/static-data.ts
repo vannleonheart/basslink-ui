@@ -69,7 +69,7 @@ export const RelationshipTypes = {
 };
 
 export const TransferTypes = {
-	domestic: 'Dalam Negeri',
+	domestic: 'Domestik',
 	international: 'Internasional'
 };
 
@@ -104,11 +104,20 @@ export const FundSources = {
 	other: 'Lainnya'
 };
 
-export const DisbursementStatuses = {
-	all: 'Semua',
+export const RemittanceStatuses = {
+	all: 'Semua Status',
 	new: 'Baru',
 	approved: 'Disetujui',
 	processing: 'Sedang Diproses',
 	completed: 'Selesai',
 	failed: 'Gagal'
+};
+
+export const PaymentMethods = {
+	cash: 'Tunai',
+	bank_transfer: 'Transfer Bank',
+	credit_card: 'Kartu Kredit',
+	debit_card: 'Kartu Debit',
+	e_wallet: 'Dompet Digital',
+	other: 'Lainnya'
 };

@@ -10,16 +10,16 @@ import Link from '@fuse/core/Link';
 import Button from '@mui/material/Button';
 import { signIn } from 'next-auth/react';
 import { Alert } from '@mui/material';
-import { SignInFormData } from '@/types/entity';
 import { redirect } from 'next/navigation';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import PasswordField from '@/components/forms/fields/PasswordField';
 import getErrorMessage from '@/data/errors';
+import { SignInFormData } from '@/types/form';
 
 const schema = z.object({
 	username: z.string().min(1, 'You must enter a username'),
 	password: z.string().min(1, 'Please enter your password.'),
-	remember: z.boolean().optional().default(false)
+	remember: z.boolean()
 });
 
 function AgentSignInForm() {
@@ -34,6 +34,18 @@ function AgentSignInForm() {
 	});
 	const { isValid, dirtyFields, errors } = formState;
 	const [submitting, setSubmitting] = useState(false);
+
+	useEffect(() => {
+		// Prefill username field if "Remember me" was checked
+		if (typeof window !== 'undefined') {
+			const rememberedUsername = localStorage.getItem('agentUsername');
+
+			if (rememberedUsername) {
+				setValue('username', rememberedUsername);
+				setValue('remember', true);
+			}
+		}
+	}, [setValue]);
 
 	async function onSubmit(formData: SignInFormData) {
 		if (submitting) {
@@ -53,6 +65,15 @@ function AgentSignInForm() {
 			setSubmitting(false);
 			setError('root', { type: 'manual', message: getErrorMessage(result?.code) });
 			return false;
+		}
+
+		// Remember username if "Remember me" is checked
+		if (typeof window !== 'undefined') {
+			if (formData.remember) {
+				localStorage.setItem('agentUsername', formData.username);
+			} else {
+				localStorage.removeItem('agentUsername');
+			}
 		}
 
 		return redirect('/dashboard');
@@ -115,14 +136,16 @@ function AgentSignInForm() {
 				<Controller
 					name="remember"
 					control={control}
-					render={({ field }) => (
+					render={({ field: { onChange, value, ...rest } }) => (
 						<FormControl>
 							<FormControlLabel
 								label="Remember me"
 								control={
 									<Checkbox
 										size="small"
-										{...field}
+										{...rest}
+										checked={value}
+										onChange={(e) => onChange(e.target.checked)}
 									/>
 								}
 							/>

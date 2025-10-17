@@ -40,7 +40,7 @@ export default function LoadingBar({
 	}
 
 	return (
-		<div className="flex items-center justify-center min-h-full">
+		<div className="flex items-center justify-center w-full h-full min-h-[200px]">
 			<div className="flex gap-6 items-center bg-white px-12 py-6 rounded-md opacity-70">
 				<CircularProgress size={csize} />
 				<Typography fontSize={fsize}>{text}</Typography>

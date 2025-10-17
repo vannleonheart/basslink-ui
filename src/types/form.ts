@@ -66,64 +66,53 @@ export type ResendEmailVerificationFormData = {
 	email: string;
 };
 
-export type CreateDisbursementFormData = {
+export type CreateRemittanceFormData = {
 	from_currency: string;
 	from_amount: string;
 	to_currency: string;
 	to_amount: string;
-	from_customer: string;
-	customer_type?: string;
-	customer_name?: string;
-	customer_gender?: string;
-	customer_birthdate?: string;
-	customer_citizenship?: string;
-	customer_identity_type?: string;
-	customer_identity_no?: string;
-	customer_country?: string;
-	customer_region?: string;
-	customer_city?: string;
-	customer_address?: string;
-	customer_email?: string;
-	customer_phone_code?: string;
-	customer_phone_no?: string;
-	customer_occupation?: string;
-	customer_notes?: string;
-	customer_update?: boolean;
-	to_contact: string;
-	beneficiary_type?: string;
-	beneficiary_name?: string;
-	beneficiary_gender?: string;
-	beneficiary_birthdate?: string;
-	beneficiary_citizenship?: string;
-	beneficiary_identity_type?: string;
-	beneficiary_identity_no?: string;
-	beneficiary_country?: string;
-	beneficiary_region?: string;
-	beneficiary_city?: string;
-	beneficiary_address?: string;
-	beneficiary_email?: string;
-	beneficiary_phone_code?: string;
-	beneficiary_phone_no?: string;
-	beneficiary_occupation?: string;
-	beneficiary_relationship?: string;
-	beneficiary_notes?: string;
-	beneficiary_update?: boolean;
-	to_account: string;
-	bank_name?: string;
-	bank_account_no?: string;
-	bank_account_name?: string;
-	bank_country?: string;
-	bank_swift_code?: string;
-	bank_code?: string;
-	bank_address?: string;
-	bank_email?: string;
-	bank_phone_code?: string;
-	bank_phone_no?: string;
-	bank_website?: string;
-	bank_notes?: string;
-	bank_update?: boolean;
+	sender_id?: string;
+	sender_type: string;
+	sender_name: string;
+	sender_gender: string;
+	sender_birthdate: string;
+	sender_citizenship: string;
+	sender_identity_type: string;
+	sender_identity_no: string;
+	sender_registered_country: string;
+	sender_registered_region: string;
+	sender_registered_city: string;
+	sender_registered_address: string;
+	sender_registered_zip_code: string;
+	sender_country: string;
+	sender_region: string;
+	sender_city: string;
+	sender_address: string;
+	sender_zip_code: string;
+	sender_contact: string;
+	sender_occupation: string;
+	sender_pep_status?: string;
+	sender_notes?: string;
+	sender_update?: boolean;
+	recipient_id?: string;
+	recipient_type: string;
+	recipient_relationship: string;
+	recipient_name: string;
+	recipient_country: string;
+	recipient_region: string;
+	recipient_city: string;
+	recipient_address: string;
+	recipient_zip_code: string;
+	recipient_contact: string;
+	recipient_pep_status?: string;
+	recipient_bank_name: string;
+	recipient_bank_code: string;
+	recipient_bank_account_no: string;
+	recipient_bank_account_owner: string;
+	recipient_notes?: string;
+	recipient_update?: boolean;
 	transfer_type: string;
-	transfer_date: string;
+	payment_method: string;
 	transfer_reference?: string;
 	rate?: string;
 	fee_percent?: string;
@@ -134,30 +123,33 @@ export type CreateDisbursementFormData = {
 	files: string[];
 };
 
-export type CreateCustomerFormData = {
-	customer_type?: string;
-	customer_name?: string;
-	customer_gender?: string;
-	customer_birthdate?: string;
-	customer_citizenship?: string;
-	customer_identity_type?: string;
-	customer_identity_no?: string;
-	customer_country?: string;
-	customer_region?: string;
-	customer_city?: string;
-	customer_address?: string;
-	customer_email?: string;
-	customer_phone_code?: string;
-	customer_phone_no?: string;
-	customer_occupation?: string;
-	customer_notes?: string;
-	customer_documents?: CreateCustomerDocumentFormData[];
-	username?: string;
-	password?: string;
-	password_confirmation?: string;
+export type CreateSenderFormData = {
+	sender_type: string;
+	sender_name: string;
+	sender_gender: string;
+	sender_birthdate: string;
+	sender_citizenship: string;
+	sender_identity_type: string;
+	sender_identity_no: string;
+	sender_registered_country: string;
+	sender_registered_region: string;
+	sender_registered_city: string;
+	sender_registered_address: string;
+	sender_registered_zip_code: string;
+	sender_country: string;
+	sender_region: string;
+	sender_city: string;
+	sender_address: string;
+	sender_zip_code: string;
+	sender_contact: string;
+	sender_occupation: string;
+	sender_pep_status: string;
+	sender_notes: string;
+	sender_documents: CreateSenderDocumentFormData[];
 };
 
-export type CreateCustomerDocumentFormData = {
+export type CreateSenderDocumentFormData = {
+	id?: string;
 	document_type: string;
 	document_data: string;
 	notes?: string;
@@ -174,55 +166,30 @@ export type UpdateRatesFormData = {
 	spread_fixed: number;
 };
 
-export type AcceptDealFormData = {
-	company_id: string;
-	due_date: string;
+export type CreateRecipientFormData = {
+	sender_id?: string;
+	recipient_type: string;
+	recipient_relationship: string;
+	recipient_name: string;
+	recipient_country: string;
+	recipient_region: string;
+	recipient_city: string;
+	recipient_address: string;
+	recipient_zip_code: string;
+	recipient_contact: string;
+	recipient_pep_status?: string;
+	recipient_bank_name: string;
+	recipient_bank_code: string;
+	recipient_bank_account_no: string;
+	recipient_bank_account_owner: string;
+	recipient_notes?: string;
+	recipient_documents?: CreateRecipientDocumentFormData[];
 };
 
-export type CreateContactFormData = {
-	contact_type?: string;
-	contact_name?: string;
-	contact_gender?: string;
-	contact_birthdate?: string;
-	contact_citizenship?: string;
-	contact_identity_type?: string;
-	contact_identity_no?: string;
-	contact_country?: string;
-	contact_region?: string;
-	contact_city?: string;
-	contact_address?: string;
-	contact_email?: string;
-	contact_phone_code?: string;
-	contact_phone_no?: string;
-	contact_occupation?: string;
-	contact_notes?: string;
-	contact_documents?: CreateContactDocumentFormData[];
-	contact_accounts?: CreateContactAccountFormData[];
-};
-
-export type CreateContactDocumentFormData = {
+export type CreateRecipientDocumentFormData = {
 	id?: string;
 	document_type: string;
 	document_data: string;
 	notes?: string;
 	is_verified: boolean;
 };
-
-export type CreateContactAccountFormData = {
-	id?: string;
-	bank_name?: string;
-	bank_account_no?: string;
-	bank_account_name?: string;
-	bank_country?: string;
-	bank_swift_code?: string;
-	bank_code?: string;
-	bank_address?: string;
-	bank_email?: string;
-	bank_phone_code?: string;
-	bank_phone_no?: string;
-	bank_website?: string;
-	bank_notes?: string;
-};
-
-
-export type DisbursementChatFormData = {};

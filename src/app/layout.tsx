@@ -15,7 +15,7 @@ export const metadata = await generateMetadata({
 	description: 'BassLink - Connecting businesses beyond borders',
 	cardImage: '/card.png',
 	robots: 'follow, index',
-	favicon: '/favicon.ico',
+	favicon: '/assets/images/logo/basslink-logo.png',
 	url: 'https://basslink.id'
 });
 
@@ -49,7 +49,8 @@ export default async function RootLayout({
 				/>
 				<link
 					rel="shortcut icon"
-					href="/favicon.ico"
+					href="/assets/images/logo/basslink-logo.png"
+					type="image/x-icon"
 				/>
 				<link
 					href="/assets/fonts/material-design-icons/MaterialIconsOutlined.css"

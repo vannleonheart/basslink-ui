@@ -1,3 +1,5 @@
+export type AllUser = AdminUser | AgentUser;
+
 export type AdminUser = {
 	id: string;
 	username: string;
@@ -49,45 +51,43 @@ export type AgentUser = {
 	as?: string;
 };
 
-export type User = {
+export type Sender = {
 	id: string;
-	agent_id: string;
-	username: string;
-	user_type: string;
+	sender_type: string;
 	name: string;
 	gender?: string;
 	birthdate?: string;
 	citizenship?: string;
 	identity_type?: string;
 	identity_no?: string;
+	registered_country?: string;
+	registered_region?: string;
+	registered_city?: string;
+	registered_address?: string;
+	registered_zip_code?: string;
 	country?: string;
 	region?: string;
 	city?: string;
 	address?: string;
-	email: string;
-	phone_code: string;
-	phone_no: string;
+	zip_code?: string;
+	contact: string;
 	occupation?: string;
+	pep_status?: string;
 	notes?: string;
-	is_verified: boolean;
-	email_verified: boolean;
-	phone_verified: boolean;
-	is_enable: boolean;
 	created: number;
+	created_by: string;
 	updated?: number;
-	agent?: Agent;
-	image?: string;
-	as?: string;
-	documents?: UserDocument[];
+	updated_by?: string;
+	documents?: SenderDocument[];
 };
 
-export type Disbursement = {
+export type Remittance = {
 	id: string;
 	agent_id: string;
-	user_id?: string;
+	sender_id?: string;
 	from_currency: string;
 	from_amount: number;
-	from_type: string;
+	from_sender_type: string;
 	from_name: string;
 	from_gender?: string;
 	from_birthdate?: string;
@@ -95,47 +95,37 @@ export type Disbursement = {
 	from_identity_type: string;
 	from_identity_no: string;
 	from_occupation?: string;
+	from_registered_country?: string;
+	from_registered_region?: string;
+	from_registered_city?: string;
+	from_registered_address?: string;
+	from_registered_zip_code?: string;
 	from_country: string;
 	from_region?: string;
 	from_city?: string;
 	from_address?: string;
-	from_email?: string;
-	from_phone_code?: string;
-	from_phone_no?: string;
+	from_zip_code?: string;
+	from_contact: string;
+	from_pep_status?: string;
 	from_notes?: string;
-	to_contact: string;
+	recipient_id: string;
 	to_currency: string;
 	to_amount: number;
-	to_type: string;
+	to_recipient_type: string;
+	to_relationship: string;
 	to_name: string;
-	to_gender?: string;
-	to_birthdate?: string;
-	to_citizenship: string;
-	to_identity_type: string;
-	to_identity_no?: string;
-	to_occupation?: string;
 	to_country: string;
 	to_region?: string;
 	to_city?: string;
 	to_address?: string;
-	to_email?: string;
-	to_phone_code?: string;
-	to_phone_no?: string;
-	to_notes?: string;
-	to_relationship?: string;
-	to_account: string;
-	to_bank_name?: string;
-	to_bank_account_no?: string;
-	to_bank_account_name?: string;
-	to_bank_country: string;
+	to_zip_code: string;
+	to_contact?: string;
+	to_pep_status?: string;
+	to_bank_name: string;
 	to_bank_code?: string;
-	to_bank_swift?: string;
-	to_bank_address?: string;
-	to_bank_email?: string;
-	to_bank_phone_code?: string;
-	to_bank_phone_no?: string;
-	to_bank_website?: string;
-	to_bank_notes?: string;
+	to_bank_account_no?: string;
+	to_bank_account_owner?: string;
+	to_notes?: string;
 	rate_currency: string;
 	rate: number;
 	fee_currency: string;
@@ -155,10 +145,10 @@ export type Disbursement = {
 	updated?: number;
 	source_currency?: Currency;
 	target_currency?: Currency;
-	attachments?: DisbursementAttachment[];
+	attachments?: RemittanceAttachment[];
 };
 
-export type UserType = User | AgentUser | AdminUser;
+export type UserType = AgentUser | AdminUser;
 
 export type Rate = {
 	source: string;
@@ -180,36 +170,33 @@ export type Currency = {
 	is_active: boolean;
 };
 
-export type Contact = {
+export type Recipient = {
 	id: string;
-	agent_id: string;
-	contact_type: string;
+	sender_id: string;
+	recipient_type: string;
+	relationship: string;
 	name: string;
-	gender?: string;
-	birthdate?: string;
-	citizenship?: string;
-	identity_type?: string;
-	identity_no?: string;
 	country?: string;
 	region?: string;
 	city?: string;
 	address?: string;
-	email?: string;
-	phone_code?: string;
-	phone_no?: string;
-	occupation?: string;
+	zip_code?: string;
+	contact?: string;
+	pep_status?: string;
+	bank_name?: string;
+	bank_code?: string;
+	bank_account_no?: string;
+	bank_account_owner?: string;
 	notes?: string;
 	is_verified: boolean;
 	created: number;
 	updated?: number;
-	documents?: ContactDocument[];
-	accounts?: ContactAccount[];
-	relations?: ContactRelation[];
+	documents?: RecipientDocument[];
 };
 
-export type ContactDocument = {
+export type RecipientDocument = {
 	id: string;
-	contact_id: string;
+	recipient_id: string;
 	document_type: string;
 	document_data: string;
 	notes?: string;
@@ -218,46 +205,17 @@ export type ContactDocument = {
 	updated?: number;
 };
 
-export type ContactAccount = {
+export type RemittanceAttachment = {
 	id: string;
-	contact_id: string;
-	account_type: string;
-	bank_id: string;
-	bank_name: string;
-	bank_code?: string;
-	bank_swift?: string;
-	owner_name: string;
-	no: string;
-	country?: string;
-	address?: string;
-	email?: string;
-	website?: string;
-	phone_code?: string;
-	phone_no?: string;
-	notes?: string;
-	created: number;
-	updated?: number;
-};
-
-export type ContactRelation = {
-	contact_id: string;
-	user_id: string;
-	relation: string;
-	updated: number;
-};
-
-export type DisbursementAttachment = {
-	id: string;
-	disbursement_id: string;
+	remittance_id: string;
 	attachment: string;
 	submit_by: string;
-	submit_owner: string;
 	submit_time: number;
 };
 
-export type UserDocument = {
+export type SenderDocument = {
 	id: string;
-	user_id: string;
+	sender_id: string;
 	document_type: string;
 	document_data: string;
 	notes?: string;

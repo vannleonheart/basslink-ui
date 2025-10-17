@@ -1,9 +1,9 @@
 import { useSession, signOut } from 'next-auth/react';
 import { useMemo } from 'react';
-import { User } from '@/types/entity';
+import { AllUser } from '@/types/entity';
 
 type useUser = {
-	data: User | null;
+	data: AllUser | null;
 	as: string;
 	isGuest: boolean;
 	signOut: typeof signOut;
@@ -16,7 +16,16 @@ function useUser(): useUser {
 	const isGuest = useMemo(() => !user, [user]);
 
 	async function handleSignOut() {
-		return signOut();
+		let redirectTo = '/signin';
+
+		if (as === 'admin') {
+			redirectTo = '/office/signin';
+		}
+
+		return signOut({
+			redirect: true,
+			redirectTo
+		});
 	}
 
 	return {
