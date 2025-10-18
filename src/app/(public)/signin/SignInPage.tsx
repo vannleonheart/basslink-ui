@@ -11,7 +11,14 @@ function SignInPage() {
 	const error = getErrorMessage(errorType);
 
 	return (
-		<div className="flex min-w-0 flex-auto flex-col items-center sm:justify-center">
+		<div
+			className="flex min-w-0 flex-auto flex-col items-center sm:justify-center"
+			style={{
+				backgroundImage: 'url(/assets/images/bg.png)',
+				backgroundSize: 'cover',
+				backgroundPosition: 'center'
+			}}
+		>
 			<Paper className="bg-white min-h-full w-full rounded-0 px-16 py-32 sm:min-h-auto sm:w-auto sm:rounded-xl sm:p-48 sm:shadow md:shadow-2">
 				<div className="mx-auto w-full max-w-320 sm:mx-0 sm:w-320">
 					<Typography className="text-4xl font-extrabold leading-4 tracking-tight text-center text-red-700 uppercase">

@@ -16,7 +16,7 @@ import useThemeMediaQuery from '@fuse/hooks/useThemeMediaQuery';
 import NavbarStyle2Content from './NavbarStyle2Content';
 import { Layout1ConfigDefaultsType } from '@/components/theme-layouts/layout1/Layout1Config';
 
-const navbarWidth = 280;
+const navbarWidth = 250;
 
 type StyledNavBarPropsProps = {
 	theme?: Theme;
