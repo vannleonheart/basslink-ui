@@ -167,7 +167,7 @@ export type UpdateRatesFormData = {
 };
 
 export type CreateRecipientFormData = {
-	sender_id?: string;
+	recipient_sender_id?: string;
 	recipient_type: string;
 	recipient_relationship: string;
 	recipient_name: string;

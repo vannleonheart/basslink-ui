@@ -4,7 +4,7 @@ import { z } from 'zod';
 import _ from 'lodash';
 import TextField from '@mui/material/TextField';
 import Button from '@mui/material/Button';
-import { Alert } from '@mui/material';
+import { Alert, Checkbox, FormControl, FormControlLabel, Typography } from '@mui/material';
 import MenuItem from '@mui/material/MenuItem';
 import { CountryCodeList } from '@/data/country-code';
 import { useSession } from 'next-auth/react';
@@ -17,6 +17,7 @@ import { showMessage } from '@fuse/core/FuseMessage/fuseMessageSlice';
 import { Gender, IdentityTypes, Occupations, UserTypes } from '@/data/static-data';
 import { Sender } from '@/types/entity';
 import NewSenderDocument from './parts/NewSenderDocument';
+import { useEffect, useState } from 'react';
 
 const schema = z.object({
 	sender_type: z.enum(['individual', 'institution'], { message: 'Jenis pengirim tidak valid' }),
@@ -42,15 +43,30 @@ const schema = z.object({
 	sender_zip_code: z.string().min(1, 'Kode pos harus diisi'),
 	sender_contact: z.string().min(1, 'Kontak harus diisi'),
 	sender_notes: z.optional(z.string().or(z.literal(''))),
-	sender_documents: z.array(
-		z.object({
-			id: z.optional(z.string().or(z.literal(''))),
-			document_data: z.string().min(2, 'Data dokumen harus diisi'),
-			document_type: z.string().min(2, 'Jenis dokumen harus diisi'),
-			notes: z.optional(z.string().or(z.literal(''))),
-			is_verified: z.optional(z.boolean())
-		})
-	)
+	sender_documents: z
+		.array(
+			z
+				.object({
+					id: z.optional(z.string().or(z.literal(''))),
+					document_data: z.optional(z.string().or(z.literal(''))),
+					document_type: z.optional(z.string().or(z.literal(''))),
+					notes: z.optional(z.string().or(z.literal(''))),
+					is_verified: z.optional(z.boolean())
+				})
+				.refine(
+					(data) => {
+						if (data.document_data && data.document_data.length > 0) {
+							return data.document_type && data.document_type.length > 0;
+						}
+
+						return true;
+					},
+					{
+						message: 'Anda harus memilih jenis dokumen jika mengunggah dokumen'
+					}
+				)
+		)
+		.optional()
 });
 
 type NewSenderFormProps = {
@@ -58,7 +74,7 @@ type NewSenderFormProps = {
 };
 
 export default function NewSenderForm({ sender }: NewSenderFormProps) {
-	const { control, formState, handleSubmit } = useForm<CreateSenderFormData>({
+	const { control, formState, handleSubmit, watch, setValue } = useForm<CreateSenderFormData>({
 		mode: 'onChange',
 		resolver: zodResolver(schema),
 		defaultValues: {
@@ -98,12 +114,38 @@ export default function NewSenderForm({ sender }: NewSenderFormProps) {
 		}
 	});
 	const { isValid, dirtyFields, errors } = formState;
+	const {
+		sender_registered_address,
+		sender_registered_city,
+		sender_registered_country,
+		sender_registered_region,
+		sender_registered_zip_code
+	} = watch();
 	const { data } = useSession() ?? {};
 	const { accessToken, side } = data ?? {};
 	const [createSender, { isLoading: submitting }] = apiService.useCreateSenderMutation();
 	const [updateSender, { isLoading: updating }] = apiService.useUpdateSenderMutation();
 	const dispatch = useAppDispatch();
 	const navigate = useNavigate();
+	const [isSenderDomicileSameAsIdAddress, setIsSenderDomicileSameAsIdAddress] = useState(false);
+
+	useEffect(() => {
+		if (isSenderDomicileSameAsIdAddress) {
+			setValue('sender_country', sender_registered_country);
+			setValue('sender_region', sender_registered_region);
+			setValue('sender_city', sender_registered_city);
+			setValue('sender_address', sender_registered_address);
+			setValue('sender_zip_code', sender_registered_zip_code);
+		}
+	}, [
+		isSenderDomicileSameAsIdAddress,
+		setValue,
+		sender_registered_address,
+		sender_registered_city,
+		sender_registered_country,
+		sender_registered_region,
+		sender_registered_zip_code
+	]);
 
 	async function onSubmit(formData: CreateSenderFormData) {
 		if (submitting || updating) {
@@ -169,7 +211,7 @@ export default function NewSenderForm({ sender }: NewSenderFormProps) {
 			<div className="flex flex-col items-center justify-center gap-20">
 				<div className="w-full p-24 bg-white shadow-2 rounded">
 					<div className="mb-24 flex flex-col items-start justify-start gap-12 md:flex-row md:items-center md:justify-between">
-						<h4 className="font-bold">Informasi Pengirim</h4>
+						<h4 className="font-bold">Identitas Pengirim</h4>
 					</div>
 					<div className="flex flex-col items-start justify-between gap-12 md:flex-row mb-12">
 						<Controller
@@ -178,6 +220,7 @@ export default function NewSenderForm({ sender }: NewSenderFormProps) {
 							render={({ field }) => (
 								<TextField
 									{...field}
+									autoFocus
 									label="Jenis Pengirim"
 									error={!!errors.sender_type}
 									helperText={errors?.sender_type?.message}
@@ -226,13 +269,14 @@ export default function NewSenderForm({ sender }: NewSenderFormProps) {
 									error={!!errors.sender_gender}
 									helperText={errors?.sender_gender?.message}
 									variant="outlined"
+									required
 									fullWidth
 									select
 									className="w-full md:w-1/3"
 								>
 									{Object.entries(Gender).map(([key, value]) => (
 										<MenuItem
-											key={`gender-${key}`}
+											key={`sender-gender-${key}`}
 											value={key}
 										>
 											{value}
@@ -274,7 +318,7 @@ export default function NewSenderForm({ sender }: NewSenderFormProps) {
 									>
 										{countryList.map((country) => (
 											<MenuItem
-												key={`customer_citizenship_${country.code}`}
+												key={`sender_citizenship_${country.code}`}
 												value={country.code}
 											>
 												{country.name}
@@ -303,7 +347,7 @@ export default function NewSenderForm({ sender }: NewSenderFormProps) {
 								>
 									{Object.entries(IdentityTypes).map(([key, value]) => (
 										<MenuItem
-											key={`identity-type-${key}`}
+											key={`customer-identity-type-${key}`}
 											value={key}
 										>
 											{value}
@@ -343,7 +387,7 @@ export default function NewSenderForm({ sender }: NewSenderFormProps) {
 									>
 										{Object.entries(Occupations).map(([key, value]) => (
 											<MenuItem
-												key={`occupation-${key}`}
+												key={`sender-occupation-${key}`}
 												value={key}
 											>
 												{value}
@@ -354,63 +398,130 @@ export default function NewSenderForm({ sender }: NewSenderFormProps) {
 							/>
 						</div>
 					</div>
+					<Typography
+						fontWeight="medium"
+						fontSize={14}
+						className="mt-20 mb-6"
+					>
+						Alamat sesuai identitas
+					</Typography>
+					<Controller
+						name="sender_registered_address"
+						control={control}
+						render={({ field }) => (
+							<TextField
+								{...field}
+								label="Alamat"
+								error={!!errors.sender_registered_address}
+								helperText={errors?.sender_registered_address?.message}
+								variant="outlined"
+								required
+								fullWidth
+								multiline
+								minRows={3}
+								maxRows={5}
+								className="mb-12"
+							/>
+						)}
+					/>
 					<div className="flex flex-col items-start justify-between gap-12 md:flex-row mb-12">
-						<Controller
-							name="sender_country"
-							control={control}
-							render={({ field }) => (
-								<TextField
-									{...field}
-									label="Negara"
-									error={!!errors.sender_country}
-									helperText={errors?.sender_country?.message}
-									variant="outlined"
-									required
-									fullWidth
-									select
-									className="w-full md:w-1/3"
-								>
-									{countryList.map((country) => (
-										<MenuItem
-											key={`receiver_country_${country.code}`}
-											value={country.code}
-										>
-											{country.name}
-										</MenuItem>
-									))}
-								</TextField>
-							)}
-						/>
-						<div className="w-full md:w-2/3 flex flex-col items-start justify-between gap-12 md:flex-row">
+						<div className="w-full md:w-1/2 flex flex-col items-start justify-between gap-12 md:flex-row">
 							<Controller
-								name="sender_region"
+								name="sender_registered_city"
 								control={control}
 								render={({ field }) => (
 									<TextField
 										{...field}
-										label="Provinsi"
-										error={!!errors.sender_region}
-										helperText={errors?.sender_region?.message}
+										label="Kota"
+										error={!!errors.sender_registered_city}
+										helperText={errors?.sender_registered_city?.message}
 										variant="outlined"
 										fullWidth
 									/>
 								)}
 							/>
 							<Controller
-								name="sender_city"
+								name="sender_registered_region"
 								control={control}
 								render={({ field }) => (
 									<TextField
 										{...field}
-										label="Kota"
-										error={!!errors.sender_city}
-										helperText={errors?.sender_city?.message}
+										label="Provinsi"
+										error={!!errors.sender_registered_region}
+										helperText={errors?.sender_registered_region?.message}
 										variant="outlined"
 										fullWidth
 									/>
 								)}
 							/>
 						</div>
+						<div className="w-full md:w-1/2 flex flex-col items-start justify-between gap-12 md:flex-row">
+							<Controller
+								name="sender_registered_country"
+								control={control}
+								render={({ field }) => (
+									<TextField
+										{...field}
+										label="Negara"
+										error={!!errors.sender_registered_country}
+										helperText={errors?.sender_registered_country?.message}
+										variant="outlined"
+										required
+										select
+										className="w-full md:3/5"
+									>
+										{countryList.map((country) => (
+											<MenuItem
+												key={`sender_registered_country_${country.code}`}
+												value={country.code}
+											>
+												{country.name}
+											</MenuItem>
+										))}
+									</TextField>
+								)}
+							/>
+							<Controller
+								name="sender_registered_zip_code"
+								control={control}
+								render={({ field }) => (
+									<TextField
+										{...field}
+										label="Kode Pos"
+										type="tel"
+										error={!!errors.sender_registered_zip_code}
+										helperText={errors?.sender_registered_zip_code?.message}
+										variant="outlined"
+										className="w-full md:w-2/5"
+										slotProps={{
+											htmlInput: {
+												maxLength: 5
+											}
+										}}
+									/>
+								)}
+							/>
+						</div>
+					</div>
+					<div className="mt-20 mb-6 flex flex-col items-start justify-start gap-12 md:flex-row md:items-center md:justify-between">
+						<Typography
+							fontWeight="medium"
+							fontSize={14}
+						>
+							Alamat domisili
+						</Typography>
+						<FormControl>
+							<FormControlLabel
+								label="Check jika alamat domisili sama dengan alamat sesuai identitas"
+								control={
+									<Checkbox
+										size="small"
+										checked={isSenderDomicileSameAsIdAddress}
+										onChange={(e) => setIsSenderDomicileSameAsIdAddress(e.target.checked)}
+									/>
+								}
+							/>
+						</FormControl>
 					</div>
 					<Controller
 						name="sender_address"
@@ -428,9 +539,93 @@ export default function NewSenderForm({ sender }: NewSenderFormProps) {
 								minRows={3}
 								maxRows={5}
 								className="mb-12"
+								disabled={isSenderDomicileSameAsIdAddress}
 							/>
 						)}
 					/>
+					<div className="flex flex-col items-start justify-between gap-12 md:flex-row mb-12">
+						<div className="w-full md:w-1/2 flex flex-col items-start justify-between gap-12 md:flex-row">
+							<Controller
+								name="sender_city"
+								control={control}
+								render={({ field }) => (
+									<TextField
+										{...field}
+										label="Kota"
+										error={!!errors.sender_city}
+										helperText={errors?.sender_city?.message}
+										variant="outlined"
+										fullWidth
+										disabled={isSenderDomicileSameAsIdAddress}
+									/>
+								)}
+							/>
+							<Controller
+								name="sender_region"
+								control={control}
+								render={({ field }) => (
+									<TextField
+										{...field}
+										label="Provinsi"
+										error={!!errors.sender_region}
+										helperText={errors?.sender_region?.message}
+										variant="outlined"
+										fullWidth
+										disabled={isSenderDomicileSameAsIdAddress}
+									/>
+								)}
+							/>
+						</div>
+						<div className="w-full md:w-1/2 flex flex-col items-start justify-between gap-12 md:flex-row">
+							<Controller
+								name="sender_country"
+								control={control}
+								render={({ field }) => (
+									<TextField
+										{...field}
+										label="Negara"
+										error={!!errors.sender_country}
+										helperText={errors?.sender_country?.message}
+										variant="outlined"
+										required
+										select
+										className="w-full md:3/5"
+										disabled={isSenderDomicileSameAsIdAddress}
+									>
+										{countryList.map((country) => (
+											<MenuItem
+												key={`sender_country_${country.code}`}
+												value={country.code}
+											>
+												{country.name}
+											</MenuItem>
+										))}
+									</TextField>
+								)}
+							/>
+							<Controller
+								name="sender_zip_code"
+								control={control}
+								render={({ field }) => (
+									<TextField
+										{...field}
+										label="Kode Pos"
+										type="tel"
+										error={!!errors.sender_zip_code}
+										helperText={errors?.sender_zip_code?.message}
+										variant="outlined"
+										className="w-full md:w-2/5"
+										slotProps={{
+											htmlInput: {
+												maxLength: 5
+											}
+										}}
+										disabled={isSenderDomicileSameAsIdAddress}
+									/>
+								)}
+							/>
+						</div>
+					</div>
 					<Controller
 						name="sender_contact"
 						control={control}
@@ -465,6 +660,7 @@ export default function NewSenderForm({ sender }: NewSenderFormProps) {
 						)}
 					/>
 				</div>
+
 				<Controller
 					name="sender_documents"
 					control={control}

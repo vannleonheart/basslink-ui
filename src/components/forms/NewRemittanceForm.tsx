@@ -177,7 +177,6 @@ export default function NewRemittanceForm() {
 			setValue('sender_zip_code', sender_registered_zip_code);
 		}
 	}, [
-		getValues,
 		isSenderDomicileSameAsIdAddress,
 		setValue,
 		sender_registered_address,
@@ -290,7 +289,6 @@ export default function NewRemittanceForm() {
 				children: (
 					<SenderListDialog
 						onSelect={(sender: Sender) => {
-							console.log('selected sender', sender);
 							setValue('sender_id', sender.id);
 							setValue('sender_type', sender.sender_type);
 							setValue('sender_name', sender.name);

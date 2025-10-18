@@ -60,7 +60,7 @@ function SenderDocument({ value, onChange, onRemove }: SenderDocumentProps) {
 	const { control, formState, handleSubmit } = useForm<CreateSenderDocumentFormData>({
 		mode: 'all',
 		defaultValues: {
-			document_data: value?.document_data || null,
+			document_data: value?.document_data || '',
 			document_type: value?.document_type || '',
 			notes: value?.notes || '',
 			is_verified: value?.is_verified || false

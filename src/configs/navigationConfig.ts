@@ -95,17 +95,17 @@ const navigationConfig: FuseNavItemType[] = [
 		children: [
 			{
 				id: 'sidebar-menu-admin-users',
-				title: 'Pengguna Admin',
+				title: 'Akun Admin',
 				type: 'item',
-				url: '/admin-users',
+				url: '/users',
 				end: true,
 				auth: 'admin'
 			},
 			{
 				id: 'sidebar-menu-agent-users',
-				title: 'Pengguna Agen',
+				title: 'Akun Agen',
 				type: 'item',
-				url: '/agent-users',
+				url: '/users',
 				end: true,
 				auth: 'agent'
 			},

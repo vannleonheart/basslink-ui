@@ -37,7 +37,7 @@ function ListItem({ sender }: AgentSenderListItemPropsType) {
 			<ListItemButton
 				className="px-32 py-16"
 				sx={{ bgcolor: 'background.paper' }}
-				href={'/customers/' + sender.id}
+				href={'/senders/' + sender.id}
 			>
 				<ListItemAvatar>
 					<Avatar

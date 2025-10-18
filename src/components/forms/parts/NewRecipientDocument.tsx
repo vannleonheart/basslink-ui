@@ -1,16 +1,16 @@
 import { Controller, useForm } from 'react-hook-form';
 import FileUploadInput from '../fields/FileUploadInput';
-import { CreateContactDocumentFormData } from '@/types/form';
+import { CreateRecipientDocumentFormData } from '@/types/form';
 import { Button, MenuItem, TextField } from '@mui/material';
 import FuseSvgIcon from '@fuse/core/FuseSvgIcon';
 import { DocumentTypes } from '@/data/static-data';
 
-type NewContactDocumentProps = {
-	value: CreateContactDocumentFormData[];
-	onChange: (value: CreateContactDocumentFormData[]) => void;
+type NewRecipientDocumentProps = {
+	value: CreateRecipientDocumentFormData[];
+	onChange: (value: CreateRecipientDocumentFormData[]) => void;
 };
 
-export default function NewContactDocument({ value, onChange }: NewContactDocumentProps) {
+export default function NewRecipientDocument({ value, onChange }: NewRecipientDocumentProps) {
 	const handleAddDocument = () => {
 		onChange([...value, { document_data: null, document_type: '', notes: '', is_verified: false }]);
 	};
@@ -26,7 +26,7 @@ export default function NewContactDocument({ value, onChange }: NewContactDocume
 		onChange(newValue);
 	};
 
-	const handleDocumentChange = (index: number, newValue: CreateContactDocumentFormData) => {
+	const handleDocumentChange = (index: number, newValue: CreateRecipientDocumentFormData) => {
 		const newValues = [...value].map((item, i) => (i === index ? newValue : item));
 
 		onChange(newValues);
@@ -39,7 +39,7 @@ export default function NewContactDocument({ value, onChange }: NewContactDocume
 				<Button onClick={handleAddDocument}>Tambah Dokumen</Button>
 			</div>
 			{value.map((item, index) => (
-				<ContactDocument
+				<RecipientDocument
 					key={index}
 					value={item}
 					onRemove={() => handleRemoveDocument(index)}
@@ -50,26 +50,26 @@ export default function NewContactDocument({ value, onChange }: NewContactDocume
 	);
 }
 
-type ContactDocumentProps = {
-	value?: CreateContactDocumentFormData;
-	onChange?: (value: CreateContactDocumentFormData) => void;
+type RecipientDocumentProps = {
+	value?: CreateRecipientDocumentFormData;
+	onChange?: (value: CreateRecipientDocumentFormData) => void;
 	onRemove?: () => void;
 };
 
-function ContactDocument({ value, onChange, onRemove }: ContactDocumentProps) {
-	const { control, formState, handleSubmit } = useForm<CreateContactDocumentFormData>({
+function RecipientDocument({ value, onChange, onRemove }: RecipientDocumentProps) {
+	const { control, formState, handleSubmit } = useForm<CreateRecipientDocumentFormData>({
 		mode: 'all',
 		defaultValues: {
-			id: value?.id || '',
-			document_data: value?.document_data || null,
-			document_type: value?.document_type || '',
-			notes: value?.notes || '',
-			is_verified: value?.is_verified || false
+			id: value?.id ?? '',
+			document_data: value?.document_data ?? '',
+			document_type: value?.document_type ?? '',
+			notes: value?.notes ?? '',
+			is_verified: value?.is_verified ?? false
 		}
 	});
 	const { errors } = formState;
 
-	const onSubmit = (data: CreateContactDocumentFormData) => {
+	const onSubmit = (data: CreateRecipientDocumentFormData) => {
 		onChange?.(data);
 	};
 
