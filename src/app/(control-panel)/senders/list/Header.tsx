@@ -8,11 +8,14 @@ import { ChangeEvent, useEffect } from 'react';
 import { setSearchText, resetSearchText, selectSearchText } from './AppSlice';
 import { selectFilteredSenderList } from './Api';
 import { Sender } from '@/types/entity';
+import { useThemeMediaQuery } from '@fuse/hooks';
+import NavbarToggleButton from '@/components/theme-layouts/components/navbar/NavbarToggleButton';
 
 function Header({ data, isLoading }: { data: Sender[]; isLoading: boolean }) {
 	const dispatch = useAppDispatch();
 	const searchText = useAppSelector(selectSearchText);
 	const filteredData = useAppSelector(selectFilteredSenderList(data));
+	const isMobile = useThemeMediaQuery((theme) => theme.breakpoints.down('md'));
 
 	useEffect(() => {
 		return () => {
@@ -26,27 +29,30 @@ function Header({ data, isLoading }: { data: Sender[]; isLoading: boolean }) {
 
 	return (
 		<div className="p-24 sm:p-32 w-full">
-			<div className="flex flex-col space-y-4">
-				<motion.span
-					initial={{ x: -20 }}
-					animate={{ x: 0, transition: { delay: 0.2 } }}
-				>
-					<Typography className="text-4xl font-extrabold leading-none tracking-tight">
-						Daftar Pengirim
-					</Typography>
-				</motion.span>
-				<motion.span
-					initial={{ y: -20, opacity: 0 }}
-					animate={{ y: 0, opacity: 1, transition: { delay: 0.2 } }}
-				>
-					<Typography
-						component={motion.span}
-						className="text-base font-medium ml-2"
-						color="text.secondary"
+			<div className="flex flex-row items-start justify-between">
+				<div className="flex flex-col space-y-4">
+					<motion.span
+						initial={{ x: -20 }}
+						animate={{ x: 0, transition: { delay: 0.2 } }}
 					>
-						{`${filteredData?.length} pengirim`}
-					</Typography>
-				</motion.span>
+						<Typography className="text-4xl font-extrabold leading-none tracking-tight">
+							Daftar Pengirim
+						</Typography>
+					</motion.span>
+					<motion.span
+						initial={{ y: -20, opacity: 0 }}
+						animate={{ y: 0, opacity: 1, transition: { delay: 0.2 } }}
+					>
+						<Typography
+							component={motion.span}
+							className="text-base font-medium ml-2"
+							color="text.secondary"
+						>
+							{`${filteredData?.length} pengirim`}
+						</Typography>
+					</motion.span>
+				</div>
+				{isMobile && <NavbarToggleButton className="mx-0 h-40 w-40 p-0 sm:mx-8" />}
 			</div>
 			<div className="flex flex-1 items-center mt-16 space-x-8">
 				<Box

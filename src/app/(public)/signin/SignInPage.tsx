@@ -28,7 +28,7 @@ function SignInPage() {
 						Counter
 					</Typography>
 					<Typography className="mt-16 text-lg font-medium leading-6 tracking-tight text-gray-600 text-center">
-						Please sign in to access counter dashboard.
+						Silahkan masuk untuk mengakses dasbor
 					</Typography>
 					<div className="flex flex-col space-y-32">
 						{error && (

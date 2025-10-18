@@ -174,7 +174,7 @@ export default function NewRecipientForm({ recipient }: NewRecipientFormProps) {
 	};
 
 	return (
-		<div className="mt-32 flex w-full flex-col justify-center">
+		<div className="my-20 flex w-full flex-col justify-center">
 			{errors?.root?.message && (
 				<Alert
 					className="mb-32"

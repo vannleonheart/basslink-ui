@@ -354,7 +354,7 @@ export default function NewRemittanceForm() {
 		<form
 			name="remittanceForm"
 			noValidate
-			className="mt-32 flex w-full flex-col justify-center"
+			className="my-20 flex w-full flex-col justify-center"
 			onSubmit={handleSubmit(onSubmit)}
 		>
 			{errors?.root?.message && (

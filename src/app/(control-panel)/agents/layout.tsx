@@ -1,12 +1,7 @@
 'use client';
 
 import AuthGuardRedirect from '@auth/AuthGuardRedirect';
-import App from './App';
 
-export default function Layout() {
-	return (
-		<AuthGuardRedirect auth="admin">
-			<App />
-		</AuthGuardRedirect>
-	);
+export default function Layout({ children }: { children: React.ReactNode }) {
+	return <AuthGuardRedirect auth="admin">{children}</AuthGuardRedirect>;
 }

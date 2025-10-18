@@ -195,7 +195,7 @@ export default function NewSenderForm({ sender }: NewSenderFormProps) {
 	const countryList = CountryCodeList.sort((a, b) => a.name.localeCompare(b.name));
 
 	return (
-		<div className="mt-32 flex w-full flex-col justify-center">
+		<div className="my-20 flex w-full flex-col justify-center">
 			{errors?.root?.message && (
 				<Alert
 					className="mb-32"

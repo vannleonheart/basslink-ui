@@ -1,7 +1,6 @@
 'use client';
 
 import PageContainer from '@/components/PageContainer';
-import PageHeader from '@/components/PageHeader';
 import Content from './Content';
 import { useSession } from 'next-auth/react';
 import { useParams } from 'next/navigation';
@@ -14,12 +13,7 @@ export default function RemittanceDetailPage() {
 		data: { accessToken, side }
 	} = useSession();
 	const { id } = useParams<{ id: string }>();
-	const {
-		data: remittanceData,
-		isLoading,
-		isUninitialized,
-		refetch
-	} = apiService.useGetRemittanceByIdQuery(
+	const { data: remittanceData, isLoading } = apiService.useGetRemittanceByIdQuery(
 		{
 			side,
 			accessToken,
@@ -33,7 +27,7 @@ export default function RemittanceDetailPage() {
 
 	return (
 		<PageContainer
-			header={<PageHeader title="Kirim Dana" />}
+			title="Detail Pengiriman Dana"
 			content={
 				<Content
 					remittance={remittance}

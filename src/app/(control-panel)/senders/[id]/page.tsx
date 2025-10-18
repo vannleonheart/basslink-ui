@@ -4,7 +4,6 @@ import Empty from '@/components/commons/Empty';
 import LoadingBar from '@/components/commons/LoadingBar';
 import NewSenderForm from '@/components/forms/NewSenderForm';
 import PageContainer from '@/components/PageContainer';
-import PageHeader from '@/components/PageHeader';
 import apiService from '@/store/apiService';
 import { Sender } from '@/types/entity';
 import { useSession } from 'next-auth/react';
@@ -25,7 +24,7 @@ export default function SenderDetailPage() {
 
 	return (
 		<PageContainer
-			header={<PageHeader title="Informasi Pengirim" />}
+			title="Informasi Pengirim"
 			content={
 				<div className="px-16 pb-28 h-full">
 					{isLoading ? (

@@ -139,7 +139,7 @@ function AgentSignInForm() {
 					render={({ field: { onChange, value, ...rest } }) => (
 						<FormControl>
 							<FormControlLabel
-								label="Remember me"
+								label="Ingat saya"
 								control={
 									<Checkbox
 										size="small"
@@ -157,12 +157,12 @@ function AgentSignInForm() {
 					className="text-md font-medium"
 					to="/forgot-password"
 				>
-					Forgot password?
+					Lupa kata sandi?
 				</Link>
 			</div>
 			<Button
 				variant="contained"
-				color="secondary"
+				color="primary"
 				className="mt-16 w-full"
 				aria-label="Sign in"
 				disabled={_.isEmpty(dirtyFields) || !isValid || submitting}

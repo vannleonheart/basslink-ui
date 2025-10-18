@@ -2,6 +2,15 @@ import { FuseNavItemType } from '@fuse/core/FuseNavigation/types/FuseNavItemType
 
 const navigationConfig: FuseNavItemType[] = [
 	{
+		id: 'sidebar-menu-dashboard',
+		title: 'Dashboard',
+		type: 'item',
+		icon: 'heroicons-solid:home',
+		url: '/dashboard',
+		end: true,
+		auth: true
+	},
+	{
 		id: 'sidebar-menu-remittances',
 		title: 'Kirim Dana',
 		type: 'collapse',
