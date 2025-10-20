@@ -1,3 +1,5 @@
+'use client';
+
 import { styled } from '@mui/material/styles';
 import FusePageSimple from '@fuse/core/FusePageSimple/FusePageSimple';
 import Header from './Header';
