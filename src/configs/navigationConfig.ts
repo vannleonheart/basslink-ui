@@ -26,10 +26,26 @@ const navigationConfig: FuseNavItemType[] = [
 				auth: true
 			},
 			{
+				id: 'sidebar-menu-remittance-submissions',
+				title: 'Daftar Pengajuan',
+				type: 'item',
+				url: '/remittances/submissions',
+				end: true,
+				auth: true
+			},
+			{
 				id: 'sidebar-menu-new-remittance',
 				title: 'Kirim Dana',
 				type: 'item',
 				url: '/remittances/new',
+				end: true,
+				auth: 'agent'
+			},
+			{
+				id: 'sidebar-menu-new-remittance-bulk',
+				title: 'Kirim Dana Massal',
+				type: 'item',
+				url: '/remittances/new-bulk',
 				end: true,
 				auth: 'agent'
 			}
@@ -93,6 +109,15 @@ const navigationConfig: FuseNavItemType[] = [
 				auth: 'agent'
 			}
 		]
+	},
+	{
+		id: 'sidebar-menu-appointments',
+		title: 'Janji Temu',
+		type: 'item',
+		icon: 'heroicons-solid:calendar',
+		url: '/appointments',
+		end: true,
+		auth: ['agent', 'admin']
 	},
 	{
 		id: 'sidebar-menu-settings',

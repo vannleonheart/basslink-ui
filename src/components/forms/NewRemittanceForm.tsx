@@ -20,6 +20,7 @@ import useNavigate from '@fuse/hooks/useNavigate';
 import { ApiResponse } from '@/types/component';
 import { showMessage } from '@fuse/core/FuseMessage/fuseMessageSlice';
 import {
+	AccountTypes,
 	FundSources,
 	Gender,
 	IdentityTypes,
@@ -41,8 +42,8 @@ const schema = z.object({
 	sender_id: z.optional(z.string().or(z.literal(''))),
 	sender_type: z.string().min(1, 'Anda harus memasukkan jenis pengirim'),
 	sender_name: z.string().min(1, 'Anda harus memasukkan nama pengirim'),
-	sender_gender: z.string().min(1, 'Anda harus memasukkan jenis kelamin pengirim'),
-	sender_birthdate: z.string().min(1, 'Anda harus memasukkan tanggal lahir pengirim'),
+	sender_gender: z.optional(z.enum(['male', 'female'], { message: 'Jenis kelamin tidak valid' }).or(z.literal(''))),
+	sender_birthdate: z.optional(z.string().or(z.literal(''))),
 	sender_citizenship: z.string().min(1, 'Anda harus memasukkan kewarganegaraan pengirim'),
 	sender_identity_type: z.string().min(1, 'Anda harus memasukkan jenis identitas pengirim'),
 	sender_identity_no: z.string().min(1, 'Anda harus memasukkan nomor identitas pengirim'),
@@ -72,6 +73,7 @@ const schema = z.object({
 	recipient_zip_code: z.string().min(1, 'Anda harus memasukkan kode pos penerima'),
 	recipient_contact: z.string().min(1, 'Anda harus memasukkan nomor telepon/email penerima'),
 	recipient_pep_status: z.optional(z.string().or(z.literal(''))),
+	recipient_account_type: z.string().min(1, 'Anda harus memasukkan jenis akun penerima'),
 	recipient_bank_name: z.string().min(1, 'Anda harus memasukkan bank penerima'),
 	recipient_bank_code: z.string().min(1, 'Anda harus memasukkan kode bank penerima'),
 	recipient_bank_account_no: z.string().min(1, 'Anda harus memasukkan nomor rekening penerima'),
@@ -80,7 +82,7 @@ const schema = z.object({
 	recipient_update: z.boolean(),
 	transfer_type: z.string().min(1, 'Anda harus memasukkan jenis transfer'),
 	payment_method: z.string().min(1, 'Anda harus memasukkan metode pembayaran'),
-	transfer_reference: z.string().min(1, 'Anda harus memasukkan referensi transfer'),
+	transfer_reference: z.optional(z.string().or(z.literal(''))),
 	rate: z.string().min(1, 'Anda harus memasukkan rate tukar'),
 	fee_percent: z.string().min(1, 'Anda harus memasukkan persentase biaya'),
 	fee_fixed: z.string().min(1, 'Anda harus memasukkan jumlah biaya tetap'),
@@ -133,6 +135,7 @@ export default function NewRemittanceForm() {
 			recipient_zip_code: '',
 			recipient_contact: '',
 			recipient_pep_status: '',
+			recipient_account_type: '',
 			recipient_bank_name: '',
 			recipient_bank_code: '',
 			recipient_bank_account_no: '',
@@ -152,6 +155,7 @@ export default function NewRemittanceForm() {
 		}
 	});
 	const {
+		sender_type,
 		sender_registered_address,
 		sender_registered_city,
 		sender_registered_country,
@@ -336,6 +340,7 @@ export default function NewRemittanceForm() {
 							setValue('recipient_zip_code', recipient.zip_code);
 							setValue('recipient_contact', recipient.contact);
 							setValue('recipient_pep_status', recipient.pep_status);
+							setValue('recipient_account_type', recipient.account_type);
 							setValue('recipient_bank_name', recipient.bank_name);
 							setValue('recipient_bank_code', recipient.bank_code);
 							setValue('recipient_bank_account_no', recipient.bank_account_no);
@@ -349,6 +354,10 @@ export default function NewRemittanceForm() {
 	};
 
 	const countryList = CountryCodeList.sort((a, b) => a.name.localeCompare(b.name));
+	const identityTypeList: Record<string, string> = (IdentityTypes?.[sender_type as keyof typeof IdentityTypes] ||
+		[]) as Record<string, string>;
+	const occupationList: Record<string, string> = (Occupations?.[sender_type as keyof typeof Occupations] ||
+		[]) as Record<string, string>;
 
 	return (
 		<form
@@ -394,7 +403,6 @@ export default function NewRemittanceForm() {
 							render={({ field }) => (
 								<TextField
 									{...field}
-									autoFocus
 									label="Jenis Pengirim"
 									error={!!errors.sender_type}
 									helperText={errors?.sender_type?.message}
@@ -402,7 +410,6 @@ export default function NewRemittanceForm() {
 									required
 									fullWidth
 									select
-									className="w-full md:w-1/3"
 								>
 									{Object.keys(UserTypes).map((key) => (
 										<MenuItem
@@ -421,45 +428,47 @@ export default function NewRemittanceForm() {
 							render={({ field }) => (
 								<TextField
 									{...field}
-									label="Nama pengirim sesuai dengan identitas"
+									label={
+										sender_type !== 'institution'
+											? 'Nama lengkap sesuai dengan identitas'
+											: 'Nama institusi sesuai dengan identitas'
+									}
 									error={!!errors.sender_name}
 									helperText={errors?.sender_name?.message}
 									variant="outlined"
 									required
 									fullWidth
-									className="w-full md:w-2/3"
 								/>
 							)}
 						/>
 					</div>
-					<div className="flex flex-col items-start justify-between gap-12 md:flex-row mb-12">
-						<Controller
-							name="sender_gender"
-							control={control}
-							render={({ field }) => (
-								<TextField
-									{...field}
-									label="Jenis Kelamin"
-									error={!!errors.sender_gender}
-									helperText={errors?.sender_gender?.message}
-									variant="outlined"
-									required
-									fullWidth
-									select
-									className="w-full md:w-1/3"
-								>
-									{Object.entries(Gender).map(([key, value]) => (
-										<MenuItem
-											key={`sender-gender-${key}`}
-											value={key}
-										>
-											{value}
-										</MenuItem>
-									))}
-								</TextField>
-							)}
-						/>
-						<div className="w-full md:w-2/3 flex flex-col items-start justify-between gap-12 md:flex-row">
+					{sender_type !== 'institution' && (
+						<div className="flex flex-col items-start justify-between gap-12 md:flex-row mb-12">
+							<Controller
+								name="sender_gender"
+								control={control}
+								render={({ field }) => (
+									<TextField
+										{...field}
+										label="Jenis Kelamin"
+										error={!!errors.sender_gender}
+										helperText={errors?.sender_gender?.message}
+										variant="outlined"
+										required
+										fullWidth
+										select
+									>
+										{Object.entries(Gender).map(([key, value]) => (
+											<MenuItem
+												key={`sender-gender-${key}`}
+												value={key}
+											>
+												{value}
+											</MenuItem>
+										))}
+									</TextField>
+								)}
+							/>
 							<Controller
 								name="sender_birthdate"
 								control={control}
@@ -473,35 +482,68 @@ export default function NewRemittanceForm() {
 										variant="outlined"
 										required
 										fullWidth
+										slotProps={{
+											inputLabel: { shrink: true }
+										}}
 									/>
 								)}
 							/>
-							<Controller
-								name="sender_citizenship"
-								control={control}
-								render={({ field }) => (
-									<TextField
-										{...field}
-										label="Kewarganegaraan"
-										error={!!errors.sender_citizenship}
-										helperText={errors?.sender_citizenship?.message}
-										variant="outlined"
-										required
-										fullWidth
-										select
-									>
-										{countryList.map((country) => (
-											<MenuItem
-												key={`sender_citizenship_${country.code}`}
-												value={country.code}
-											>
-												{country.name}
-											</MenuItem>
-										))}
-									</TextField>
-								)}
-							/>
 						</div>
+					)}
+					<div className="flex flex-col items-start justify-between gap-12 md:flex-row mb-12">
+						<Controller
+							name="sender_citizenship"
+							control={control}
+							render={({ field }) => (
+								<TextField
+									{...field}
+									label={sender_type !== 'institution' ? 'Kewarganegaraan' : 'Negara Pendirian'}
+									error={!!errors.sender_citizenship}
+									helperText={errors?.sender_citizenship?.message}
+									variant="outlined"
+									required
+									fullWidth
+									select
+								>
+									{countryList.map((country) => (
+										<MenuItem
+											key={`sender_citizenship_${country.code}`}
+											value={country.code}
+										>
+											{country.name}
+										</MenuItem>
+									))}
+								</TextField>
+							)}
+						/>
+						<Controller
+							name="sender_occupation"
+							control={control}
+							render={({ field }) => (
+								<TextField
+									{...field}
+									label={sender_type !== 'institution' ? 'Pekerjaan' : 'Jenis Usaha'}
+									error={!!errors.sender_occupation}
+									helperText={errors?.sender_occupation?.message}
+									variant="outlined"
+									fullWidth
+									select
+								>
+									{Object.entries(occupationList).length > 0 ? (
+										Object.entries(occupationList).map(([key, value]) => (
+											<MenuItem
+												key={`sender-occupation-${key}`}
+												value={key}
+											>
+												{value}
+											</MenuItem>
+										))
+									) : (
+										<MenuItem value="">Pilih Jenis Pengirim</MenuItem>
+									)}
+								</TextField>
+							)}
+						/>
 					</div>
 					<div className="flex flex-col items-start justify-between gap-12 md:flex-row mb-12">
 						<Controller
@@ -517,60 +559,37 @@ export default function NewRemittanceForm() {
 									required
 									fullWidth
 									select
-									className="w-full md:w-1/3"
 								>
-									{Object.entries(IdentityTypes).map(([key, value]) => (
-										<MenuItem
-											key={`customer-identity-type-${key}`}
-											value={key}
-										>
-											{value}
-										</MenuItem>
-									))}
-								</TextField>
-							)}
-						/>
-						<div className="w-full md:w-2/3 flex flex-col items-start justify-between gap-12 md:flex-row">
-							<Controller
-								name="sender_identity_no"
-								control={control}
-								render={({ field }) => (
-									<TextField
-										{...field}
-										label="Nomor Identitas"
-										error={!!errors.sender_identity_no}
-										helperText={errors?.sender_identity_no?.message}
-										variant="outlined"
-										required
-										fullWidth
-									/>
-								)}
-							/>
-							<Controller
-								name="sender_occupation"
-								control={control}
-								render={({ field }) => (
-									<TextField
-										{...field}
-										label="Pekerjaan"
-										error={!!errors.sender_occupation}
-										helperText={errors?.sender_occupation?.message}
-										variant="outlined"
-										fullWidth
-										select
-									>
-										{Object.entries(Occupations).map(([key, value]) => (
+									{Object.entries(identityTypeList).length > 0 ? (
+										Object.entries(identityTypeList).map(([key, value]) => (
 											<MenuItem
-												key={`sender-occupation-${key}`}
+												key={`customer-identity-type-${key}`}
 												value={key}
 											>
 												{value}
 											</MenuItem>
-										))}
-									</TextField>
-								)}
-							/>
-						</div>
+										))
+									) : (
+										<MenuItem value="">Pilih Jenis Pengirim</MenuItem>
+									)}
+								</TextField>
+							)}
+						/>
+						<Controller
+							name="sender_identity_no"
+							control={control}
+							render={({ field }) => (
+								<TextField
+									{...field}
+									label="Nomor Identitas"
+									error={!!errors.sender_identity_no}
+									helperText={errors?.sender_identity_no?.message}
+									variant="outlined"
+									required
+									fullWidth
+								/>
+							)}
+						/>
 					</div>
 					<Typography
 						fontWeight="medium"
@@ -1073,6 +1092,32 @@ export default function NewRemittanceForm() {
 					>
 						Rekening Bank Penerima
 					</Typography>
+					<Controller
+						name="recipient_account_type"
+						control={control}
+						render={({ field }) => (
+							<TextField
+								{...field}
+								label="Jenis Rekening"
+								error={!!errors.recipient_account_type}
+								helperText={errors?.recipient_account_type?.message}
+								variant="outlined"
+								required
+								fullWidth
+								className="mb-12"
+								select
+							>
+								{Object.keys(AccountTypes).map((key) => (
+									<MenuItem
+										key={`recipient-account-type-${key}`}
+										value={key}
+									>
+										{AccountTypes[key]}
+									</MenuItem>
+								))}
+							</TextField>
+						)}
+					/>
 					<div className="flex flex-col items-start justify-between gap-12 md:flex-row mb-12">
 						<Controller
 							name="recipient_bank_name"

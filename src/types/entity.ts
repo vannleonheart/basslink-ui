@@ -183,6 +183,7 @@ export type Recipient = {
 	zip_code?: string;
 	contact?: string;
 	pep_status?: string;
+	account_type?: string;
 	bank_name?: string;
 	bank_code?: string;
 	bank_account_no?: string;
@@ -220,6 +221,21 @@ export type SenderDocument = {
 	document_data: string;
 	notes?: string;
 	is_verified: boolean;
+	created: number;
+	updated?: number;
+};
+
+export type Appointment = {
+	id: string;
+	name: string;
+	company?: string;
+	email: string;
+	phone: string;
+	service_type: string;
+	date: string;
+	time: string;
+	notes?: string;
+	status: string;
 	created: number;
 	updated?: number;
 };

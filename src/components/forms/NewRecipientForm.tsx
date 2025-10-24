@@ -14,7 +14,7 @@ import { ApiResponse } from '@/types/component';
 import { useAppDispatch } from '@/store/hooks';
 import { showMessage } from '@fuse/core/FuseMessage/fuseMessageSlice';
 import useNavigate from '@fuse/hooks/useNavigate';
-import { RelationshipTypes, UserTypes } from '@/data/static-data';
+import { AccountTypes, RelationshipTypes, UserTypes } from '@/data/static-data';
 import { Recipient, Sender } from '@/types/entity';
 import { CreateRecipientDocumentFormData, CreateRecipientFormData } from '@/types/form';
 import { useState } from 'react';
@@ -33,6 +33,7 @@ const schema = z.object({
 	recipient_zip_code: z.string().min(1, 'Anda harus memasukkan kode pos penerima'),
 	recipient_contact: z.string().min(1, 'Anda harus memasukkan nomor telepon/email penerima'),
 	recipient_pep_status: z.optional(z.string().or(z.literal(''))),
+	recipient_account_type: z.string().min(1, 'Anda harus memasukkan jenis rekening penerima'),
 	recipient_bank_name: z.string().min(1, 'Anda harus memasukkan bank penerima'),
 	recipient_bank_code: z.string().min(1, 'Anda harus memasukkan kode bank penerima'),
 	recipient_bank_account_no: z.string().min(1, 'Anda harus memasukkan nomor rekening penerima'),
@@ -84,6 +85,7 @@ export default function NewRecipientForm({ recipient }: NewRecipientFormProps) {
 			recipient_zip_code: recipient?.zip_code ?? '',
 			recipient_contact: recipient?.contact ?? '',
 			recipient_pep_status: recipient?.pep_status ?? '',
+			recipient_account_type: recipient?.account_type ?? '',
 			recipient_bank_name: recipient?.bank_name ?? '',
 			recipient_bank_code: recipient?.bank_code ?? '',
 			recipient_bank_account_no: recipient?.bank_account_no ?? '',
@@ -416,6 +418,32 @@ export default function NewRecipientForm({ recipient }: NewRecipientFormProps) {
 					>
 						Rekening Bank Penerima
 					</Typography>
+					<Controller
+						name="recipient_account_type"
+						control={control}
+						render={({ field }) => (
+							<TextField
+								{...field}
+								label="Jenis Rekening"
+								error={!!errors.recipient_account_type}
+								helperText={errors?.recipient_account_type?.message}
+								variant="outlined"
+								required
+								fullWidth
+								className="mb-12"
+								select
+							>
+								{Object.keys(AccountTypes).map((key) => (
+									<MenuItem
+										key={`recipient-account-type-${key}`}
+										value={key}
+									>
+										{AccountTypes[key]}
+									</MenuItem>
+								))}
+							</TextField>
+						)}
+					/>
 					<div className="flex flex-col items-start justify-between gap-12 md:flex-row mb-12">
 						<Controller
 							name="recipient_bank_name"

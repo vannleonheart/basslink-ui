@@ -54,7 +54,7 @@ export default function Content({ remittance, isLoading }: ContentProps) {
 	}, []);
 
 	const identityTypeList = useMemo(() => {
-		const types: Record<string, string> = {};
+		const types: Record<string, Record<string, string>> = {};
 		Object.keys(IdentityTypes).forEach((key) => {
 			types[key] = IdentityTypes[key];
 		});
@@ -62,7 +62,7 @@ export default function Content({ remittance, isLoading }: ContentProps) {
 	}, []);
 
 	const occupationList = useMemo(() => {
-		const types: Record<string, string> = {};
+		const types: Record<string, Record<string, string>> = {};
 		Object.keys(Occupations).forEach((key) => {
 			types[key] = Occupations[key];
 		});
@@ -209,8 +209,9 @@ export default function Content({ remittance, isLoading }: ContentProps) {
 										<div className="flex gap-4 items-center items-center justify-between">
 											<Typography className="w-full md:w-1/2">Jenis Identitas</Typography>
 											<Typography className="w-full md:w-1/2 font-medium text-right">
-												{identityTypeList[remittance.from_identity_type] ||
-													remittance.from_identity_type}
+												{identityTypeList?.[remittance.from_sender_type]?.[
+													remittance.from_identity_type
+												] || remittance.from_identity_type}
 											</Typography>
 										</div>
 										<div className="flex gap-4 items-center items-center justify-between">
@@ -222,8 +223,9 @@ export default function Content({ remittance, isLoading }: ContentProps) {
 										<div className="flex gap-4 items-center items-center justify-between">
 											<Typography className="w-full md:w-1/2">Pekerjaan</Typography>
 											<Typography className="w-full md:w-1/2 font-medium text-right">
-												{occupationList[remittance.from_occupation] ||
-													remittance.from_occupation}
+												{occupationList?.[remittance.from_sender_type]?.[
+													remittance.from_occupation
+												] || remittance.from_occupation}
 											</Typography>
 										</div>
 										<div className="flex gap-4 items-center items-center justify-between">

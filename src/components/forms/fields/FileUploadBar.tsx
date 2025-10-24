@@ -74,7 +74,7 @@ export default function FileUploadBar({
 
 	return (
 		<div className="w-full flex flex-col">
-			<div className="grid grid-cols-2 gap-12 mb-12">
+			<div className="grid grid-cols-1 md:grid-cols-2 gap-12 mb-12">
 				{value?.map((file, index) => {
 					return (
 						<UploadedFileItem

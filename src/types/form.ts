@@ -105,6 +105,7 @@ export type CreateRemittanceFormData = {
 	recipient_zip_code: string;
 	recipient_contact: string;
 	recipient_pep_status?: string;
+	recipient_account_type: string;
 	recipient_bank_name: string;
 	recipient_bank_code: string;
 	recipient_bank_account_no: string;
@@ -178,6 +179,7 @@ export type CreateRecipientFormData = {
 	recipient_zip_code: string;
 	recipient_contact: string;
 	recipient_pep_status?: string;
+	recipient_account_type: string;
 	recipient_bank_name: string;
 	recipient_bank_code: string;
 	recipient_bank_account_no: string;

@@ -9,28 +9,52 @@ export const UserTypes = {
 };
 
 export const IdentityTypes = {
-	national_id: 'KTP',
-	passport: 'Paspor',
-	driver_license: 'SIM',
-	social_security: 'Kartu Jaminan Sosial',
-	work_permit: 'Izin Kerja',
-	green_card: 'Kartu Hijau',
-	permanent_resident_card: 'Kartu Penduduk Tetap',
-	trading_business_license: 'Surat Izin Usaha Perdagangan',
-	other: 'Lainnya'
+	individual: {
+		national_id: 'KTP',
+		passport: 'Paspor',
+		driver_license: 'SIM',
+		social_security: 'Kartu Jaminan Sosial',
+		work_permit: 'Izin Kerja',
+		green_card: 'Kartu Hijau',
+		permanent_resident_card: 'Kartu Penduduk Tetap',
+		other: 'Lainnya'
+	},
+	institution: {
+		business_license: 'Nomor Induk Berusaha (NIB)',
+		trading_business_license: 'Surat Izin Usaha Perdagangan (SIUP)',
+		tax_identification_number: 'NPWP Perusahaan',
+		company_registration_number: 'Nomor Induk Perusahaan (NIP)',
+		organization_certificate: 'Akta Pendirian Perusahaan',
+		bank_account_statement: 'Rekening Koran Perusahaan',
+		other: 'Lainnya'
+	}
 };
 
 export const Occupations = {
-	private_sector_employee: 'Karyawan Sektor Swasta',
-	government_employee: 'Aparatur Sipil Negara',
-	self_employed: 'Wiraswasta',
-	police_military: 'Polisi/Militer',
-	unemployed: 'Tidak Bekerja',
-	student: 'Pelajar/Mahasiswa',
-	retired: 'Pensiunan',
-	homemaker: 'Ibu Rumah Tangga',
-	business: 'Pemilik Usaha',
-	other: 'Lainnya'
+	individual: {
+		private_sector_employee: 'Karyawan Sektor Swasta',
+		government_employee: 'Aparatur Sipil Negara',
+		self_employed: 'Wiraswasta',
+		police_military: 'Polisi/Militer',
+		unemployed: 'Tidak Bekerja',
+		student: 'Pelajar/Mahasiswa',
+		retired: 'Pensiunan',
+		homemaker: 'Ibu Rumah Tangga',
+		business: 'Pemilik Usaha',
+		other: 'Lainnya'
+	},
+	institution: {
+		micro_small_medium_enterprise: 'Usaha Mikro, Kecil dan Menengah',
+		financial_institution: 'Lembaga Keuangan dan Perbankan',
+		trade_company: 'Perusahaan Perdagangan',
+		logistics_company: 'Perusahaan Logistik',
+		manufacturing_company: 'Perusahaan Manufaktur',
+		service_provider: 'Penyedia Jasa',
+		government_agency: 'Instansi Pemerintah',
+		non_profit_organization: 'Organisasi Nirlaba',
+		educational_institution: 'Lembaga Pendidikan',
+		other: 'Lainnya'
+	}
 };
 
 export const DocumentTypes = {
@@ -113,6 +137,12 @@ export const RemittanceStatuses = {
 	failed: 'Gagal'
 };
 
+export const RemittanceSubmissionStatuses = {
+	all: 'Semua Status',
+	submitted: 'Diajukan',
+	under_review: 'Dalam Peninjauan',
+};
+
 export const PaymentMethods = {
 	cash: 'Tunai',
 	bank_transfer: 'Transfer Bank',
@@ -120,4 +150,18 @@ export const PaymentMethods = {
 	debit_card: 'Kartu Debit',
 	e_wallet: 'Dompet Digital',
 	other: 'Lainnya'
+};
+
+export const Services = {
+	international_remittance: 'Pengiriman Uang Internasional',
+	local_remittance: 'Pengiriman Uang Lokal',
+	currency_exchange: 'Penukaran Mata Uang',
+	corporate_solutions: 'Solusi Korporat',
+	consultation_services: 'Layanan Konsultasi',
+	other: 'Lainnya'
+};
+
+export const AccountTypes = {
+	bank_account: 'Rekening Bank',
+	ewallet: 'Dompet Digital'
 };

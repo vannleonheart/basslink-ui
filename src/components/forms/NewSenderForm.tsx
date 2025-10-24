@@ -25,8 +25,8 @@ const schema = z.object({
 		.string()
 		.min(3, 'Nama harus terdiri dari minimal 3 karakter')
 		.max(100, 'Nama harus terdiri dari maksimal 100 karakter'),
-	sender_gender: z.enum(['male', 'female'], { message: 'Jenis kelamin tidak valid' }),
-	sender_birthdate: z.string().min(1, 'Tanggal lahir harus diisi'),
+	sender_gender: z.optional(z.enum(['male', 'female'], { message: 'Jenis kelamin tidak valid' }).or(z.literal(''))),
+	sender_birthdate: z.optional(z.string().or(z.literal(''))),
 	sender_citizenship: z.string().min(1, 'Kewarganegaraan harus diisi'),
 	sender_identity_type: z.string().min(1, 'Jenis identitas harus diisi'),
 	sender_identity_no: z.string().min(1, 'Nomor identitas harus diisi'),
@@ -115,6 +115,7 @@ export default function NewSenderForm({ sender }: NewSenderFormProps) {
 	});
 	const { isValid, dirtyFields, errors } = formState;
 	const {
+		sender_type,
 		sender_registered_address,
 		sender_registered_city,
 		sender_registered_country,
@@ -193,6 +194,10 @@ export default function NewSenderForm({ sender }: NewSenderFormProps) {
 	}
 
 	const countryList = CountryCodeList.sort((a, b) => a.name.localeCompare(b.name));
+	const identityTypeList: Record<string, string> = (IdentityTypes?.[sender_type as keyof typeof IdentityTypes] ||
+		[]) as Record<string, string>;
+	const occupationList: Record<string, string> = (Occupations?.[sender_type as keyof typeof Occupations] ||
+		[]) as Record<string, string>;
 
 	return (
 		<div className="my-20 flex w-full flex-col justify-center">
@@ -220,7 +225,6 @@ export default function NewSenderForm({ sender }: NewSenderFormProps) {
 							render={({ field }) => (
 								<TextField
 									{...field}
-									autoFocus
 									label="Jenis Pengirim"
 									error={!!errors.sender_type}
 									helperText={errors?.sender_type?.message}
@@ -228,7 +232,6 @@ export default function NewSenderForm({ sender }: NewSenderFormProps) {
 									required
 									fullWidth
 									select
-									className="w-full md:w-1/3"
 								>
 									{Object.keys(UserTypes).map((key) => (
 										<MenuItem
@@ -247,45 +250,47 @@ export default function NewSenderForm({ sender }: NewSenderFormProps) {
 							render={({ field }) => (
 								<TextField
 									{...field}
-									label="Nama pengirim sesuai dengan identitas"
+									label={
+										sender_type !== 'institution'
+											? 'Nama lengkap sesuai dengan identitas'
+											: 'Nama institusi sesuai dengan identitas'
+									}
 									error={!!errors.sender_name}
 									helperText={errors?.sender_name?.message}
 									variant="outlined"
 									required
 									fullWidth
-									className="w-full md:w-2/3"
 								/>
 							)}
 						/>
 					</div>
-					<div className="flex flex-col items-start justify-between gap-12 md:flex-row mb-12">
-						<Controller
-							name="sender_gender"
-							control={control}
-							render={({ field }) => (
-								<TextField
-									{...field}
-									label="Jenis Kelamin"
-									error={!!errors.sender_gender}
-									helperText={errors?.sender_gender?.message}
-									variant="outlined"
-									required
-									fullWidth
-									select
-									className="w-full md:w-1/3"
-								>
-									{Object.entries(Gender).map(([key, value]) => (
-										<MenuItem
-											key={`sender-gender-${key}`}
-											value={key}
-										>
-											{value}
-										</MenuItem>
-									))}
-								</TextField>
-							)}
-						/>
-						<div className="w-full md:w-2/3 flex flex-col items-start justify-between gap-12 md:flex-row">
+					{sender_type !== 'institution' && (
+						<div className="flex flex-col items-start justify-between gap-12 md:flex-row mb-12">
+							<Controller
+								name="sender_gender"
+								control={control}
+								render={({ field }) => (
+									<TextField
+										{...field}
+										label="Jenis Kelamin"
+										error={!!errors.sender_gender}
+										helperText={errors?.sender_gender?.message}
+										variant="outlined"
+										required
+										fullWidth
+										select
+									>
+										{Object.entries(Gender).map(([key, value]) => (
+											<MenuItem
+												key={`sender-gender-${key}`}
+												value={key}
+											>
+												{value}
+											</MenuItem>
+										))}
+									</TextField>
+								)}
+							/>
 							<Controller
 								name="sender_birthdate"
 								control={control}
@@ -299,35 +304,68 @@ export default function NewSenderForm({ sender }: NewSenderFormProps) {
 										variant="outlined"
 										required
 										fullWidth
+										slotProps={{
+											inputLabel: { shrink: true }
+										}}
 									/>
 								)}
 							/>
-							<Controller
-								name="sender_citizenship"
-								control={control}
-								render={({ field }) => (
-									<TextField
-										{...field}
-										label="Kewarganegaraan"
-										error={!!errors.sender_citizenship}
-										helperText={errors?.sender_citizenship?.message}
-										variant="outlined"
-										required
-										fullWidth
-										select
-									>
-										{countryList.map((country) => (
-											<MenuItem
-												key={`sender_citizenship_${country.code}`}
-												value={country.code}
-											>
-												{country.name}
-											</MenuItem>
-										))}
-									</TextField>
-								)}
-							/>
 						</div>
+					)}
+					<div className="flex flex-col items-start justify-between gap-12 md:flex-row mb-12">
+						<Controller
+							name="sender_citizenship"
+							control={control}
+							render={({ field }) => (
+								<TextField
+									{...field}
+									label={sender_type !== 'institution' ? 'Kewarganegaraan' : 'Negara Pendirian'}
+									error={!!errors.sender_citizenship}
+									helperText={errors?.sender_citizenship?.message}
+									variant="outlined"
+									required
+									fullWidth
+									select
+								>
+									{countryList.map((country) => (
+										<MenuItem
+											key={`sender_citizenship_${country.code}`}
+											value={country.code}
+										>
+											{country.name}
+										</MenuItem>
+									))}
+								</TextField>
+							)}
+						/>
+						<Controller
+							name="sender_occupation"
+							control={control}
+							render={({ field }) => (
+								<TextField
+									{...field}
+									label={sender_type !== 'institution' ? 'Pekerjaan' : 'Jenis Usaha'}
+									error={!!errors.sender_occupation}
+									helperText={errors?.sender_occupation?.message}
+									variant="outlined"
+									fullWidth
+									select
+								>
+									{Object.entries(occupationList).length > 0 ? (
+										Object.entries(occupationList).map(([key, value]) => (
+											<MenuItem
+												key={`sender-occupation-${key}`}
+												value={key}
+											>
+												{value}
+											</MenuItem>
+										))
+									) : (
+										<MenuItem value="">Pilih Jenis Pengirim</MenuItem>
+									)}
+								</TextField>
+							)}
+						/>
 					</div>
 					<div className="flex flex-col items-start justify-between gap-12 md:flex-row mb-12">
 						<Controller
@@ -343,60 +381,37 @@ export default function NewSenderForm({ sender }: NewSenderFormProps) {
 									required
 									fullWidth
 									select
-									className="w-full md:w-1/3"
 								>
-									{Object.entries(IdentityTypes).map(([key, value]) => (
-										<MenuItem
-											key={`customer-identity-type-${key}`}
-											value={key}
-										>
-											{value}
-										</MenuItem>
-									))}
-								</TextField>
-							)}
-						/>
-						<div className="w-full md:w-2/3 flex flex-col items-start justify-between gap-12 md:flex-row">
-							<Controller
-								name="sender_identity_no"
-								control={control}
-								render={({ field }) => (
-									<TextField
-										{...field}
-										label="Nomor Identitas"
-										error={!!errors.sender_identity_no}
-										helperText={errors?.sender_identity_no?.message}
-										variant="outlined"
-										required
-										fullWidth
-									/>
-								)}
-							/>
-							<Controller
-								name="sender_occupation"
-								control={control}
-								render={({ field }) => (
-									<TextField
-										{...field}
-										label="Pekerjaan"
-										error={!!errors.sender_occupation}
-										helperText={errors?.sender_occupation?.message}
-										variant="outlined"
-										fullWidth
-										select
-									>
-										{Object.entries(Occupations).map(([key, value]) => (
+									{Object.entries(identityTypeList).length > 0 ? (
+										Object.entries(identityTypeList).map(([key, value]) => (
 											<MenuItem
-												key={`sender-occupation-${key}`}
+												key={`customer-identity-type-${key}`}
 												value={key}
 											>
 												{value}
 											</MenuItem>
-										))}
-									</TextField>
-								)}
-							/>
-						</div>
+										))
+									) : (
+										<MenuItem value="">Pilih Jenis Pengirim</MenuItem>
+									)}
+								</TextField>
+							)}
+						/>
+						<Controller
+							name="sender_identity_no"
+							control={control}
+							render={({ field }) => (
+								<TextField
+									{...field}
+									label="Nomor Identitas"
+									error={!!errors.sender_identity_no}
+									helperText={errors?.sender_identity_no?.message}
+									variant="outlined"
+									required
+									fullWidth
+								/>
+							)}
+						/>
 					</div>
 					<Typography
 						fontWeight="medium"

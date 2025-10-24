@@ -313,6 +313,19 @@ export const apiService = createApi({
 				};
 			},
 			transformResponse
+		}),
+		getAppointments: build.query({
+			query: (args) => {
+				const { accessToken, side = 'agent', filter = {} } = args;
+				return {
+					url: `/${side}/appointments`,
+					headers: {
+						Authorization: `Bearer ${accessToken}`
+					},
+					params: filter
+				};
+			},
+			transformResponse
 		})
 	}),
 	reducerPath: 'apiService'

@@ -23,7 +23,7 @@ function ListPage({ data, isLoading }: { data: Recipient[]; isLoading: boolean }
 					color="text.secondary"
 					variant="h5"
 				>
-					There are no recipients!
+					Tidak ada data penerima
 				</Typography>
 			</div>
 		);

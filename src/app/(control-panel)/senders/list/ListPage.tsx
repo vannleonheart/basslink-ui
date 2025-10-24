@@ -23,7 +23,7 @@ function ListPage({ data, isLoading, fetch }: { data: Sender[]; isLoading: boole
 					color="text.secondary"
 					variant="h5"
 				>
-					There are no user!
+					Tidak ada data pengirim
 				</Typography>
 			</div>
 		);
