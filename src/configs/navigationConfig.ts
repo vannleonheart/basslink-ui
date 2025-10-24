@@ -40,14 +40,6 @@ const navigationConfig: FuseNavItemType[] = [
 				url: '/remittances/new',
 				end: true,
 				auth: 'agent'
-			},
-			{
-				id: 'sidebar-menu-new-remittance-bulk',
-				title: 'Kirim Dana Massal',
-				type: 'item',
-				url: '/remittances/new-bulk',
-				end: true,
-				auth: 'agent'
 			}
 		]
 	},

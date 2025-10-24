@@ -30,7 +30,7 @@ export default function Content() {
 		isLoading,
 		isUninitialized,
 		refetch
-	} = apiService.useGetRemittancesQuery(
+	} = apiService.useGetRemittanceSubmissionsQuery(
 		{
 			side,
 			accessToken,

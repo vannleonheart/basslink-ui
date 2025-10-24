@@ -179,6 +179,19 @@ export const apiService = createApi({
 			},
 			transformResponse
 		}),
+		getRemittanceSubmissions: build.query({
+			query: (args) => {
+				const { accessToken, side = 'agent', filter = {} } = args;
+				return {
+					url: `/${side}/remittances/submissions`,
+					headers: {
+						Authorization: `Bearer ${accessToken}`
+					},
+					params: filter
+				};
+			},
+			transformResponse
+		}),
 		getRemittanceById: build.query({
 			query: (args) => {
 				const { accessToken, side = 'agent', id } = args;
@@ -326,7 +339,22 @@ export const apiService = createApi({
 				};
 			},
 			transformResponse
-		})
+		}),
+		acceptSubmittedRemittance: build.mutation({
+			query: (args) => {
+				const { accessToken, data = {}, side = 'agent', id } = args;
+
+				return {
+					url: `/${side}/remittances/${id}/accept-submission`,
+					method: 'POST',
+					body: jsonify(data),
+					headers: {
+						'Content-Type': 'application/json',
+						Authorization: `Bearer ${accessToken}`
+					}
+				};
+			}
+		}),
 	}),
 	reducerPath: 'apiService'
 });
