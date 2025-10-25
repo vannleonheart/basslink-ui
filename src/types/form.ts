@@ -195,3 +195,14 @@ export type CreateRecipientDocumentFormData = {
 	notes?: string;
 	is_verified: boolean;
 };
+
+export type RejectRemittanceFormData = {
+	reason: string;
+};
+
+export type CompleteRemittanceFormData = {
+	date: string;
+	reference: string;
+	notes?: string;
+	receipt: string;
+};

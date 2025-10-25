@@ -1,5 +1,5 @@
 import CurrencyField from '@/components/forms/fields/CurrencyField';
-import { RemittanceSubmissionStatuses, TransferTypes } from '@/data/static-data';
+import { TransferTypes } from '@/data/static-data';
 import { RemittanceFilter } from '@/types/component';
 import { Button, MenuItem, TextField, Typography } from '@mui/material';
 
@@ -11,7 +11,7 @@ type FilterProps = {
 export default function Filter({ filter, setFilter }: FilterProps) {
 	return (
 		<div className="w-full flex flex-col gap-20 border px-12 py-12 rounded-lg mb-8 bg-gray-50">
-			<div className="w-full grid grid-cols-1 gap-8 md:grid-cols-3 md:gap-16">
+			<div className="w-full grid grid-cols-1 gap-8 md:grid-cols-2 md:gap-16">
 				<TextField
 					select
 					value={filter.type}
@@ -25,21 +25,6 @@ export default function Filter({ filter, setFilter }: FilterProps) {
 							value={key}
 						>
 							{TransferTypes[key as keyof typeof TransferTypes]}
-						</MenuItem>
-					))}
-				</TextField>
-				<TextField
-					select
-					value={filter.status}
-					onChange={(e) => setFilter({ ...filter, status: e.target.value })}
-					fullWidth
-				>
-					{Object.keys(RemittanceSubmissionStatuses).map((key) => (
-						<MenuItem
-							key={'status-' + key}
-							value={key}
-						>
-							{RemittanceSubmissionStatuses[key as keyof typeof RemittanceSubmissionStatuses]}
 						</MenuItem>
 					))}
 				</TextField>

@@ -1,6 +1,8 @@
 import CopyButton from '@/components/commons/CopyButton';
 import StatusLabel from '@/components/commons/StatusLabel';
+import DialogCompleteRemittance from '@/components/dialogs/DialogCompleteRemittance';
 import DialogConfirm from '@/components/dialogs/DialogConfirm';
+import DialogRejectRemittance from '@/components/dialogs/DialogRejectRemittance';
 import { CountryCodeList } from '@/data/country-code';
 import {
 	FundSources,
@@ -12,7 +14,7 @@ import {
 } from '@/data/static-data';
 import apiService from '@/store/apiService';
 import { useAppDispatch } from '@/store/hooks';
-import { ApiResponse } from '@/types/component';
+import { ApiResponse, AuthComponentProps } from '@/types/component';
 import { Remittance } from '@/types/entity';
 import { openDialog } from '@fuse/core/FuseDialog/fuseDialogSlice';
 import { showMessage } from '@fuse/core/FuseMessage/fuseMessageSlice';
@@ -21,20 +23,16 @@ import useNavigate from '@fuse/hooks/useNavigate';
 import { Accordion, AccordionActions, AccordionDetails, AccordionSummary, Button, Typography } from '@mui/material';
 import { t } from 'i18next';
 import { DateTime } from 'luxon';
-import { useSession } from 'next-auth/react';
 import { useMemo } from 'react';
 
-type ContentProps = {
+type ContentProps = AuthComponentProps & {
 	remittance: Remittance;
 	isLoading?: boolean;
 };
 
-export default function Content({ remittance, isLoading }: ContentProps) {
+export default function Content({ remittance, isLoading, accessToken, side }: ContentProps) {
 	const dispatch = useAppDispatch();
 	const navigate = useNavigate();
-	const {
-		data: { accessToken, side }
-	} = useSession();
 
 	const userTypes = useMemo(() => {
 		const types: Record<string, string> = {};
@@ -133,11 +131,73 @@ export default function Content({ remittance, isLoading }: ContentProps) {
 		);
 	};
 
+	const handleCompleteTransaction = async () => {
+		dispatch(
+			openDialog({
+				children: (
+					<DialogCompleteRemittance
+						data={remittance}
+						accessToken={accessToken}
+						side={side}
+					/>
+				),
+				fullWidth: false,
+				disableBackdropClick: true,
+				disableEscapeKeyDown: true
+			})
+		);
+	};
+
+	const handleRejectSubmission = async (message = undefined, label = undefined) => {
+		dispatch(
+			openDialog({
+				children: (
+					<DialogRejectRemittance
+						data={remittance}
+						message={message}
+						fieldLabel={label}
+						accessToken={accessToken}
+						side={side}
+					/>
+				),
+				fullWidth: false,
+				disableBackdropClick: true,
+				disableEscapeKeyDown: true
+			})
+		);
+	};
+
 	return (
 		!isLoading &&
 		remittance && (
 			<div className="mt-28 flex flex-col gap-12">
-				<div className="flex items-center justify-end">
+				<div className="flex flex-col md:flex-row md:items-center md:justify-end gap-8">
+					{remittance.status === 'submitted' && (
+						<Button
+							variant="contained"
+							color="error"
+							size="small"
+							startIcon={<FuseSvgIcon>heroicons-outline:x-mark</FuseSvgIcon>}
+							onClick={() =>
+								handleRejectSubmission('Apakah yakin untuk menolak pengajuan ini?', 'Alasan Penolakan')
+							}
+							className="order-2 md:order-1"
+						>
+							Tolak Pengajuan
+						</Button>
+					)}
+					{(remittance.status === 'wait' || remittance.status === 'payment_confirmed') && (
+						<Button
+							variant="contained"
+							color="error"
+							size="small"
+							startIcon={<FuseSvgIcon>heroicons-outline:x-mark</FuseSvgIcon>}
+							onClick={() => handleRejectSubmission()}
+							className="order-2 md:order-1"
+						>
+							Batalkan Pengiriman
+						</Button>
+					)}
 					{remittance.status === 'submitted' && (
 						<Button
 							variant="contained"
@@ -145,8 +205,21 @@ export default function Content({ remittance, isLoading }: ContentProps) {
 							size="small"
 							startIcon={<FuseSvgIcon>heroicons-outline:check</FuseSvgIcon>}
 							onClick={handleAcceptSubmission}
+							className="order-1 md:order-2"
 						>
-							Terima Pengiriman
+							Terima Pengajuan
+						</Button>
+					)}
+					{(remittance.status === 'wait' || remittance.status === 'payment_confirmed') && (
+						<Button
+							variant="contained"
+							color="success"
+							size="small"
+							startIcon={<FuseSvgIcon>heroicons-outline:check</FuseSvgIcon>}
+							onClick={handleCompleteTransaction}
+							className="order-1 md:order-2"
+						>
+							Selesaikan Pengiriman
 						</Button>
 					)}
 				</div>

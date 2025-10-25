@@ -183,7 +183,7 @@ export const apiService = createApi({
 			query: (args) => {
 				const { accessToken, side = 'agent', filter = {} } = args;
 				return {
-					url: `/${side}/remittances/submissions`,
+					url: `/${side}/submissions`,
 					headers: {
 						Authorization: `Bearer ${accessToken}`
 					},
@@ -342,10 +342,24 @@ export const apiService = createApi({
 		}),
 		acceptSubmittedRemittance: build.mutation({
 			query: (args) => {
+				const { accessToken, side = 'agent', id } = args;
+
+				return {
+					url: `/${side}/submissions/${id}/accept`,
+					method: 'POST',
+					headers: {
+						'Content-Type': 'application/json',
+						Authorization: `Bearer ${accessToken}`
+					}
+				};
+			}
+		}),
+		rejectSubmittedRemittance: build.mutation({
+			query: (args) => {
 				const { accessToken, data = {}, side = 'agent', id } = args;
 
 				return {
-					url: `/${side}/remittances/${id}/accept-submission`,
+					url: `/${side}/submissions/${id}/reject`,
 					method: 'POST',
 					body: jsonify(data),
 					headers: {
@@ -355,6 +369,21 @@ export const apiService = createApi({
 				};
 			}
 		}),
+		completeRemittance: build.mutation({
+			query: (args) => {
+				const { accessToken, data = {}, side = 'agent', id } = args;
+
+				return {
+					url: `/${side}/remittances/${id}/complete`,
+					method: 'POST',
+					body: jsonify(data),
+					headers: {
+						'Content-Type': 'application/json',
+						Authorization: `Bearer ${accessToken}`
+					}
+				};
+			}
+		})
 	}),
 	reducerPath: 'apiService'
 });

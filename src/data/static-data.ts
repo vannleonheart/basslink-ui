@@ -137,12 +137,6 @@ export const RemittanceStatuses = {
 	failed: 'Gagal'
 };
 
-export const RemittanceSubmissionStatuses = {
-	all: 'Semua Status',
-	submitted: 'Diajukan',
-	under_review: 'Dalam Peninjauan',
-};
-
 export const PaymentMethods = {
 	cash: 'Tunai',
 	bank_transfer: 'Transfer Bank',
@@ -164,4 +158,13 @@ export const Services = {
 export const AccountTypes = {
 	bank_account: 'Rekening Bank',
 	ewallet: 'Dompet Digital'
+};
+
+export const RejectionReasons = {
+	payment_issue: 'Masalah Pembayaran',
+	invalid_information: 'Informasi Tidak Valid',
+	insufficient_documents: 'Dokumen Tidak Lengkap',
+	suspicious_activity: 'Aktivitas Mencurigakan',
+	policy_violation: 'Pelanggaran Kebijakan',
+	other: 'Lainnya'
 };

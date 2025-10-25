@@ -30,6 +30,8 @@ export default function RemittanceDetailPage() {
 			title="Detail Pengiriman Dana"
 			content={
 				<Content
+					accessToken={accessToken}
+					side={side}
 					remittance={remittance}
 					isLoading={isLoading}
 				/>

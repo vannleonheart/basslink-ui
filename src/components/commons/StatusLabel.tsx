@@ -14,23 +14,21 @@ export default function StatusLabel({ status, text = '', size = 'medium', title 
 
 	switch (status) {
 		case 'new':
-		case 'wait':
-		case 'disabled':
-		case 'inactive':
+		case 'submitted':
 			bgClass = 'bg-grey-700 text-white';
 			break;
+		case 'wait':
 		case 'pending':
 			bgClass = 'bg-cyan-900 text-white';
+			break;
+		case 'payment_confirmed':
+			bgClass = 'bg-blue-900 text-white';
 			break;
 		case 'paid':
 			bgClass = 'bg-indigo-900 text-white';
 			break;
 		case 'processed':
 			bgClass = 'bg-purple-900 text-white';
-			break;
-		case 'active':
-		case 'delivered':
-			bgClass = 'bg-blue-900 text-white';
 			break;
 		case 'returned':
 			bgClass = 'bg-yellow-900 text-white';
@@ -39,12 +37,10 @@ export default function StatusLabel({ status, text = '', size = 'medium', title 
 			bgClass = 'bg-orange-900 text-white';
 			break;
 		case 'failed':
-		case 'blocked':
-		case 'alert':
+		case 'cancelled':
 			bgClass = 'bg-red-900 text-white';
 			break;
 		case 'completed':
-		case 'online':
 			bgClass = 'bg-green-900 text-white';
 			break;
 	}
@@ -74,6 +70,8 @@ export default function StatusLabel({ status, text = '', size = 'medium', title 
 			fontSize = 18;
 			break;
 	}
+
+	text = text.split('_').join(' ');
 
 	return (
 		<div className={clsx(padding, 'rounded', bgClass, 'inline-block', 'text-center')}>
