@@ -130,11 +130,13 @@ export const FundSources = {
 
 export const RemittanceStatuses = {
 	all: 'Semua Status',
-	new: 'Baru',
-	approved: 'Disetujui',
-	processing: 'Sedang Diproses',
+	wait: 'Menunggu',
+	payment_confirmed: 'Pembayaran Dikonfirmasi',
+	paid: 'Pembayaran Selesai',
+	processed: 'Sedang Diproses',
 	completed: 'Selesai',
-	failed: 'Gagal'
+	cancelled: 'Dibatalkan',
+	refunded: 'Dikembalikan'
 };
 
 export const PaymentMethods = {
