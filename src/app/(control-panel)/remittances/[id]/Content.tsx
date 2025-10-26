@@ -16,11 +16,20 @@ import apiService from '@/store/apiService';
 import { useAppDispatch } from '@/store/hooks';
 import { ApiResponse, AuthComponentProps } from '@/types/component';
 import { Remittance } from '@/types/entity';
+import { formatNumber } from '@/utils/format';
 import { openDialog } from '@fuse/core/FuseDialog/fuseDialogSlice';
 import { showMessage } from '@fuse/core/FuseMessage/fuseMessageSlice';
 import FuseSvgIcon from '@fuse/core/FuseSvgIcon';
 import useNavigate from '@fuse/hooks/useNavigate';
-import { Accordion, AccordionActions, AccordionDetails, AccordionSummary, Button, Typography } from '@mui/material';
+import {
+	Accordion,
+	AccordionActions,
+	AccordionDetails,
+	AccordionSummary,
+	Button,
+	Link,
+	Typography
+} from '@mui/material';
 import { t } from 'i18next';
 import { DateTime } from 'luxon';
 import { useMemo } from 'react';
@@ -572,6 +581,77 @@ export default function Content({ remittance, isLoading, accessToken, side }: Co
 						</AccordionActions>
 					</Accordion>
 				</div>
+				{remittance?.payment && (
+					<div className="flex flex-col gap-6 bg-white p-12 rounded shadow mb-20">
+						<div className="flex flex-row justify-between gap-8 bg-gray-100 p-8 rounded border-1 border-gray-300">
+							<Typography
+								className="uppercase"
+								fontSize={14}
+								fontWeight="medium"
+							>
+								Pembayaran
+							</Typography>
+							<div className="flex gap-4 items-center">
+								<StatusLabel
+									status={remittance.payment.status}
+									size="small"
+								/>
+							</div>
+						</div>
+						<div className="flex flex-col md:flex-row md:justify-between gap-4">
+							<div className="w-full md:w-2/3 bg-gray-100 p-6 rounded border-1 border-gray-300">
+								<div className="flex flex-col gap-4 justify-center items-center">
+									<Typography
+										className="font-bold"
+										fontSize={14}
+									>
+										{remittance.payment.payment_data.toUpperCase()}
+									</Typography>
+								</div>
+							</div>
+							<div className="w-full md:w-1/3 bg-gray-100 p-6 rounded border-1 border-gray-300">
+								<div className="flex flex-col gap-4 justify-center items-center">
+									<Typography
+										className="font-bold"
+										fontSize={14}
+									>
+										{remittance.payment.currency.toUpperCase()}{' '}
+										{formatNumber(remittance.payment.amount)}
+									</Typography>
+								</div>
+							</div>
+						</div>
+						{remittance.payment.payment_confirm_time && (
+							<div className="flex flex-col gap-12 rounded border-1 border-gray-300 p-12 bg-gray-50">
+								<div className="flex flex-col md:flex-row gap-8 md:items-center md:justify-between">
+									<Typography>Tanggal Pembayaran</Typography>
+									<Typography className="font-medium">
+										{remittance.payment.payment_confirm_time}
+									</Typography>
+								</div>
+								<div className="flex flex-col md:flex-row gap-8 md:items-center md:justify-between">
+									<Typography>No Referensi Pembayaran</Typography>
+									<Typography className="font-medium">
+										{remittance.payment.payment_reference}
+									</Typography>
+								</div>
+								{remittance.payment.payment_confirm_proof?.length > 0 && (
+									<div className="flex flex-col md:flex-row gap-8 md:items-center md:justify-between">
+										<Typography>Bukti Pembayaran</Typography>
+										<Link
+											href={remittance.payment.payment_confirm_proof}
+											target="_blank"
+											rel="noopener noreferrer"
+											className="text-blue-600 hover:underline break-all px-12 py-2"
+										>
+											{remittance.payment.payment_confirm_proof.split('/').pop()}
+										</Link>
+									</div>
+								)}
+							</div>
+						)}
+					</div>
+				)}
 			</div>
 		)
 	);

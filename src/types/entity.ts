@@ -146,6 +146,7 @@ export type Remittance = {
 	source_currency?: Currency;
 	target_currency?: Currency;
 	attachments?: RemittanceAttachment[];
+	payment?: RemittancePayment;
 };
 
 export type UserType = AgentUser | AdminUser;
@@ -234,6 +235,21 @@ export type Appointment = {
 	service_type: string;
 	date: string;
 	time: string;
+	notes?: string;
+	status: string;
+	created: number;
+	updated?: number;
+};
+
+type RemittancePayment = {
+	id: string;
+	currency: string;
+	amount: number;
+	payment_method: string;
+	payment_data?: string;
+	payment_confirm_time?: string;
+	payment_confirm_proof?: string;
+	payment_reference?: string;
 	notes?: string;
 	status: string;
 	created: number;
